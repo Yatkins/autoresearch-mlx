@@ -35,7 +35,7 @@ Same as the original. Three files that matter:
 
 The agent reads `program.md`, modifies `train.py`, runs a 5-minute experiment, checks `val_bpb`, and commits or reverts. Repeat overnight. Wake up to results.
 
-## Results on M4 Max (128GB)
+## Results on M1 Mac Studio (48GB)
 
 Starting from the upstream default configuration and running the autoresearch loop:
 
