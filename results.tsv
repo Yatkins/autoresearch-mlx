@@ -1,2 +1,12 @@
 commit	accuracy	adjusted_score	cost_per_doc	latency_s	status	description
 0445589	0.653061	0.561219	0.001431	5.225	keep	one-invoice baseline Mistral OCR plus Mistral Small 4
+bdee7e0-dirty	0.000000	0.000000	0.000000	3.248	crash	one-invoice PaddleOCR v4 plus heuristic parser
+bdee7e0-dirty	0.061224	0.000000	0.000000	105.300	run	one-invoice PaddleOCR v4 plus heuristic parser after setuptools fix
+bdee7e0-dirty	0.000000	0.000000	0.000000	1.246	crash	one-invoice PaddleOCR v5 plus heuristic parser
+bdee7e0-dirty	0.020408	0.000000	0.000000	32.831	run	one-invoice Donut CORD plus heuristic parser
+bdee7e0-dirty	0.000000	0.000000	0.000000	13.347	crash	one-invoice LayoutLMv3 invoice token classifier
+bdee7e0-dirty	0.000000	0.000000	0.000000	2.702	crash	one-invoice LayoutLMv3 invoice token classifier after pytesseract install
+bdee7e0-dirty	0.020408	0.000000	0.000000	11.171	run	one-invoice LayoutLMv3 token classifier with PaddleOCR boxes
+bdee7e0-dirty	0.000000	0.000000	0.000000	2.768	crash	one-invoice HunyuanOCR direct JSON prompt
+bdee7e0-dirty	0.000000	0.000000	0.000000	1.737	crash	one-invoice DeepSeek OCR plus heuristic parser
+bdee7e0-dirty	0.000000	0.000000	0.000000	2.736	crash	one-invoice DeepSeek OCR plus heuristic parser after matplotlib install

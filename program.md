@@ -66,6 +66,12 @@ INVOICE_EXPERIMENT=azure_prebuilt_invoice uv run train.py > run.log 2>&1
 AZURE_CUSTOM_MODEL_ID=... INVOICE_EXPERIMENT=azure_custom_invoice uv run train.py > run.log 2>&1
 INVOICE_EXPERIMENT=openrouter_vision uv run train.py > run.log 2>&1
 INVOICE_EXPERIMENT=ollama_vision uv run train.py > run.log 2>&1
+INVOICE_EXPERIMENT=paddleocr_v4_regex uv run train.py > run.log 2>&1
+INVOICE_EXPERIMENT=paddleocr_v4_mistral uv run train.py > run.log 2>&1
+INVOICE_EXPERIMENT=donut_cord_regex uv run train.py > run.log 2>&1
+INVOICE_EXPERIMENT=layoutlmv3_invoice_token uv run train.py > run.log 2>&1
+INVOICE_EXPERIMENT=hunyuanocr_direct uv run train.py > run.log 2>&1
+INVOICE_EXPERIMENT=deepseek_ocr_regex uv run train.py > run.log 2>&1
 ```
 
 Useful controls:
@@ -75,6 +81,10 @@ INVOICE_DOC_LIMIT=1
 MISTRAL_EXTRACT_MODEL=mistral-small-2603
 OPENROUTER_MODEL=qwen/qwen2.5-vl-72b-instruct
 OLLAMA_MODEL=qwen2.5vl:7b
+PDF_RENDER_DPI=200
+PDF_PAGE_LIMIT=1
+AUTO_LOG_RESULTS=1
+RUN_DESCRIPTION="short note for results.tsv"
 ```
 
 ## Candidate Models
@@ -98,6 +108,8 @@ Prioritize this exploration order:
 ```tsv
 commit	accuracy	adjusted_score	cost_per_doc	latency_s	status	description
 ```
+
+`train.py` appends one row automatically after each run unless `AUTO_LOG_RESULTS=0` is set. Use `RUN_DESCRIPTION` to make each row readable. The default status is `run`, or `crash` when every scored document crashed. During the keep/revert loop, change the row status to `keep` or `discard` when you decide.
 
 After each run:
 

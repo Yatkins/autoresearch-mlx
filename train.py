@@ -11,8 +11,11 @@ import base64
 import json
 import os
 import re
+import subprocess
+import tempfile
 import time
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -24,9 +27,11 @@ from score_invoices import score_predictions
 DATA_DIR = Path(os.getenv("INVOICE_DATA_DIR", "../Training_invoices"))
 PREDICTIONS_PATH = Path(os.getenv("PREDICTIONS_PATH", "predictions.jsonl"))
 REPORT_PATH = Path(os.getenv("REPORT_PATH", "invoice_report.json"))
+RESULTS_PATH = Path(os.getenv("RESULTS_PATH", "results.tsv"))
 EXPERIMENT = os.getenv("INVOICE_EXPERIMENT", "mistral_ocr_small4_v1")
 DOC_LIMIT = int(os.getenv("INVOICE_DOC_LIMIT", "0") or "0")
 REQUEST_TIMEOUT = int(os.getenv("INVOICE_REQUEST_TIMEOUT", "180"))
+AUTO_LOG_RESULTS = os.getenv("AUTO_LOG_RESULTS", "1").lower() not in {"0", "false", "no"}
 
 TARGET_FIELDS = [
     "Store",
@@ -162,6 +167,8 @@ def main() -> None:
     print(f"field_matches:        {summary['field_matches']}")
     print(f"field_total:          {summary['field_total']}")
     print(f"total_seconds:        {total_seconds:.1f}")
+    if AUTO_LOG_RESULTS:
+        append_results_row(summary)
 
 
 def discover_documents(data_dir: Path) -> list[tuple[str, Path]]:
@@ -190,6 +197,14 @@ def build_extractor(name: str):
         "azure_custom_invoice": azure_custom_invoice,
         "openrouter_vision": openrouter_vision,
         "ollama_vision": ollama_vision,
+        "paddleocr_v4_regex": paddleocr_v4_regex,
+        "paddleocr_v5_regex": paddleocr_v5_regex,
+        "paddleocr_v4_mistral": paddleocr_v4_mistral,
+        "paddleocr_v5_mistral": paddleocr_v5_mistral,
+        "donut_cord_regex": donut_cord_regex,
+        "layoutlmv3_invoice_token": layoutlmv3_invoice_token,
+        "hunyuanocr_direct": hunyuanocr_direct,
+        "deepseek_ocr_regex": deepseek_ocr_regex,
     }
     if name not in extractors:
         available = ", ".join(sorted(extractors))
@@ -257,6 +272,66 @@ def azure_analyze_document(path: Path, model_id: str) -> dict[str, Any]:
     if not operation_location:
         raise RuntimeError("Azure response did not include operation-location")
     return poll_azure_operation(operation_location, key)
+
+
+def paddleocr_v4_regex(path: Path) -> ExtractionResult:
+    return paddleocr_regex(path, "PP-OCRv4")
+
+
+def paddleocr_v5_regex(path: Path) -> ExtractionResult:
+    return paddleocr_regex(path, "PP-OCRv5")
+
+
+def paddleocr_v4_mistral(path: Path) -> ExtractionResult:
+    return paddleocr_mistral(path, "PP-OCRv4")
+
+
+def paddleocr_v5_mistral(path: Path) -> ExtractionResult:
+    return paddleocr_mistral(path, "PP-OCRv5")
+
+
+def paddleocr_regex(path: Path, ocr_version: str) -> ExtractionResult:
+    started = time.time()
+    text = run_paddleocr(path, ocr_version)
+    fields, rows = parse_invoice_text_heuristic(text)
+    return ExtractionResult(fields, rows, 0.0, time.time() - started)
+
+
+def paddleocr_mistral(path: Path, ocr_version: str) -> ExtractionResult:
+    started = time.time()
+    text = run_paddleocr(path, ocr_version)
+    fields, rows, chat_cost = run_mistral_text_extraction(text, model=os.getenv("MISTRAL_EXTRACT_MODEL", "mistral-small-2603"))
+    return ExtractionResult(fields, rows, chat_cost, time.time() - started)
+
+
+def donut_cord_regex(path: Path) -> ExtractionResult:
+    started = time.time()
+    text = run_donut(path)
+    fields, rows = parse_invoice_text_heuristic(text)
+    return ExtractionResult(fields, rows, 0.0, time.time() - started)
+
+
+def hunyuanocr_direct(path: Path) -> ExtractionResult:
+    started = time.time()
+    content = run_hunyuanocr(path)
+    try:
+        fields, rows = parse_extraction_json(content)
+    except Exception:
+        fields, rows = parse_invoice_text_heuristic(content)
+    return ExtractionResult(fields, rows, 0.0, time.time() - started)
+
+
+def deepseek_ocr_regex(path: Path) -> ExtractionResult:
+    started = time.time()
+    text = run_deepseek_ocr(path)
+    fields, rows = parse_invoice_text_heuristic(text)
+    return ExtractionResult(fields, rows, 0.0, time.time() - started)
+
+
+def layoutlmv3_invoice_token(path: Path) -> ExtractionResult:
+    started = time.time()
+    fields = run_layoutlmv3_invoice_token(path)
+    return ExtractionResult(fields, [], 0.0, time.time() - started)
 
 
 def openrouter_vision(path: Path) -> ExtractionResult:
@@ -501,6 +576,349 @@ def azure_field_value(node: dict[str, Any]) -> Any:
     )
 
 
+def run_paddleocr(path: Path, ocr_version: str) -> str:
+    try:
+        from paddleocr import PaddleOCR
+    except ImportError as exc:
+        raise RuntimeError("Install local OCR deps with: uv sync --extra local-ocr") from exc
+
+    images = render_document_images(path)
+    kwargs = {
+        "lang": os.getenv("PADDLE_LANG", "en"),
+        "ocr_version": ocr_version,
+        "show_log": False,
+    }
+    try:
+        ocr = PaddleOCR(use_angle_cls=True, **kwargs)
+    except TypeError:
+        kwargs.pop("show_log", None)
+        ocr = PaddleOCR(use_textline_orientation=True, **kwargs)
+
+    chunks: list[str] = []
+    for image_path in images:
+        if hasattr(ocr, "ocr"):
+            result = ocr.ocr(str(image_path), cls=True)
+        else:
+            result = ocr.predict(str(image_path))
+        chunks.extend(extract_text_fragments(result))
+    return "\n".join(chunks)
+
+
+def run_donut(path: Path) -> str:
+    try:
+        from PIL import Image
+        from transformers import DonutProcessor, VisionEncoderDecoderModel
+    except ImportError as exc:
+        raise RuntimeError("Install HF document deps with: uv sync --extra hf-doc") from exc
+
+    import torch
+
+    image_path = render_document_images(path)[0]
+    image = Image.open(image_path).convert("RGB")
+    model_id = os.getenv("DONUT_MODEL", "naver-clova-ix/donut-base-finetuned-cord-v2")
+    processor = DonutProcessor.from_pretrained(model_id)
+    model = VisionEncoderDecoderModel.from_pretrained(model_id)
+    device = hf_device(torch)
+    model.to(device)
+
+    pixel_values = processor(image, return_tensors="pt").pixel_values.to(device)
+    task_prompt = os.getenv("DONUT_TASK_PROMPT", "<s_cord-v2>")
+    decoder_input_ids = processor.tokenizer(task_prompt, add_special_tokens=False, return_tensors="pt").input_ids.to(device)
+    outputs = model.generate(
+        pixel_values,
+        decoder_input_ids=decoder_input_ids,
+        max_length=int(os.getenv("DONUT_MAX_LENGTH", "768")),
+        early_stopping=True,
+        pad_token_id=processor.tokenizer.pad_token_id,
+        eos_token_id=processor.tokenizer.eos_token_id,
+        use_cache=True,
+        num_beams=int(os.getenv("DONUT_NUM_BEAMS", "1")),
+        bad_words_ids=[[processor.tokenizer.unk_token_id]],
+        return_dict_in_generate=True,
+    )
+    sequence = processor.batch_decode(outputs.sequences)[0]
+    sequence = sequence.replace(processor.tokenizer.eos_token, "").replace(processor.tokenizer.pad_token, "")
+    return re.sub(r"<[^>]+>", " ", sequence)
+
+
+def run_hunyuanocr(path: Path) -> str:
+    try:
+        from PIL import Image
+        from transformers import AutoProcessor
+    except ImportError as exc:
+        raise RuntimeError("Install HF document deps with: uv sync --extra hf-doc") from exc
+
+    import torch
+    import transformers
+
+    model_id = os.getenv("HUNYUAN_MODEL", "tencent/HunyuanOCR")
+    image_path = render_document_images(path)[0]
+    image = Image.open(image_path).convert("RGB")
+    processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=True)
+    model_cls = getattr(transformers, "HunYuanVLForConditionalGeneration", None)
+    if model_cls is None:
+        from transformers import AutoModelForImageTextToText
+
+        model_cls = AutoModelForImageTextToText
+    model = model_cls.from_pretrained(model_id, trust_remote_code=True, torch_dtype=hf_dtype(torch))
+    device = hf_device(torch)
+    model.to(device)
+
+    prompt = os.getenv("HUNYUAN_PROMPT", EXTRACTION_PROMPT)
+    messages = [{"role": "user", "content": [{"type": "image", "image": image}, {"type": "text", "text": prompt}]}]
+    if hasattr(processor, "apply_chat_template"):
+        text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+        inputs = processor(text=[text], images=[image], return_tensors="pt").to(device)
+    else:
+        inputs = processor(images=image, text=prompt, return_tensors="pt").to(device)
+    output_ids = model.generate(**inputs, max_new_tokens=int(os.getenv("HUNYUAN_MAX_NEW_TOKENS", "1024")))
+    return processor.batch_decode(output_ids, skip_special_tokens=True)[0]
+
+
+def run_deepseek_ocr(path: Path) -> str:
+    try:
+        from transformers import AutoModel, AutoTokenizer
+    except ImportError as exc:
+        raise RuntimeError("Install HF document deps with: uv sync --extra hf-doc") from exc
+
+    import torch
+
+    model_id = os.getenv("DEEPSEEK_OCR_MODEL", "deepseek-ai/DeepSeek-OCR")
+    image_path = render_document_images(path)[0]
+    tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
+    model = AutoModel.from_pretrained(model_id, trust_remote_code=True, torch_dtype=hf_dtype(torch))
+    model = model.eval().to(hf_device(torch))
+    prompt = os.getenv("DEEPSEEK_OCR_PROMPT", "<image>\nExtract all text from this invoice.")
+    if hasattr(model, "infer"):
+        return str(
+            model.infer(
+                tokenizer,
+                prompt=prompt,
+                image_file=str(image_path),
+                output_path=tempfile.mkdtemp(prefix="deepseek_ocr_"),
+                base_size=int(os.getenv("DEEPSEEK_BASE_SIZE", "1024")),
+                image_size=int(os.getenv("DEEPSEEK_IMAGE_SIZE", "640")),
+                crop_mode=os.getenv("DEEPSEEK_CROP_MODE", "1") not in {"0", "false", "False"},
+                save_results=False,
+            )
+        )
+    raise RuntimeError("Loaded DeepSeek OCR model does not expose an infer() method in this Transformers version.")
+
+
+def run_layoutlmv3_invoice_token(path: Path) -> dict[str, Any]:
+    try:
+        from PIL import Image
+        from transformers import AutoModelForTokenClassification, AutoProcessor
+    except ImportError as exc:
+        raise RuntimeError("Install HF document deps with: uv sync --extra hf-doc") from exc
+
+    import torch
+
+    word_image_path, words, boxes = run_paddleocr_words_boxes(path, os.getenv("LAYOUTLM_OCR_VERSION", "PP-OCRv4"))
+    if not words:
+        raise RuntimeError("PaddleOCR produced no words for LayoutLMv3.")
+    image_path = word_image_path
+    image = Image.open(image_path).convert("RGB")
+    model_id = os.getenv("LAYOUTLMV3_MODEL", "ngvozdenovic/invoice_extraction")
+    processor = AutoProcessor.from_pretrained(model_id, apply_ocr=False)
+    model = AutoModelForTokenClassification.from_pretrained(model_id)
+    device = hf_device(torch)
+    model.to(device)
+
+    encoding = processor(image, words, boxes=boxes, return_tensors="pt", truncation=True)
+    word_ids = encoding.word_ids() if hasattr(encoding, "word_ids") else []
+    encoding = {key: value.to(device) for key, value in encoding.items()}
+    with torch.no_grad():
+        outputs = model(**encoding)
+    predictions = outputs.logits.argmax(-1)[0].detach().cpu().tolist()
+
+    fields: dict[str, list[str]] = {}
+    previous_word_id = None
+    for token_index, label_id in enumerate(predictions):
+        if token_index >= len(word_ids):
+            continue
+        word_id = word_ids[token_index]
+        if word_id is None or word_id == previous_word_id or word_id >= len(words):
+            continue
+        previous_word_id = word_id
+        label = model.config.id2label.get(label_id, "O")
+        if label == "O":
+            continue
+        label = re.sub(r"^[BI]-", "", label)
+        fields.setdefault(label, []).append(words[word_id])
+    return {key: " ".join(value) for key, value in fields.items()}
+
+
+def render_document_images(path: Path) -> list[Path]:
+    if path.suffix.lower() != ".pdf":
+        return [path]
+    try:
+        import fitz
+    except ImportError as exc:
+        raise RuntimeError("Install PDF rendering deps with: uv sync --extra local-ocr or uv sync --extra hf-doc") from exc
+
+    output_dir = Path(tempfile.mkdtemp(prefix="invoice_pages_"))
+    doc = fitz.open(path)
+    page_limit = int(os.getenv("PDF_PAGE_LIMIT", "1"))
+    dpi = int(os.getenv("PDF_RENDER_DPI", "200"))
+    image_paths: list[Path] = []
+    for index, page in enumerate(doc):
+        if index >= page_limit:
+            break
+        pix = page.get_pixmap(dpi=dpi)
+        image_path = output_dir / f"{path.stem}-{index + 1}.png"
+        pix.save(image_path)
+        image_paths.append(image_path)
+    doc.close()
+    return image_paths
+
+
+def run_paddleocr_words_boxes(path: Path, ocr_version: str) -> tuple[Path, list[str], list[list[int]]]:
+    try:
+        from PIL import Image
+        from paddleocr import PaddleOCR
+    except ImportError as exc:
+        raise RuntimeError("Install local OCR deps with: uv sync --extra local-ocr") from exc
+
+    image_path = render_document_images(path)[0]
+    image = Image.open(image_path)
+    width, height = image.size
+    kwargs = {
+        "lang": os.getenv("PADDLE_LANG", "en"),
+        "ocr_version": ocr_version,
+        "show_log": False,
+    }
+    try:
+        ocr = PaddleOCR(use_angle_cls=True, **kwargs)
+    except TypeError:
+        kwargs.pop("show_log", None)
+        ocr = PaddleOCR(use_textline_orientation=True, **kwargs)
+
+    result = ocr.ocr(str(image_path), cls=True) if hasattr(ocr, "ocr") else ocr.predict(str(image_path))
+    words: list[str] = []
+    boxes: list[list[int]] = []
+    for box, text in extract_paddle_box_text(result):
+        if not text:
+            continue
+        words.append(text)
+        boxes.append(normalize_layout_box(box, width, height))
+    return image_path, words, boxes
+
+
+def extract_paddle_box_text(value: Any) -> list[tuple[list[list[float]], str]]:
+    entries: list[tuple[list[list[float]], str]] = []
+    if isinstance(value, (list, tuple)):
+        if len(value) >= 2 and looks_like_box(value[0]):
+            text = ""
+            if isinstance(value[1], (list, tuple)) and value[1] and isinstance(value[1][0], str):
+                text = value[1][0].strip()
+            elif isinstance(value[1], str):
+                text = value[1].strip()
+            if text:
+                entries.append((value[0], text))
+            return entries
+        for item in value:
+            entries.extend(extract_paddle_box_text(item))
+    return entries
+
+
+def looks_like_box(value: Any) -> bool:
+    return (
+        isinstance(value, (list, tuple))
+        and len(value) >= 4
+        and all(isinstance(point, (list, tuple)) and len(point) >= 2 for point in value[:4])
+    )
+
+
+def normalize_layout_box(box: list[list[float]], width: int, height: int) -> list[int]:
+    xs = [float(point[0]) for point in box[:4]]
+    ys = [float(point[1]) for point in box[:4]]
+    left = int(max(0, min(1000, round(min(xs) / width * 1000))))
+    top = int(max(0, min(1000, round(min(ys) / height * 1000))))
+    right = int(max(0, min(1000, round(max(xs) / width * 1000))))
+    bottom = int(max(0, min(1000, round(max(ys) / height * 1000))))
+    return [left, top, max(left + 1, right), max(top + 1, bottom)]
+
+
+def extract_text_fragments(value: Any) -> list[str]:
+    fragments: list[str] = []
+    if value is None:
+        return fragments
+    if isinstance(value, str):
+        cleaned = value.strip()
+        return [cleaned] if cleaned else []
+    if isinstance(value, dict):
+        for key in ("text", "rec_text", "transcription"):
+            if key in value:
+                fragments.extend(extract_text_fragments(value[key]))
+        for key in ("res", "data", "items", "pages"):
+            if key in value:
+                fragments.extend(extract_text_fragments(value[key]))
+        return fragments
+    if isinstance(value, (list, tuple)):
+        if len(value) >= 2 and isinstance(value[1], tuple) and value[1] and isinstance(value[1][0], str):
+            return [value[1][0].strip()]
+        for item in value:
+            fragments.extend(extract_text_fragments(item))
+    return fragments
+
+
+def parse_invoice_text_heuristic(text: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    flat = collapse_text(text)
+    fields: dict[str, Any] = {}
+    patterns = {
+        "Invoice No": r"(?:invoice\s*(?:no|number|#|id)[:\s]*)([A-Z0-9\-]+)",
+        "Invoice Date": r"(?:invoice\s*date|date)[:\s]*(\d{1,2}[/-]\d{1,2}[/-]\d{2,4})",
+        "Invoice Amount": r"(?:invoice\s*(?:amount|total)|amount\s*due|total)[:\s$]*([\d,]+\.\d{2})",
+        "Total Quantity": r"(?:total\s*(?:quantity|qty))[:\s]*(\d+(?:\.\d+)?)",
+        "Bottle Deposit": r"(?:bottle\s*deposit|deposit)[:\s$]*([\d,]+\.\d{2})",
+    }
+    for field, pattern in patterns.items():
+        match = re.search(pattern, flat, flags=re.IGNORECASE)
+        if match:
+            fields[field] = match.group(1)
+
+    vendor_match = re.search(r"(?:vendor|supplier)[:\s]+([A-Z][A-Z0-9 &'.,-]{2,80}?)(?:\s{2,}| invoice| date|$)", flat, flags=re.IGNORECASE)
+    if vendor_match:
+        fields["Vendor"] = vendor_match.group(1).strip()
+
+    rows: list[dict[str, Any]] = []
+    money = r"\d+(?:,\d{3})*(?:\.\d{1,2})?"
+    for line in text.splitlines():
+        cleaned = collapse_text(line)
+        match = re.match(rf"^(\d{{3,}})\s+(.+?)\s+(\d+)\s+(\d+)\s+({money})\s+({money})(?:\s|$)", cleaned)
+        if match:
+            rows.append(
+                {
+                    "Item Code": match.group(1),
+                    "Description": match.group(2),
+                    "Cases": match.group(3),
+                    "Quantity": match.group(4),
+                    "Unit Price": match.group(5),
+                    "Line Amount": match.group(6),
+                }
+            )
+    return fields, rows
+
+
+def hf_device(torch_module):
+    if torch_module.backends.mps.is_available():
+        return "mps"
+    if torch_module.cuda.is_available():
+        return "cuda"
+    return "cpu"
+
+
+def hf_dtype(torch_module):
+    if torch_module.cuda.is_available():
+        return torch_module.float16
+    return torch_module.float32
+
+
+def collapse_text(value: str) -> str:
+    return re.sub(r"\s+", " ", value).strip()
+
+
 def parse_extraction_json(content: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     match = re.search(r"\{.*\}", content, flags=re.DOTALL)
     if not match:
@@ -560,6 +978,50 @@ def require_env(name: str) -> str:
 
 def write_jsonl(path: Path, records: list[dict[str, Any]]) -> None:
     path.write_text("\n".join(json.dumps(record, sort_keys=True) for record in records) + "\n")
+
+
+def append_results_row(summary: dict[str, Any]) -> None:
+    status = os.getenv("RUN_STATUS")
+    if not status:
+        status = "crash" if summary["crash_rate"] >= 1.0 else "run"
+    description = os.getenv("RUN_DESCRIPTION") or default_run_description()
+    row = [
+        current_commit(),
+        f"{summary['accuracy']:.6f}",
+        f"{summary['adjusted_score']:.6f}",
+        f"{summary['avg_cost_usd']:.6f}",
+        f"{summary['avg_latency_seconds']:.3f}",
+        sanitize_tsv(status),
+        sanitize_tsv(description),
+    ]
+    if not RESULTS_PATH.exists() or RESULTS_PATH.read_text().strip() == "":
+        RESULTS_PATH.write_text("commit\taccuracy\tadjusted_score\tcost_per_doc\tlatency_s\tstatus\tdescription\n")
+    with RESULTS_PATH.open("a") as handle:
+        handle.write("\t".join(row) + "\n")
+
+
+def default_run_description() -> str:
+    bits = [EXPERIMENT, f"docs={DOC_LIMIT or 'all'}"]
+    for name in ("MISTRAL_EXTRACT_MODEL", "OPENROUTER_MODEL", "OLLAMA_MODEL", "PADDLE_LANG"):
+        value = os.getenv(name)
+        if value:
+            bits.append(f"{name.lower()}={value}")
+    bits.append(datetime.now(timezone.utc).strftime("utc=%Y-%m-%dT%H:%M:%SZ"))
+    return " ".join(bits)
+
+
+def current_commit() -> str:
+    try:
+        commit = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], text=True).strip()
+        dirty = subprocess.run(["git", "diff", "--quiet"], check=False).returncode != 0
+        staged = subprocess.run(["git", "diff", "--cached", "--quiet"], check=False).returncode != 0
+        return f"{commit}-dirty" if dirty or staged else commit
+    except Exception:
+        return "unknown"
+
+
+def sanitize_tsv(value: str) -> str:
+    return str(value).replace("\t", " ").replace("\n", " ").strip()
 
 
 if __name__ == "__main__":

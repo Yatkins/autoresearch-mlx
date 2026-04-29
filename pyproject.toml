@@ -13,3 +13,29 @@ dependencies = [
     "rustbpe>=0.1.0",
     "tiktoken>=0.11.0",
 ]
+[project.optional-dependencies]
+local-ocr = [
+  "setuptools",
+  "pymupdf",
+  "pillow",
+  "opencv-python-headless",
+  "paddleocr",
+  "paddlepaddle",
+]
+
+hf-doc = [
+  "torch",
+  "torchvision",
+  "transformers",
+  "accelerate",
+  "sentencepiece",
+  "einops",
+  "addict",
+  "easydict",
+  "matplotlib",
+  "protobuf",
+  "pytesseract",
+  "timm",
+  "pillow",
+  "pymupdf",
+]
