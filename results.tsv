@@ -8,3 +8,4 @@ f32e8df	0.201599	0.104659	0.000000	5.819	keep	all-doc local PaddleOCR v4 row cle
 d084181	0.256661	0.159217	0.000000	5.849	keep	all-doc local Herrs and BW parser expansion
 c6e70c1	0.306394	0.208472	0.000000	5.877	keep	all-doc local Herrs four-decimal and BW description cleanup
 cf92edc	0.329485	0.231855	0.000000	5.859	keep	all-doc local Herrs quantity and BW footer cleanup
+2611ba4	0.463588	0.365582	0.000000	5.882	keep	all-doc local Menachem row parser and quantity fallback
