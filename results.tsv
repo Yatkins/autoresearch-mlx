@@ -6,3 +6,4 @@ dc31c85-dirty	0.877551	0.768175	0.000000	7.125	keep	local PaddleOCR v4 heuristic
 35f5ca2	0.918367	0.804868	0.000000	7.620	keep	local PaddleOCR v4 row cleanup after table reconstruction
 f32e8df	0.201599	0.104659	0.000000	5.819	keep	all-doc local PaddleOCR v4 row cleanup after one-invoice win
 d084181	0.256661	0.159217	0.000000	5.849	keep	all-doc local Herrs and BW parser expansion
+c6e70c1	0.306394	0.208472	0.000000	5.877	keep	all-doc local Herrs four-decimal and BW description cleanup
