@@ -1,22 +1,5 @@
 commit	accuracy	adjusted_score	cost_per_doc	latency_s	status	description
 0445589	0.653061	0.561219	0.001431	5.225	keep	one-invoice baseline Mistral OCR plus Mistral Small 4
-bdee7e0-dirty	0.000000	0.000000	0.000000	3.248	crash	one-invoice PaddleOCR v4 plus heuristic parser
-bdee7e0-dirty	0.061224	0.000000	0.000000	105.300	run	one-invoice PaddleOCR v4 plus heuristic parser after setuptools fix
-bdee7e0-dirty	0.000000	0.000000	0.000000	1.246	crash	one-invoice PaddleOCR v5 plus heuristic parser
-bdee7e0-dirty	0.020408	0.000000	0.000000	32.831	run	one-invoice Donut CORD plus heuristic parser
-bdee7e0-dirty	0.000000	0.000000	0.000000	13.347	crash	one-invoice LayoutLMv3 invoice token classifier
-bdee7e0-dirty	0.000000	0.000000	0.000000	2.702	crash	one-invoice LayoutLMv3 invoice token classifier after pytesseract install
-bdee7e0-dirty	0.020408	0.000000	0.000000	11.171	run	one-invoice LayoutLMv3 token classifier with PaddleOCR boxes
-bdee7e0-dirty	0.000000	0.000000	0.000000	2.768	crash	one-invoice HunyuanOCR direct JSON prompt
-bdee7e0-dirty	0.000000	0.000000	0.000000	1.737	crash	one-invoice DeepSeek OCR plus heuristic parser
-bdee7e0-dirty	0.000000	0.000000	0.000000	2.736	crash	one-invoice DeepSeek OCR plus heuristic parser after matplotlib install
-9f8e5cf	0.000000	0.000000	0.000000	40.762	crash	HunyuanOCR after source transformers
-9f8e5cf-dirty	0.000000	0.000000	0.000000	5.787	crash	HunyuanOCR float32 Mac dtype fix
-9f8e5cf-dirty	0.000000	0.000000	0.000000	5.240	crash	HunyuanOCR recursive float32 input fix
-9f8e5cf-dirty	0.000000	0.000000	0.000000	7.787	crash	HunyuanOCR BF16 vision tower fix
-9f8e5cf-dirty	0.000000	0.000000	0.000000	9.867	crash	HunyuanOCR BF16 vision low DPI 96 tokens 256
-9f8e5cf-dirty	0.000000	0.000000	0.000000	14.304	run	HunyuanOCR full BF16 low DPI 96 tokens 256
-9f8e5cf-dirty	0.000000	0.000000	0.000000	12.428	crash	HunyuanOCR full BF16 low DPI trimmed decode
-9f8e5cf-dirty	0.000000	0.000000	0.000000	13.151	run	HunyuanOCR full BF16 low DPI trimmed decode fixed
-9f8e5cf-dirty	0.000000	0.000000	0.000000	8.523	run	HunyuanOCR OCR text prompt low DPI 96
 d0828be	0.489796	0.358039	0.000439	11.539	discard	round 1 PaddleOCR v4 OCR plus Mistral extraction
+0027b25-dirty	0.061224	0.000000	0.000000	8.965	discard	recheck local PaddleOCR v4 heuristic parser
+dc31c85-dirty	0.877551	0.768175	0.000000	7.125	keep	local PaddleOCR v4 heuristic table reconstruction
