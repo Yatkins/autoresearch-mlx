@@ -917,24 +917,55 @@ def parse_invoice_text_heuristic(text: str) -> tuple[dict[str, Any], list[dict[s
 
 
 def enrich_invoice_text_fields(flat: str, fields: dict[str, Any]) -> None:
+    upper_flat = flat.upper()
+    for store in ("Foodex", "Einhorn", "Everfresh"):
+        if store.upper() in upper_flat:
+            fields.setdefault("Store", store)
+            break
+
     customer = re.search(r"customer\s*:\s*([A-Z][A-Z0-9 &'.,-]{2,80}?)(?:\s+terms|\s+address|\s+city|$)", flat, flags=re.IGNORECASE)
     if customer:
         fields.setdefault("Store", normalize_store_name(customer.group(1)))
 
-    for vendor in ("Malba Trading", "Kravy Food", "A F Trading", "Paradise Distributors", "Herrs", "B&W Foods"):
+    vendors = (
+        "Malba Trading",
+        "Kravy Food",
+        "A F Trading",
+        "Paradise Distributors",
+        "Herrs",
+        "B&W Foods",
+        "Galil Importing Corp.",
+        "Israel Beigel Baking",
+        "Klein's Naturals Ltd.",
+        "Restaurant Depot",
+        "Menachem's Dips, LLC",
+    )
+    for vendor in vendors:
         if re.search(re.escape(vendor), flat, flags=re.IGNORECASE):
             fields.setdefault("Vendor", vendor)
             break
+    if "B&WFOODS" in upper_flat or "KAYCO" in upper_flat:
+        fields.setdefault("Vendor", "B&W Foods")
 
     total_cs = re.search(r"total\s*(?:cs|quantity|qty)\s*:\s*(\d+(?:\.\d+)?)", flat, flags=re.IGNORECASE)
     if total_cs:
         fields.setdefault("Total Quantity", total_cs.group(1))
+    elif "HERR" in upper_flat:
+        herr_total = re.search(r"TOTAL\s+GROSS\s+NEI\s+HIEMS\s+UNIIS.*?\b(\d+)\s+\$[\d,.]+", flat, flags=re.IGNORECASE)
+        if herr_total:
+            fields.setdefault("Total Quantity", herr_total.group(1))
     cda_total = re.search(r"total\s*cda\s*\$?\s*:\s*([\d,]+\.\d{2})", flat, flags=re.IGNORECASE)
     if cda_total:
         fields.setdefault("Bottle Deposit", cda_total.group(1))
         fields.setdefault("Adjustment", cda_total.group(1))
+    fields.setdefault("Bottle Deposit", "0.00")
+    fields.setdefault("Adjustment", "0.00")
+    invoice_no = re.search(r"invoice\s*no\.?\s*[:#]?\s*([A-Z0-9\-]+)", flat, flags=re.IGNORECASE)
+    if invoice_no:
+        fields.setdefault("Invoice No", invoice_no.group(1))
     if "Document Type" not in fields:
-        fields["Document Type"] = "Credit" if re.search(r"\bcredit\b", flat, flags=re.IGNORECASE) else "Bill"
+        is_credit = re.search(r"\bcredit\s+(?:memo|invoice|note)\b", flat, flags=re.IGNORECASE)
+        fields["Document Type"] = "Credit" if is_credit else "Bill"
 
 
 def normalize_store_name(value: str) -> str:
@@ -952,6 +983,9 @@ def normalize_store_name(value: str) -> str:
 def parse_paddleocr_line_items(text: str) -> list[dict[str, Any]]:
     lines = [collapse_text(line) for line in text.splitlines()]
     lines = [line for line in lines if line]
+    specialized = parse_herrs_line_items(lines) or parse_bw_foods_line_items(lines)
+    if specialized:
+        return specialized
     rows: list[dict[str, Any]] = []
     current: dict[str, Any] | None = None
     numbers: list[str] = []
@@ -1006,6 +1040,143 @@ def parse_paddleocr_line_items(text: str) -> list[dict[str, Any]]:
 
     flush()
     return rows
+
+
+def parse_herrs_line_items(lines: list[str]) -> list[dict[str, Any]]:
+    text = " ".join(lines).upper()
+    if "HERR" not in text or "UPC" not in text:
+        return []
+    rows: list[dict[str, Any]] = []
+    index = 0
+    while index < len(lines):
+        if not re.fullmatch(r"\d{3}", lines[index]):
+            index += 1
+            continue
+        code = lines[index]
+        index += 1
+        desc_parts: list[str] = []
+        numbers: list[str] = []
+        upc = ""
+        while index < len(lines):
+            line = lines[index]
+            if re.fullmatch(r"\d{3}", line) or line.upper() == "TOTAL":
+                break
+            upc_match = re.search(r"UPC:?\s*(\d+)", line, flags=re.IGNORECASE)
+            if upc_match:
+                upc = upc_match.group(1)
+                index += 1
+                break
+            if is_numeric_cell(line):
+                numbers.append(line)
+            else:
+                desc_parts.append(line)
+            index += 1
+        if upc and len(numbers) >= 4 and desc_parts:
+            description, quantity = split_trailing_quantity(" ".join(desc_parts))
+            if quantity is None and numbers:
+                quantity = numbers[0]
+            rows.append(
+                fill_common_line_defaults(
+                    {
+                        "Item Code": upc,
+                        "Description": cleanup_herrs_description(description),
+                        "Cases": "0",
+                        "Quantity": quantity or "",
+                        "Unit Price": numbers[-2],
+                        "Line Amount": numbers[-1],
+                    }
+                )
+            )
+    return rows
+
+
+def parse_bw_foods_line_items(lines: list[str]) -> list[dict[str, Any]]:
+    text = " ".join(lines).upper()
+    if "B&WFOODS" not in text and "KAYCO" not in text:
+        return []
+    rows: list[dict[str, Any]] = []
+    for index, line in enumerate(lines):
+        if not re.fullmatch(r"\d{6}", line):
+            continue
+        previous_numbers = nearby_previous_numbers(lines, index)
+        if not previous_numbers:
+            continue
+        cursor = index + 1
+        desc_parts: list[str] = []
+        while cursor < len(lines) and not looks_like_pack_size(lines[cursor]) and not re.fullmatch(r"\d{6}", lines[cursor]):
+            if not is_numeric_cell(lines[cursor]):
+                desc_parts.append(lines[cursor])
+            cursor += 1
+        if cursor >= len(lines) or re.fullmatch(r"\d{6}", lines[cursor]):
+            continue
+        cursor += 1
+        prices: list[str] = []
+        while cursor < len(lines) and len(prices) < 4:
+            if is_numeric_cell(lines[cursor]):
+                prices.append(lines[cursor])
+            cursor += 1
+        while cursor < len(lines) and not normalized_quantity(lines[cursor]) and not re.fullmatch(r"\d{6}", lines[cursor]):
+            if not is_numeric_cell(lines[cursor]):
+                desc_parts.append(lines[cursor])
+            cursor += 1
+        if len(prices) < 2 or not desc_parts:
+            continue
+        quantity = previous_numbers[0]
+        rows.append(
+            fill_common_line_defaults(
+                {
+                    "Item Code": line,
+                    "Description": cleanup_description(" ".join(desc_parts)),
+                    "Cases": quantity,
+                    "Quantity": quantity,
+                    "Unit Price": prices[-2],
+                    "Line Amount": prices[-1],
+                }
+            )
+        )
+    return rows
+
+
+def split_trailing_quantity(value: str) -> tuple[str, str | None]:
+    match = re.match(r"^(.*\D)(\d{1,4})$", value.strip())
+    if not match:
+        return value, None
+    return match.group(1).strip(), match.group(2)
+
+
+def cleanup_herrs_description(value: str) -> str:
+    cleaned = collapse_text(value)
+    cleaned = re.sub(r"(?i)(\d+CT)(\d)", r"\1 \2", cleaned)
+    cleaned = re.sub(r"(?i)(\d+)OZ", r"\1 OZ", cleaned)
+    cleaned = re.sub(r"(?i)-\s*NP", " - NP", cleaned)
+    return collapse_text(cleaned)
+
+
+def nearby_previous_numbers(lines: list[str], index: int) -> list[str]:
+    values: list[str] = []
+    cursor = index - 1
+    while cursor >= 0 and len(values) < 2:
+        quantity = normalized_quantity(lines[cursor])
+        if quantity is None:
+            break
+        values.append(quantity)
+        cursor -= 1
+    return list(reversed(values))
+
+
+def normalized_quantity(value: str) -> str | None:
+    cleaned = collapse_text(value)
+    if cleaned.lower() in {"oos", "os", "oo"}:
+        return "0"
+    if cleaned == "01":
+        return "0"
+    if re.fullmatch(r"\d+(?:\.\d+)?", cleaned):
+        return cleaned
+    return None
+
+
+def looks_like_pack_size(value: str) -> bool:
+    return bool(re.search(r"\d+\s*x\s*\d+|OZ", value, flags=re.IGNORECASE))
 
 
 def apply_row_numbers(row: dict[str, Any], values: list[str]) -> None:
