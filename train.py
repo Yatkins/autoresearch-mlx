@@ -917,6 +917,10 @@ def parse_invoice_text_heuristic(text: str) -> tuple[dict[str, Any], list[dict[s
         total_quantity = sum((safe_numeric(row.get("Quantity")) for row in rows), start=0.0)
         if total_quantity:
             fields["Total Quantity"] = format_quantity(total_quantity)
+    if rows and "Invoice Amount" not in fields:
+        invoice_amount = sum((safe_numeric(row.get("Line Amount")) for row in rows), start=0.0)
+        if invoice_amount:
+            fields["Invoice Amount"] = format_amount(invoice_amount)
     return fields, rows
 
 
@@ -969,6 +973,13 @@ def enrich_invoice_text_fields(flat: str, fields: dict[str, Any]) -> None:
     invoice_no = re.search(r"invoice\s*no\.?\s*[:#]?\s*([A-Z0-9\-]+)", flat, flags=re.IGNORECASE)
     if invoice_no:
         fields.setdefault("Invoice No", invoice_no.group(1))
+    if "ISRAEL BEIGEL" in upper_flat:
+        beigel_no = re.search(r"\b(\d{6})\s+SOLD TO\b", flat, flags=re.IGNORECASE)
+        if beigel_no:
+            fields.setdefault("Invoice No", beigel_no.group(1))
+        beigel_date = re.search(r"\b(\d{2})(\d{2})/(\d{4})", flat)
+        if beigel_date:
+            fields.setdefault("Invoice Date", f"{beigel_date.group(1)}/{beigel_date.group(2)}/{beigel_date.group(3)}")
     if "Document Type" not in fields:
         is_credit = re.search(r"\bcredit\s+(?:memo|invoice|note)\b", flat, flags=re.IGNORECASE)
         fields["Document Type"] = "Credit" if is_credit else "Bill"
@@ -989,7 +1000,12 @@ def normalize_store_name(value: str) -> str:
 def parse_paddleocr_line_items(text: str) -> list[dict[str, Any]]:
     lines = [collapse_text(line) for line in text.splitlines()]
     lines = [line for line in lines if line]
-    specialized = parse_herrs_line_items(lines) or parse_bw_foods_line_items(lines) or parse_menachems_line_items(lines)
+    specialized = (
+        parse_herrs_line_items(lines)
+        or parse_bw_foods_line_items(lines)
+        or parse_menachems_line_items(lines)
+        or parse_israel_beigel_line_items(lines)
+    )
     if specialized:
         return specialized
     rows: list[dict[str, Any]] = []
@@ -1182,6 +1198,93 @@ def parse_menachems_line_items(lines: list[str]) -> list[dict[str, Any]]:
     return rows
 
 
+def parse_israel_beigel_line_items(lines: list[str]) -> list[dict[str, Any]]:
+    text = " ".join(lines).upper()
+    if "ISRAEL BEIGEL" not in text:
+        return []
+    rows: list[dict[str, Any]] = []
+    in_table = False
+    index = 0
+    while index < len(lines):
+        line = lines[index]
+        if line == "Item":
+            in_table = True
+            index += 1
+            continue
+        if not in_table:
+            index += 1
+            continue
+        if re.match(r"^(?:Total|Charge to Account|Signature|Thank you)", line, flags=re.IGNORECASE):
+            break
+        if not looks_like_beigel_code(line):
+            index += 1
+            continue
+        code = normalize_beigel_code(line)
+        index += 1
+        numbers: list[str] = []
+        while index < len(lines) and len(numbers) < 3:
+            candidate = lines[index].replace("$", "")
+            if is_numeric_cell(candidate):
+                numbers.append(candidate)
+                index += 1
+                continue
+            break
+        if len(numbers) < 2 or index >= len(lines):
+            continue
+        description = cleanup_beigel_description(lines[index])
+        index += 1
+        quantity, unit_price, line_amount = beigel_numeric_fields(numbers)
+        rows.append(
+            fill_common_line_defaults(
+                {
+                    "Item Code": code,
+                    "Description": description,
+                    "Cases": "0",
+                    "Quantity": quantity,
+                    "Unit Price": unit_price,
+                    "Line Amount": line_amount,
+                }
+            )
+        )
+    return rows
+
+
+def looks_like_beigel_code(value: str) -> bool:
+    return bool(re.fullmatch(r"(?:[A-Z]{1,3}\d{0,3}|\d{1,6}|\d{1,3}:\d{1,3})", value))
+
+
+def normalize_beigel_code(value: str) -> str:
+    aliases = {
+        "122": "W22",
+        "LCH": "LCW",
+        "125:125": "W125:W125",
+    }
+    return aliases.get(value, value)
+
+
+def cleanup_beigel_description(value: str) -> str:
+    cleaned = collapse_text(value)
+    cleaned = cleaned.replace("EUERYTHING", "EVERYTHING")
+    cleaned = cleaned.replace("BURGER BLNS", "BURGER BUNS")
+    cleaned = cleaned.replace("CRIGINAI", "ORIGINAL")
+    cleaned = re.sub(r"(?i)16OZ", "16 OZ", cleaned)
+    cleaned = re.sub(r"(?i)6PK", "6PK", cleaned)
+    return cleaned
+
+
+def beigel_numeric_fields(numbers: list[str]) -> tuple[str, str, str]:
+    if len(numbers) >= 3:
+        return numbers[0], numbers[1], numbers[2]
+    unit_price = numbers[0]
+    line_amount = numbers[1]
+    quantity = ""
+    unit = safe_numeric(unit_price)
+    amount = safe_numeric(line_amount)
+    if unit:
+        quantity = format_quantity(amount / unit)
+    return quantity, unit_price, line_amount
+
+
 def normalize_item_code(value: str) -> str:
     if value.startswith("Cl"):
         return "CI" + value[2:]
@@ -1290,7 +1393,7 @@ def cleanup_description(value: str) -> str:
 
 
 def is_numeric_cell(value: str) -> bool:
-    return bool(re.fullmatch(r"\d+(?:,\d{3})*(?:\.\d{1,4})?", value))
+    return bool(re.fullmatch(r"-?\d+(?:,\d{3})*(?:\.\d{1,4})?", value))
 
 
 def canonical_money(value: str) -> str:
@@ -1310,6 +1413,10 @@ def format_quantity(value: float) -> str:
     if value.is_integer():
         return str(int(value))
     return f"{value:.2f}".rstrip("0").rstrip(".")
+
+
+def format_amount(value: float) -> str:
+    return f"{value:.2f}"
 
 
 def hf_device(torch_module):
