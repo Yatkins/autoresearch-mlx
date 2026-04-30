@@ -1121,7 +1121,7 @@ def parse_bw_foods_line_items(lines: list[str]) -> list[dict[str, Any]]:
             cursor += 1
         if len(prices) < 2 or not desc_parts:
             continue
-        quantity = previous_numbers[0]
+        quantity = previous_numbers[-1]
         rows.append(
             fill_common_line_defaults(
                 {
@@ -1176,7 +1176,7 @@ def normalized_quantity(value: str) -> str | None:
 
 
 def looks_like_pack_size(value: str) -> bool:
-    return bool(re.search(r"\d+\s*x\s*\d+|OZ", value, flags=re.IGNORECASE))
+    return bool(re.fullmatch(r"(?:\d+\s*x\s*\d+|[A-Z]OX\d+)(?:\s+OZ)?", value, flags=re.IGNORECASE))
 
 
 def apply_row_numbers(row: dict[str, Any], values: list[str]) -> None:
@@ -1230,7 +1230,7 @@ def cleanup_description(value: str) -> str:
 
 
 def is_numeric_cell(value: str) -> bool:
-    return bool(re.fullmatch(r"\d+(?:,\d{3})*(?:\.\d{1,2})?", value))
+    return bool(re.fullmatch(r"\d+(?:,\d{3})*(?:\.\d{1,4})?", value))
 
 
 def canonical_money(value: str) -> str:
