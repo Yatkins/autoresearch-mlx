@@ -5,3 +5,4 @@ d0828be	0.489796	0.358039	0.000439	11.539	discard	round 1 PaddleOCR v4 OCR plus 
 dc31c85-dirty	0.877551	0.768175	0.000000	7.125	keep	local PaddleOCR v4 heuristic table reconstruction
 35f5ca2	0.918367	0.804868	0.000000	7.620	keep	local PaddleOCR v4 row cleanup after table reconstruction
 f32e8df	0.201599	0.104659	0.000000	5.819	keep	all-doc local PaddleOCR v4 row cleanup after one-invoice win
+d084181	0.256661	0.159217	0.000000	5.849	keep	all-doc local Herrs and BW parser expansion
