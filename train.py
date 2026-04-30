@@ -913,11 +913,17 @@ def parse_invoice_text_heuristic(text: str) -> tuple[dict[str, Any], list[dict[s
                     "Line Amount": match.group(6),
                 }
             )
+    if rows and "Total Quantity" not in fields:
+        total_quantity = sum((safe_numeric(row.get("Quantity")) for row in rows), start=0.0)
+        if total_quantity:
+            fields["Total Quantity"] = format_quantity(total_quantity)
     return fields, rows
 
 
 def enrich_invoice_text_fields(flat: str, fields: dict[str, Any]) -> None:
     upper_flat = flat.upper()
+    if "FOOD EX" in upper_flat:
+        fields.setdefault("Store", "Foodex")
     for store in ("Foodex", "Einhorn", "Everfresh"):
         if store.upper() in upper_flat:
             fields.setdefault("Store", store)
@@ -983,7 +989,7 @@ def normalize_store_name(value: str) -> str:
 def parse_paddleocr_line_items(text: str) -> list[dict[str, Any]]:
     lines = [collapse_text(line) for line in text.splitlines()]
     lines = [line for line in lines if line]
-    specialized = parse_herrs_line_items(lines) or parse_bw_foods_line_items(lines)
+    specialized = parse_herrs_line_items(lines) or parse_bw_foods_line_items(lines) or parse_menachems_line_items(lines)
     if specialized:
         return specialized
     rows: list[dict[str, Any]] = []
@@ -1143,6 +1149,51 @@ def parse_bw_foods_line_items(lines: list[str]) -> list[dict[str, Any]]:
     return rows
 
 
+def parse_menachems_line_items(lines: list[str]) -> list[dict[str, Any]]:
+    text = " ".join(lines).upper()
+    if "MENACHEM" not in text or "DIPS" not in text:
+        return []
+    rows: list[dict[str, Any]] = []
+    for index, line in enumerate(lines):
+        match = re.match(r"^([A-Za-z]{1,3}\d{3,4})/(.+)$", line)
+        if not match:
+            continue
+        numbers: list[str] = []
+        cursor = index + 1
+        while cursor < len(lines) and len(numbers) < 3:
+            cleaned = lines[cursor].replace("$", "")
+            if is_numeric_cell(cleaned):
+                numbers.append(cleaned)
+            cursor += 1
+        if len(numbers) != 3:
+            continue
+        rows.append(
+            fill_common_line_defaults(
+                {
+                    "Item Code": normalize_item_code(match.group(1)),
+                    "Description": cleanup_menachem_description(match.group(2)),
+                    "Cases": "0",
+                    "Quantity": numbers[0],
+                    "Unit Price": numbers[1],
+                    "Line Amount": numbers[2],
+                }
+            )
+        )
+    return rows
+
+
+def normalize_item_code(value: str) -> str:
+    if value.startswith("Cl"):
+        return "CI" + value[2:]
+    return value
+
+
+def cleanup_menachem_description(value: str) -> str:
+    cleaned = collapse_text(value)
+    cleaned = re.sub(r"(?i)w/(\S)", r"w/ \1", cleaned)
+    return cleaned
+
+
 def split_trailing_quantity(value: str) -> tuple[str, str | None]:
     match = re.match(r"^(.*\D)(\d{1,4})$", value.strip())
     if not match:
@@ -1244,6 +1295,21 @@ def is_numeric_cell(value: str) -> bool:
 
 def canonical_money(value: str) -> str:
     return value.replace(",", "").rstrip("0").rstrip(".") or "0"
+
+
+def safe_numeric(value: Any) -> float:
+    if value is None:
+        return 0.0
+    try:
+        return float(str(value).replace("$", "").replace(",", ""))
+    except ValueError:
+        return 0.0
+
+
+def format_quantity(value: float) -> str:
+    if value.is_integer():
+        return str(int(value))
+    return f"{value:.2f}".rstrip("0").rstrip(".")
 
 
 def hf_device(torch_module):
