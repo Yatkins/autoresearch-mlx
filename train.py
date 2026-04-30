@@ -1011,7 +1011,12 @@ def parse_paddleocr_line_items(text: str) -> list[dict[str, Any]]:
 def apply_row_numbers(row: dict[str, Any], values: list[str]) -> None:
     if not values:
         return
-    row["Line Amount"] = values[-1]
+    line_amount = values[-1]
+    if canonical_money(line_amount) == "0":
+        non_zero_values = [value for value in values[1:] if canonical_money(value) != "0"]
+        if len(non_zero_values) >= 2:
+            line_amount = non_zero_values[-1]
+    row["Line Amount"] = line_amount
     candidates = values[:-1]
     if candidates and re.fullmatch(r"\d+", candidates[0]):
         row["Cases"] = candidates[0]
@@ -1038,10 +1043,12 @@ def fill_common_line_defaults(row: dict[str, Any]) -> dict[str, Any]:
 def cleanup_description(value: str) -> str:
     cleaned = collapse_text(value).strip(" .")
     cleaned = re.sub(r"(?i)POLANDSPRING", "POLAND SPRING ", cleaned)
+    cleaned = re.sub(r"(?i)POLANDSPORT", "POLAND SPORT ", cleaned)
     cleaned = re.sub(r"(?i)SPORTCAP", "SPORT CAP", cleaned)
-    cleaned = re.sub(r"(?i)(\d)LT", r"\1 LT", cleaned)
-    cleaned = re.sub(r"(?i)(\d)PK", r"\1 PK", cleaned)
-    cleaned = re.sub(r"(?i)(\d)LITER", r"\1 LITER", cleaned)
+    cleaned = re.sub(r"(?i)(\d(?:\.\d+)?)LT", r"\1 LT", cleaned)
+    cleaned = re.sub(r"(?i)(\d+)PK", r"\1 PK", cleaned)
+    cleaned = re.sub(r"(?i)(\d+)LITER", r"\1 LITER", cleaned)
+    cleaned = re.sub(r"(?i)CAP(\d+)", r"CAP \1", cleaned)
     cleaned = re.sub(r"(?i)SPRING(\d)", r"SPRING \1", cleaned)
     cleaned = collapse_text(cleaned)
     if cleaned.endswith("12"):
