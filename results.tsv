@@ -3,3 +3,4 @@ commit	accuracy	adjusted_score	cost_per_doc	latency_s	status	description
 d0828be	0.489796	0.358039	0.000439	11.539	discard	round 1 PaddleOCR v4 OCR plus Mistral extraction
 0027b25-dirty	0.061224	0.000000	0.000000	8.965	discard	recheck local PaddleOCR v4 heuristic parser
 dc31c85-dirty	0.877551	0.768175	0.000000	7.125	keep	local PaddleOCR v4 heuristic table reconstruction
+35f5ca2	0.918367	0.804868	0.000000	7.620	keep	local PaddleOCR v4 row cleanup after table reconstruction
