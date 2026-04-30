@@ -1059,7 +1059,7 @@ def parse_herrs_line_items(lines: list[str]) -> list[dict[str, Any]]:
         upc = ""
         while index < len(lines):
             line = lines[index]
-            if re.fullmatch(r"\d{3}", line) or line.upper() == "TOTAL":
+            if line.upper() == "TOTAL":
                 break
             upc_match = re.search(r"UPC:?\s*(\d+)", line, flags=re.IGNORECASE)
             if upc_match:
@@ -1115,9 +1115,15 @@ def parse_bw_foods_line_items(lines: list[str]) -> list[dict[str, Any]]:
             if is_numeric_cell(lines[cursor]):
                 prices.append(lines[cursor])
             cursor += 1
+        continuation_lines = 0
         while cursor < len(lines) and not normalized_quantity(lines[cursor]) and not re.fullmatch(r"\d{6}", lines[cursor]):
+            if re.search(r"ship\s+cs|all claims|amount due|invoice total|total paid|balance due", lines[cursor], flags=re.IGNORECASE):
+                break
             if not is_numeric_cell(lines[cursor]):
                 desc_parts.append(lines[cursor])
+                continuation_lines += 1
+                if continuation_lines >= 2:
+                    break
             cursor += 1
         if len(prices) < 2 or not desc_parts:
             continue
@@ -1148,6 +1154,7 @@ def cleanup_herrs_description(value: str) -> str:
     cleaned = collapse_text(value)
     cleaned = re.sub(r"(?i)(\d+CT)(\d)", r"\1 \2", cleaned)
     cleaned = re.sub(r"(?i)(\d+)OZ", r"\1 OZ", cleaned)
+    cleaned = re.sub(r"(?i)OZ([A-Z])", r"OZ \1", cleaned)
     cleaned = re.sub(r"(?i)-\s*NP", " - NP", cleaned)
     return collapse_text(cleaned)
 
@@ -1219,6 +1226,8 @@ def cleanup_description(value: str) -> str:
     cleaned = re.sub(r"(?i)(\d(?:\.\d+)?)LT", r"\1 LT", cleaned)
     cleaned = re.sub(r"(?i)(\d+)PK", r"\1 PK", cleaned)
     cleaned = re.sub(r"(?i)(\d+)LITER", r"\1 LITER", cleaned)
+    cleaned = re.sub(r"(?i)(\d+)OZ", r"\1OZ", cleaned)
+    cleaned = re.sub(r"(?i)([A-Z])(\d+OZ)", r"\1 \2", cleaned)
     cleaned = re.sub(r"(?i)CAP(\d+)", r"CAP \1", cleaned)
     cleaned = re.sub(r"(?i)SPRING(\d)", r"SPRING \1", cleaned)
     cleaned = collapse_text(cleaned)
