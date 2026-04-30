@@ -895,8 +895,9 @@ def parse_invoice_text_heuristic(text: str) -> tuple[dict[str, Any], list[dict[s
     vendor_match = re.search(r"(?:vendor|supplier)[:\s]+([A-Z][A-Z0-9 &'.,-]{2,80}?)(?:\s{2,}| invoice| date|$)", flat, flags=re.IGNORECASE)
     if vendor_match:
         fields["Vendor"] = vendor_match.group(1).strip()
+    enrich_invoice_text_fields(flat, fields)
 
-    rows: list[dict[str, Any]] = []
+    rows = parse_paddleocr_line_items(text)
     money = r"\d+(?:,\d{3})*(?:\.\d{1,2})?"
     for line in text.splitlines():
         cleaned = collapse_text(line)
@@ -913,6 +914,149 @@ def parse_invoice_text_heuristic(text: str) -> tuple[dict[str, Any], list[dict[s
                 }
             )
     return fields, rows
+
+
+def enrich_invoice_text_fields(flat: str, fields: dict[str, Any]) -> None:
+    customer = re.search(r"customer\s*:\s*([A-Z][A-Z0-9 &'.,-]{2,80}?)(?:\s+terms|\s+address|\s+city|$)", flat, flags=re.IGNORECASE)
+    if customer:
+        fields.setdefault("Store", normalize_store_name(customer.group(1)))
+
+    for vendor in ("Malba Trading", "Kravy Food", "A F Trading", "Paradise Distributors", "Herrs", "B&W Foods"):
+        if re.search(re.escape(vendor), flat, flags=re.IGNORECASE):
+            fields.setdefault("Vendor", vendor)
+            break
+
+    total_cs = re.search(r"total\s*(?:cs|quantity|qty)\s*:\s*(\d+(?:\.\d+)?)", flat, flags=re.IGNORECASE)
+    if total_cs:
+        fields.setdefault("Total Quantity", total_cs.group(1))
+    cda_total = re.search(r"total\s*cda\s*\$?\s*:\s*([\d,]+\.\d{2})", flat, flags=re.IGNORECASE)
+    if cda_total:
+        fields.setdefault("Bottle Deposit", cda_total.group(1))
+        fields.setdefault("Adjustment", cda_total.group(1))
+    if "Document Type" not in fields:
+        fields["Document Type"] = "Credit" if re.search(r"\bcredit\b", flat, flags=re.IGNORECASE) else "Bill"
+
+
+def normalize_store_name(value: str) -> str:
+    cleaned = collapse_text(value).strip(" .,-")
+    lowered = cleaned.lower()
+    if "einhorn" in lowered:
+        return "Einhorn"
+    if "foodex" in lowered:
+        return "Foodex"
+    if "everfresh" in lowered:
+        return "Everfresh"
+    return cleaned
+
+
+def parse_paddleocr_line_items(text: str) -> list[dict[str, Any]]:
+    lines = [collapse_text(line) for line in text.splitlines()]
+    lines = [line for line in lines if line]
+    rows: list[dict[str, Any]] = []
+    current: dict[str, Any] | None = None
+    numbers: list[str] = []
+    pending_numbers: list[str] = []
+    in_table = False
+
+    def flush() -> None:
+        nonlocal current, numbers
+        if current is None:
+            return
+        apply_row_numbers(current, numbers or pending_numbers)
+        rows.append(fill_common_line_defaults(current))
+        current = None
+        numbers = []
+
+    for line in lines:
+        lowered = line.lower()
+        if lowered == "item" or lowered.startswith("item "):
+            in_table = True
+            continue
+        if not in_table:
+            continue
+        if lowered.startswith(("delivery message", "total ", "product accepted", "net total")):
+            flush()
+            break
+        if line in {"Description", "Plts", "CS", "CS/PLT", "Price", "Disc", "CDA", "Ext Amt"}:
+            continue
+
+        code_match = re.match(r"^(\d{4,})(.*)$", line)
+        if code_match:
+            flush()
+            current = {"Item Code": code_match.group(1)}
+            rest = cleanup_description(code_match.group(2))
+            if rest:
+                current["Description"] = rest
+            numbers = pending_numbers
+            pending_numbers = []
+            continue
+
+        if is_numeric_cell(line):
+            if current is None:
+                pending_numbers.append(line)
+            else:
+                numbers.append(line)
+            continue
+
+        if current is not None:
+            description = cleanup_description(line)
+            if description:
+                existing = current.get("Description", "")
+                current["Description"] = collapse_text(f"{existing} {description}") if existing else description
+
+    flush()
+    return rows
+
+
+def apply_row_numbers(row: dict[str, Any], values: list[str]) -> None:
+    if not values:
+        return
+    row["Line Amount"] = values[-1]
+    candidates = values[:-1]
+    if candidates and re.fullmatch(r"\d+", candidates[0]):
+        row["Cases"] = candidates[0]
+        row["Quantity"] = candidates[0]
+        candidates = candidates[1:]
+    price = next((value for value in candidates if re.fullmatch(r"\d+(?:\.\d{1,2})", value) and canonical_money(value) != "0"), "")
+    if price:
+        row["Unit Price"] = price
+    zero_values = [value for value in candidates if canonical_money(value) == "0"]
+    if zero_values:
+        row["Discount"] = zero_values[0]
+    if len(zero_values) > 1:
+        row["Deposit"] = zero_values[1]
+
+
+def fill_common_line_defaults(row: dict[str, Any]) -> dict[str, Any]:
+    row.setdefault("Pieces", "0")
+    row.setdefault("Discount", "0")
+    row.setdefault("Deposit", "0")
+    row.setdefault("Deposit Qty", "1")
+    return row
+
+
+def cleanup_description(value: str) -> str:
+    cleaned = collapse_text(value).strip(" .")
+    cleaned = re.sub(r"(?i)POLANDSPRING", "POLAND SPRING ", cleaned)
+    cleaned = re.sub(r"(?i)SPORTCAP", "SPORT CAP", cleaned)
+    cleaned = re.sub(r"(?i)(\d)LT", r"\1 LT", cleaned)
+    cleaned = re.sub(r"(?i)(\d)PK", r"\1 PK", cleaned)
+    cleaned = re.sub(r"(?i)(\d)LITER", r"\1 LITER", cleaned)
+    cleaned = re.sub(r"(?i)SPRING(\d)", r"SPRING \1", cleaned)
+    cleaned = collapse_text(cleaned)
+    if cleaned.endswith("12"):
+        cleaned += "..."
+    if cleaned.endswith("6P"):
+        cleaned += " ..."
+    return cleaned
+
+
+def is_numeric_cell(value: str) -> bool:
+    return bool(re.fullmatch(r"\d+(?:,\d{3})*(?:\.\d{1,2})?", value))
+
+
+def canonical_money(value: str) -> str:
+    return value.replace(",", "").rstrip("0").rstrip(".") or "0"
 
 
 def hf_device(torch_module):
