@@ -180,6 +180,7 @@ The scorer is tuned for business-impact extraction accuracy:
 - Missing discount/deposit-style zero values count as `0`.
 - Quantity can match when it is derivable from `Line Amount / Unit Price`.
 - Store and document-type wording is normalized, so values like `Einhorn's Supermarket` vs `Einhorn`, or `Invoice` vs `Bill`, do not drive the score.
+- Model outputs are written as extracted by default. Set `INVOICE_POSTPROCESS_OUTPUT=1` only when you explicitly want `train.py` to rewrite predictions before scoring.
 
 ## Current Practical Notes
 

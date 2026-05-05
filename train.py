@@ -32,6 +32,7 @@ EXPERIMENT = os.getenv("INVOICE_EXPERIMENT", "mistral_ocr_small4_v1")
 DOC_LIMIT = int(os.getenv("INVOICE_DOC_LIMIT", "0") or "0")
 REQUEST_TIMEOUT = int(os.getenv("INVOICE_REQUEST_TIMEOUT", "180"))
 AUTO_LOG_RESULTS = os.getenv("AUTO_LOG_RESULTS", "1").lower() not in {"0", "false", "no"}
+POSTPROCESS_OUTPUT = os.getenv("INVOICE_POSTPROCESS_OUTPUT", "0").lower() in {"1", "true", "yes"}
 
 TARGET_FIELDS = [
     "Store",
@@ -91,9 +92,9 @@ Rules:
 - Use empty strings for missing fields.
 - Preserve exact invoice-visible values when possible.
 - Do not invent rows or totals.
-- If Discount, Deposit, Bottle Deposit, or Adjustment are not shown, use "0".
+- If Discount, Deposit, Bottle Deposit, or Adjustment are not shown, leave them empty.
 - Do not infer Pieces, Cases, or Deposit Qty; they are not target output fields.
-- Quantity means the total sold/credited quantity. If quantity is not explicit but Unit Price and Line Amount are visible, derive Quantity as Line Amount / Unit Price.
+- Quantity means the invoice-visible sold/credited quantity.
 - Return SKU, UPC, barcode, or VIC/vendor item code separately when visible; do not replace Item Code with SKU.
 - Prefer these header fields: {", ".join(TARGET_FIELDS)}.
 - Prefer these line item fields: {", ".join(TARGET_LINE_FIELDS)}.
@@ -139,7 +140,10 @@ def main() -> None:
                 status="crash",
                 error=f"{type(exc).__name__}: {exc}",
             )
-        fields, line_items = postprocess_extraction(result.fields, result.line_items)
+        if POSTPROCESS_OUTPUT:
+            fields, line_items = postprocess_extraction(result.fields, result.line_items)
+        else:
+            fields, line_items = result.fields, result.line_items
         records.append(
             {
                 "document_id": document_id,
