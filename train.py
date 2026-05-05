@@ -1559,6 +1559,9 @@ def default_run_description() -> str:
 
 
 def current_commit() -> str:
+    override = os.getenv("RUN_COMMIT")
+    if override:
+        return sanitize_tsv(override)
     try:
         commit = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], text=True).strip()
         dirty = subprocess.run(["git", "diff", "--quiet"], check=False).returncode != 0

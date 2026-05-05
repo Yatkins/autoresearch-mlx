@@ -119,6 +119,31 @@ INVOICE_EXPERIMENT=hunyuanocr_direct
 INVOICE_EXPERIMENT=deepseek_ocr_regex
 ```
 
+## Overnight API Queue
+
+Codex cannot launch external API runs that upload invoice contents, but you can
+start the API lane yourself and let it run unattended. The queue runner executes
+the experiments in `api_experiments.json`, stores per-run artifacts under
+`api_runs/`, and appends keep/discard/crash rows to `results.tsv`.
+
+Review `api_experiments.json`, export the provider keys you want to use, then run:
+
+```bash
+python3 api_experiment_queue.py --queue api_experiments.json
+```
+
+Useful controls:
+
+```bash
+python3 api_experiment_queue.py --dry-run
+python3 api_experiment_queue.py --max-runs 1
+python3 api_experiment_queue.py --include-disabled
+python3 api_experiment_queue.py --baseline-accuracy 0.562167 --baseline-adjusted-score 0.464865
+```
+
+This command may send invoice PDFs/images or OCR text to the external providers
+listed in the queue.
+
 For HunyuanOCR on Apple Silicon, use lower render DPI to avoid MPS memory errors:
 
 ```bash

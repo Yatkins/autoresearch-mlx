@@ -10,6 +10,7 @@ __pycache__/
 run.log
 predictions.jsonl
 invoice_report.json
+api_runs/
 surfaces.txt
 surface-verify-prompt.md
 build-2-closeout.md
