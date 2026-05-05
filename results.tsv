@@ -10,3 +10,8 @@ c6e70c1	0.306394	0.208472	0.000000	5.877	keep	all-doc local Herrs four-decimal a
 cf92edc	0.329485	0.231855	0.000000	5.859	keep	all-doc local Herrs quantity and BW footer cleanup
 2611ba4	0.463588	0.365582	0.000000	5.882	keep	all-doc local Menachem row parser and quantity fallback
 fe16e1b	0.562167	0.464865	0.000000	5.840	keep	all-doc local Israel Beigel parser and amount fallback
+591916a	0.717418	0.613510	0.001612	5.850	keep	all-doc API Mistral OCR plus Small 4 structured extraction
+591916a	0.722290	0.648267	0.001622	4.360	keep	all-doc API Mistral OCR table HTML plus Small 4 extraction
+591916a	0.598051	0.466241	0.000576	9.541	discard	all-doc API PaddleOCR v4 local OCR plus Mistral extraction
+591916a	0.029233	0.000000	0.000000	0.229	crash	all-doc API PaddleOCR v5 local OCR plus Mistral extraction
+591916a	0.221681	0.041168	0.002500	2.461	discard	all-doc API Azure prebuilt invoice

@@ -47,15 +47,14 @@ TARGET_FIELDS = [
 
 TARGET_LINE_FIELDS = [
     "Item Code",
+    "SKU",
+    "VIC",
     "Description",
-    "Cases",
     "Quantity",
     "Unit Price",
     "Line Amount",
-    "Pieces",
     "Discount",
     "Deposit",
-    "Deposit Qty",
 ]
 
 EXTRACTION_PROMPT = f"""Extract invoice data from the document text.
@@ -76,15 +75,14 @@ Return only valid JSON with this shape:
   "line_items": [
     {{
       "Item Code": "",
+      "SKU": "",
+      "VIC": "",
       "Description": "",
-      "Cases": "",
       "Quantity": "",
       "Unit Price": "",
       "Line Amount": "",
-      "Pieces": "",
       "Discount": "",
-      "Deposit": "",
-      "Deposit Qty": ""
+      "Deposit": ""
     }}
   ]
 }}
@@ -93,6 +91,10 @@ Rules:
 - Use empty strings for missing fields.
 - Preserve exact invoice-visible values when possible.
 - Do not invent rows or totals.
+- If Discount, Deposit, Bottle Deposit, or Adjustment are not shown, use "0".
+- Do not infer Pieces, Cases, or Deposit Qty; they are not target output fields.
+- Quantity means the total sold/credited quantity. If quantity is not explicit but Unit Price and Line Amount are visible, derive Quantity as Line Amount / Unit Price.
+- Return SKU, UPC, barcode, or VIC/vendor item code separately when visible; do not replace Item Code with SKU.
 - Prefer these header fields: {", ".join(TARGET_FIELDS)}.
 - Prefer these line item fields: {", ".join(TARGET_LINE_FIELDS)}.
 """
@@ -137,12 +139,13 @@ def main() -> None:
                 status="crash",
                 error=f"{type(exc).__name__}: {exc}",
             )
+        fields, line_items = postprocess_extraction(result.fields, result.line_items)
         records.append(
             {
                 "document_id": document_id,
                 "source_path": str(path),
-                "fields": result.fields,
-                "line_items": result.line_items,
+                "fields": fields,
+                "line_items": line_items,
                 "cost_usd": result.cost_usd,
                 "latency_seconds": result.latency_seconds,
                 "status": result.status,
@@ -1417,6 +1420,125 @@ def format_quantity(value: float) -> str:
 
 def format_amount(value: float) -> str:
     return f"{value:.2f}"
+
+
+def postprocess_extraction(fields: dict[str, Any], line_items: list[dict[str, Any]]) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    rows = postprocess_line_items(line_items)
+    processed_fields = postprocess_fields(fields)
+    if rows and blank_value(processed_fields.get("Total Quantity")):
+        quantity = sum((safe_numeric(row.get("Quantity")) for row in rows), start=0.0)
+        if quantity:
+            processed_fields["Total Quantity"] = format_quantity(quantity)
+    if rows and blank_value(processed_fields.get("Invoice Amount")):
+        amount = sum((safe_numeric(row.get("Line Amount")) for row in rows), start=0.0)
+        if amount:
+            processed_fields["Invoice Amount"] = format_amount(amount)
+    return processed_fields, rows
+
+
+def postprocess_fields(fields: dict[str, Any]) -> dict[str, Any]:
+    processed = dict(fields) if isinstance(fields, dict) else {}
+    store = processed.get("Store")
+    if isinstance(store, str):
+        lowered = store.lower()
+        if "einhorn" in lowered:
+            processed["Store"] = "Einhorn"
+        elif "food ex" in lowered or "foodex" in lowered:
+            processed["Store"] = "Foodex"
+        elif "everfresh" in lowered:
+            processed["Store"] = "Everfresh"
+
+    document_type = processed.get("Document Type")
+    if isinstance(document_type, str):
+        lowered = document_type.lower()
+        if "credit" in lowered:
+            processed["Document Type"] = "Credit"
+        elif lowered.strip() in {"invoice", "bill"}:
+            processed["Document Type"] = "Bill"
+
+    for name in ("Adjustment", "Bottle Deposit"):
+        if blank_value(processed.get(name)):
+            processed[name] = "0"
+    return processed
+
+
+def postprocess_line_items(line_items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for row in line_items:
+        if not isinstance(row, dict):
+            continue
+        normalized = normalize_output_row_keys(row)
+        if blank_value(normalized.get("Quantity")):
+            quantity = quantity_from_price_amount(normalized)
+            if quantity:
+                normalized["Quantity"] = quantity
+            elif not blank_value(normalized.get("Cases")):
+                normalized["Quantity"] = normalized["Cases"]
+        if isinstance(normalized.get("Description"), str):
+            normalized["Description"] = normalize_output_description(str(normalized["Description"]))
+        for name in ("Discount", "Deposit"):
+            if blank_value(normalized.get(name)):
+                normalized[name] = "0"
+        rows.append({key: value for key, value in normalized.items() if not blank_value(value)})
+    return rows
+
+
+OUTPUT_ROW_ALIASES = {
+    "itemcode": "Item Code",
+    "productcode": "Item Code",
+    "item": "Item Code",
+    "sku": "SKU",
+    "upc": "SKU",
+    "barcode": "SKU",
+    "vic": "VIC",
+    "vendoritemcode": "VIC",
+    "description": "Description",
+    "itemdescription": "Description",
+    "productdescription": "Description",
+    "cases": "Cases",
+    "case": "Cases",
+    "quantity": "Quantity",
+    "qty": "Quantity",
+    "unitprice": "Unit Price",
+    "price": "Unit Price",
+    "lineamount": "Line Amount",
+    "amount": "Line Amount",
+    "linetotal": "Line Amount",
+    "discount": "Discount",
+    "deposit": "Deposit",
+}
+
+
+def normalize_output_row_keys(row: dict[str, Any]) -> dict[str, Any]:
+    normalized: dict[str, Any] = {}
+    for key, value in row.items():
+        compact = re.sub(r"[^a-z0-9]", "", str(key).lower())
+        normalized_key = OUTPUT_ROW_ALIASES.get(compact, key)
+        if normalized_key in normalized and not blank_value(normalized[normalized_key]):
+            continue
+        normalized[normalized_key] = value
+    return normalized
+
+
+def quantity_from_price_amount(row: dict[str, Any]) -> str:
+    unit_price = safe_numeric(row.get("Unit Price"))
+    line_amount = safe_numeric(row.get("Line Amount"))
+    if not unit_price or not line_amount:
+        return ""
+    return format_quantity(line_amount / unit_price)
+
+
+def normalize_output_description(value: str) -> str:
+    cleaned = collapse_text(value)
+    cleaned = cleaned.replace("…", "...")
+    cleaned = re.sub(r"\s*\.\s*\.\s*\.", "...", cleaned)
+    cleaned = re.sub(r"\s*/\s*", "/", cleaned)
+    cleaned = re.sub(r"\s*\\\s*", r"\\", cleaned)
+    return collapse_text(cleaned)
+
+
+def blank_value(value: Any) -> bool:
+    return value is None or (isinstance(value, str) and value.strip() == "")
 
 
 def hf_device(torch_module):

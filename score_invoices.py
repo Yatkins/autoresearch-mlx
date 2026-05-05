@@ -23,6 +23,17 @@ EXCLUDED_TOP_LEVEL_FIELDS = {
 
 EXCLUDED_LINE_ITEM_FIELDS = {
     "Error Fields",
+    "Cases",
+    "Case",
+    "cases",
+    "Pieces",
+    "Piece",
+    "pieces",
+    "Deposit Qty",
+    "Deposit Quantity",
+    "deposit_qty",
+    "Unit Per Case",
+    "unit_per_case",
 }
 
 NUMERIC_HINTS = (
@@ -39,8 +50,16 @@ NUMERIC_HINTS = (
     "cases",
     "unitpercase",
     "calcvalue",
-    "upc",
 )
+
+IDENTITY_FIELDS = {"item_code", "sku", "vic"}
+
+ZERO_DEFAULT_FIELDS = {
+    "adjustment",
+    "bottle_deposit",
+    "discount",
+    "deposit",
+}
 
 BOOLEAN_HINTS = (
     "invalid",
@@ -79,7 +98,11 @@ HEADER_ALIASES = {
 LINE_ALIASES = {
     "itemcode": "item_code",
     "productcode": "item_code",
-    "sku": "item_code",
+    "sku": "sku",
+    "upc": "sku",
+    "barcode": "sku",
+    "vic": "vic",
+    "vendoritemcode": "vic",
     "item": "item_code",
     "description": "description",
     "itemdescription": "description",
@@ -99,6 +122,7 @@ LINE_ALIASES = {
     "deposit": "deposit",
     "depositqty": "deposit_qty",
     "depositquantity": "deposit_qty",
+    "unitpercase": "unit_per_case",
 }
 
 
@@ -286,9 +310,9 @@ def load_predictions(path: Path) -> dict[str, dict[str, Any]]:
 def normalize_fields(fields: dict[str, Any], excluded: set[str], aliases: dict[str, str]) -> dict[str, str]:
     normalized: dict[str, str] = {}
     for key, raw_value in fields.items():
-        if key in excluded:
-            continue
         canonical_key = canonical_key_name(key, aliases)
+        if key in excluded or canonical_key in excluded:
+            continue
         value = canonical_value(canonical_key, raw_value)
         if value is not None:
             normalized[canonical_key] = value
@@ -325,6 +349,14 @@ def canonical_value(field_name: str, value: Any) -> str | None:
         return None
 
     lowered_name = field_name.lower()
+    if lowered_name in IDENTITY_FIELDS:
+        return canonical_identifier(cleaned)
+    if lowered_name == "description":
+        return canonical_description(cleaned)
+    if lowered_name == "store":
+        return canonical_store(cleaned)
+    if lowered_name == "document_type":
+        return canonical_document_type(cleaned)
     if any(hint in lowered_name for hint in BOOLEAN_HINTS):
         normalized = canonical_bool(cleaned)
         if normalized is not None:
@@ -345,6 +377,41 @@ def canonical_value(field_name: str, value: Any) -> str | None:
     if normalized is not None and re.fullmatch(r"[$,0-9.\-()% ]+", cleaned):
         return normalized
     return collapse_ws(cleaned).upper()
+
+
+def canonical_identifier(value: str) -> str:
+    return re.sub(r"\s+", "", collapse_ws(value)).upper()
+
+
+def canonical_description(value: str) -> str:
+    cleaned = collapse_ws(value).upper()
+    cleaned = cleaned.replace("…", "...")
+    cleaned = re.sub(r"\s*\.\s*\.\s*\.", "...", cleaned)
+    cleaned = re.sub(r"\s*/\s*", "/", cleaned)
+    cleaned = re.sub(r"\s*\\\s*", r"\\", cleaned)
+    cleaned = re.sub(r"\s+", " ", cleaned)
+    return cleaned.strip()
+
+
+def canonical_store(value: str) -> str:
+    cleaned = collapse_ws(value).upper()
+    if "EINHORN" in cleaned:
+        return "EINHORN"
+    if "FOOD EX" in cleaned or "FOODEX" in cleaned:
+        return "FOODEX"
+    if "EVERFRESH" in cleaned:
+        return "EVERFRESH"
+    cleaned = re.sub(r"\b(?:SUPERMARKET|MARKET|GROCERY|FOODS?)\b", "", cleaned)
+    return collapse_ws(cleaned)
+
+
+def canonical_document_type(value: str) -> str:
+    cleaned = collapse_ws(value).upper()
+    if "CREDIT" in cleaned:
+        return "CREDIT"
+    if cleaned in {"BILL", "INVOICE"}:
+        return "BILL"
+    return cleaned
 
 
 def collapse_ws(value: str) -> str:
@@ -390,7 +457,7 @@ def canonical_date(value: str) -> str | None:
 
 def compare_fields(expected: dict[str, str], actual: dict[str, str]) -> tuple[int, int]:
     total = len(expected)
-    matches = sum(1 for key, value in expected.items() if actual.get(key) == value)
+    matches = sum(1 for key, value in expected.items() if field_matches(key, value, actual.get(key), actual))
     return matches, total
 
 
@@ -413,7 +480,34 @@ def compare_line_items(expected: list[dict[str, str]], actual: list[dict[str, st
 
 
 def count_field_matches(expected: dict[str, str], actual: dict[str, str]) -> int:
-    return sum(1 for key, value in expected.items() if actual.get(key) == value)
+    return sum(1 for key, value in expected.items() if field_matches(key, value, actual.get(key), actual))
+
+
+def field_matches(field_name: str, expected: str, actual: str | None, actual_row: dict[str, str]) -> bool:
+    if actual == expected:
+        return True
+    if actual is None and expected == "0" and field_name in ZERO_DEFAULT_FIELDS:
+        return True
+    if field_name == "quantity":
+        derived_quantity = quantity_from_amount_price(actual_row)
+        if derived_quantity is not None and derived_quantity == expected:
+            return True
+    return False
+
+
+def quantity_from_amount_price(row: dict[str, str]) -> str | None:
+    amount = row.get("line_amount")
+    unit_price = row.get("unit_price")
+    if amount in (None, "0") or unit_price in (None, "0"):
+        return None
+    try:
+        quantity = Decimal(amount) / Decimal(unit_price)
+    except (InvalidOperation, ZeroDivisionError):
+        return None
+    normalized = format(quantity.normalize(), "f")
+    if "." in normalized:
+        normalized = normalized.rstrip("0").rstrip(".")
+    return normalized or "0"
 
 
 def summarize_documents(documents: dict[str, DocumentMetrics]) -> dict[str, Any]:

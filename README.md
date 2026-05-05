@@ -173,6 +173,14 @@ commit	accuracy	adjusted_score	cost_per_doc	latency_s	status	description
 
 Use `keep` for improvements, `discard` for losing ideas, and `crash` for failed runs. The loop should prefer higher `accuracy`; use `adjusted_score` as a tie-breaker.
 
+The scorer is tuned for business-impact extraction accuracy:
+
+- Critical line-item fields are item code, SKU/UPC/VIC when visible, description, quantity, unit price, line amount, discount, and deposit.
+- `Cases`, `Pieces`, `Deposit Qty`, and `Unit Per Case` are not scored because they are often bookkeeping defaults or not explicit on the invoice.
+- Missing discount/deposit-style zero values count as `0`.
+- Quantity can match when it is derivable from `Line Amount / Unit Price`.
+- Store and document-type wording is normalized, so values like `Einhorn's Supermarket` vs `Einhorn`, or `Invoice` vs `Bill`, do not drive the score.
+
 ## Current Practical Notes
 
 - Mistral OCR plus structured extraction is the strongest current baseline.
