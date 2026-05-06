@@ -24,38 +24,44 @@ import requests
 from score_invoices import score_predictions
 
 
-DATA_DIR = Path(os.getenv("INVOICE_DATA_DIR", "../Training_invoices"))
+DATA_DIR = Path(os.getenv("INVOICE_DATA_DIR", "../Training_Invoices"))
 PREDICTIONS_PATH = Path(os.getenv("PREDICTIONS_PATH", "predictions.jsonl"))
 REPORT_PATH = Path(os.getenv("REPORT_PATH", "invoice_report.json"))
+COMPARISON_PATH = Path(os.getenv("COMPARISON_PATH", "invoice_comparison.tsv"))
 RESULTS_PATH = Path(os.getenv("RESULTS_PATH", "results.tsv"))
 EXPERIMENT = os.getenv("INVOICE_EXPERIMENT", "mistral_ocr_small4_v1")
 DOC_LIMIT = int(os.getenv("INVOICE_DOC_LIMIT", "0") or "0")
 REQUEST_TIMEOUT = int(os.getenv("INVOICE_REQUEST_TIMEOUT", "180"))
 AUTO_LOG_RESULTS = os.getenv("AUTO_LOG_RESULTS", "1").lower() not in {"0", "false", "no"}
-POSTPROCESS_OUTPUT = os.getenv("INVOICE_POSTPROCESS_OUTPUT", "0").lower() in {"1", "true", "yes"}
 
 TARGET_FIELDS = [
-    "Store",
     "Vendor",
+    "Vendor Physical Address",
+    "Vendor Phone Number",
+    "Vendor Website",
+    "Vendor Email",
     "Invoice No",
     "Invoice Date",
     "Total Quantity",
+    "Adjustment",
     "Bottle Deposit",
     "Invoice Amount",
     "Document Type",
-    "Adjustment",
+    "Holiday",
 ]
 
 TARGET_LINE_FIELDS = [
-    "Item Code",
-    "SKU",
+    "Cases",
+    "Pieces",
+    "Quantity",
+    "Units Per Case",
+    "UPC",
     "VIC",
     "Description",
-    "Quantity",
     "Unit Price",
-    "Line Amount",
     "Discount",
     "Deposit",
+    "Line Amount",
 ]
 
 EXTRACTION_PROMPT = f"""Extract invoice data from the document text.
@@ -63,39 +69,45 @@ EXTRACTION_PROMPT = f"""Extract invoice data from the document text.
 Return only valid JSON with this shape:
 {{
   "fields": {{
-    "Store": "",
     "Vendor": "",
+    "Vendor Physical Address": "",
+    "Vendor Phone Number": "",
+    "Vendor Website": "",
+    "Vendor Email": "",
     "Invoice No": "",
     "Invoice Date": "",
     "Total Quantity": "",
+    "Adjustment": "",
     "Bottle Deposit": "",
     "Invoice Amount": "",
     "Document Type": "",
-    "Adjustment": ""
+    "Holiday": ""
   }},
   "line_items": [
     {{
-      "Item Code": "",
-      "SKU": "",
+      "Cases": "",
+      "Pieces": "",
+      "Quantity": "",
+      "Units Per Case": "",
+      "UPC": "",
       "VIC": "",
       "Description": "",
-      "Quantity": "",
       "Unit Price": "",
-      "Line Amount": "",
       "Discount": "",
-      "Deposit": ""
+      "Deposit": "",
+      "Line Amount": ""
     }}
   ]
 }}
 
 Rules:
-- Use empty strings for missing fields.
-- Preserve exact invoice-visible values when possible.
-- Do not invent rows or totals.
-- If Discount, Deposit, Bottle Deposit, or Adjustment are not shown, leave them empty.
-- Do not infer Pieces, Cases, or Deposit Qty; they are not target output fields.
-- Quantity means the invoice-visible sold/credited quantity.
-- Return SKU, UPC, barcode, or VIC/vendor item code separately when visible; do not replace Item Code with SKU.
+- Return the exact invoice-visible values. Do not normalize formatting in the extracted data.
+- Use empty strings for missing fields. Do not default missing numeric fields to 0.
+- Map vendor-specific column labels into this schema by meaning.
+- Keep UPC/SKU/barcode separate from vendor item code/product code/item code/VIC.
+- Quantity may be shown in different line-level count columns; when unclear, line amount divided by unit price is the best quantity check.
+- Document Type is a Bill vs Credit inference from the document semantics.
+- Invoice number and credit number both belong in Invoice No.
 - Prefer these header fields: {", ".join(TARGET_FIELDS)}.
 - Prefer these line item fields: {", ".join(TARGET_LINE_FIELDS)}.
 """
@@ -140,16 +152,12 @@ def main() -> None:
                 status="crash",
                 error=f"{type(exc).__name__}: {exc}",
             )
-        if POSTPROCESS_OUTPUT:
-            fields, line_items = postprocess_extraction(result.fields, result.line_items)
-        else:
-            fields, line_items = result.fields, result.line_items
         records.append(
             {
                 "document_id": document_id,
                 "source_path": str(path),
-                "fields": fields,
-                "line_items": line_items,
+                "fields": result.fields,
+                "line_items": result.line_items,
                 "cost_usd": result.cost_usd,
                 "latency_seconds": result.latency_seconds,
                 "status": result.status,
@@ -158,7 +166,13 @@ def main() -> None:
         )
 
     write_jsonl(PREDICTIONS_PATH, records)
-    summary = score_predictions(DATA_DIR, PREDICTIONS_PATH, REPORT_PATH, document_ids=[document_id for document_id, _ in documents])
+    summary = score_predictions(
+        DATA_DIR,
+        PREDICTIONS_PATH,
+        REPORT_PATH,
+        COMPARISON_PATH,
+        document_ids=[document_id for document_id, _ in documents],
+    )
     total_seconds = time.time() - run_started
 
     print("---")
@@ -888,7 +902,7 @@ def parse_invoice_text_heuristic(text: str) -> tuple[dict[str, Any], list[dict[s
     flat = collapse_text(text)
     fields: dict[str, Any] = {}
     patterns = {
-        "Invoice No": r"(?:invoice\s*(?:no|number|#|id)[:\s]*)([A-Z0-9\-]+)",
+        "Invoice No": r"(?:(?:invoice|credit)\s*(?:no|number|#|id)[:\s]*)([A-Z0-9\-]+)",
         "Invoice Date": r"(?:invoice\s*date|date)[:\s]*(\d{1,2}[/-]\d{1,2}[/-]\d{2,4})",
         "Invoice Amount": r"(?:invoice\s*(?:amount|total)|amount\s*due|total)[:\s$]*([\d,]+\.\d{2})",
         "Total Quantity": r"(?:total\s*(?:quantity|qty))[:\s]*(\d+(?:\.\d+)?)",
@@ -975,8 +989,6 @@ def enrich_invoice_text_fields(flat: str, fields: dict[str, Any]) -> None:
     if cda_total:
         fields.setdefault("Bottle Deposit", cda_total.group(1))
         fields.setdefault("Adjustment", cda_total.group(1))
-    fields.setdefault("Bottle Deposit", "0.00")
-    fields.setdefault("Adjustment", "0.00")
     invoice_no = re.search(r"invoice\s*no\.?\s*[:#]?\s*([A-Z0-9\-]+)", flat, flags=re.IGNORECASE)
     if invoice_no:
         fields.setdefault("Invoice No", invoice_no.group(1))
@@ -1109,7 +1121,6 @@ def parse_herrs_line_items(lines: list[str]) -> list[dict[str, Any]]:
                     {
                         "Item Code": upc,
                         "Description": cleanup_herrs_description(description),
-                        "Cases": "0",
                         "Quantity": quantity or "",
                         "Unit Price": numbers[-2],
                         "Line Amount": numbers[-1],
@@ -1195,7 +1206,6 @@ def parse_menachems_line_items(lines: list[str]) -> list[dict[str, Any]]:
                 {
                     "Item Code": normalize_item_code(match.group(1)),
                     "Description": cleanup_menachem_description(match.group(2)),
-                    "Cases": "0",
                     "Quantity": numbers[0],
                     "Unit Price": numbers[1],
                     "Line Amount": numbers[2],
@@ -1246,7 +1256,6 @@ def parse_israel_beigel_line_items(lines: list[str]) -> list[dict[str, Any]]:
                 {
                     "Item Code": code,
                     "Description": description,
-                    "Cases": "0",
                     "Quantity": quantity,
                     "Unit Price": unit_price,
                     "Line Amount": line_amount,
@@ -1372,10 +1381,6 @@ def apply_row_numbers(row: dict[str, Any], values: list[str]) -> None:
 
 
 def fill_common_line_defaults(row: dict[str, Any]) -> dict[str, Any]:
-    row.setdefault("Pieces", "0")
-    row.setdefault("Discount", "0")
-    row.setdefault("Deposit", "0")
-    row.setdefault("Deposit Qty", "1")
     return row
 
 
@@ -1424,125 +1429,6 @@ def format_quantity(value: float) -> str:
 
 def format_amount(value: float) -> str:
     return f"{value:.2f}"
-
-
-def postprocess_extraction(fields: dict[str, Any], line_items: list[dict[str, Any]]) -> tuple[dict[str, Any], list[dict[str, Any]]]:
-    rows = postprocess_line_items(line_items)
-    processed_fields = postprocess_fields(fields)
-    if rows and blank_value(processed_fields.get("Total Quantity")):
-        quantity = sum((safe_numeric(row.get("Quantity")) for row in rows), start=0.0)
-        if quantity:
-            processed_fields["Total Quantity"] = format_quantity(quantity)
-    if rows and blank_value(processed_fields.get("Invoice Amount")):
-        amount = sum((safe_numeric(row.get("Line Amount")) for row in rows), start=0.0)
-        if amount:
-            processed_fields["Invoice Amount"] = format_amount(amount)
-    return processed_fields, rows
-
-
-def postprocess_fields(fields: dict[str, Any]) -> dict[str, Any]:
-    processed = dict(fields) if isinstance(fields, dict) else {}
-    store = processed.get("Store")
-    if isinstance(store, str):
-        lowered = store.lower()
-        if "einhorn" in lowered:
-            processed["Store"] = "Einhorn"
-        elif "food ex" in lowered or "foodex" in lowered:
-            processed["Store"] = "Foodex"
-        elif "everfresh" in lowered:
-            processed["Store"] = "Everfresh"
-
-    document_type = processed.get("Document Type")
-    if isinstance(document_type, str):
-        lowered = document_type.lower()
-        if "credit" in lowered:
-            processed["Document Type"] = "Credit"
-        elif lowered.strip() in {"invoice", "bill"}:
-            processed["Document Type"] = "Bill"
-
-    for name in ("Adjustment", "Bottle Deposit"):
-        if blank_value(processed.get(name)):
-            processed[name] = "0"
-    return processed
-
-
-def postprocess_line_items(line_items: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    rows: list[dict[str, Any]] = []
-    for row in line_items:
-        if not isinstance(row, dict):
-            continue
-        normalized = normalize_output_row_keys(row)
-        if blank_value(normalized.get("Quantity")):
-            quantity = quantity_from_price_amount(normalized)
-            if quantity:
-                normalized["Quantity"] = quantity
-            elif not blank_value(normalized.get("Cases")):
-                normalized["Quantity"] = normalized["Cases"]
-        if isinstance(normalized.get("Description"), str):
-            normalized["Description"] = normalize_output_description(str(normalized["Description"]))
-        for name in ("Discount", "Deposit"):
-            if blank_value(normalized.get(name)):
-                normalized[name] = "0"
-        rows.append({key: value for key, value in normalized.items() if not blank_value(value)})
-    return rows
-
-
-OUTPUT_ROW_ALIASES = {
-    "itemcode": "Item Code",
-    "productcode": "Item Code",
-    "item": "Item Code",
-    "sku": "SKU",
-    "upc": "SKU",
-    "barcode": "SKU",
-    "vic": "VIC",
-    "vendoritemcode": "VIC",
-    "description": "Description",
-    "itemdescription": "Description",
-    "productdescription": "Description",
-    "cases": "Cases",
-    "case": "Cases",
-    "quantity": "Quantity",
-    "qty": "Quantity",
-    "unitprice": "Unit Price",
-    "price": "Unit Price",
-    "lineamount": "Line Amount",
-    "amount": "Line Amount",
-    "linetotal": "Line Amount",
-    "discount": "Discount",
-    "deposit": "Deposit",
-}
-
-
-def normalize_output_row_keys(row: dict[str, Any]) -> dict[str, Any]:
-    normalized: dict[str, Any] = {}
-    for key, value in row.items():
-        compact = re.sub(r"[^a-z0-9]", "", str(key).lower())
-        normalized_key = OUTPUT_ROW_ALIASES.get(compact, key)
-        if normalized_key in normalized and not blank_value(normalized[normalized_key]):
-            continue
-        normalized[normalized_key] = value
-    return normalized
-
-
-def quantity_from_price_amount(row: dict[str, Any]) -> str:
-    unit_price = safe_numeric(row.get("Unit Price"))
-    line_amount = safe_numeric(row.get("Line Amount"))
-    if not unit_price or not line_amount:
-        return ""
-    return format_quantity(line_amount / unit_price)
-
-
-def normalize_output_description(value: str) -> str:
-    cleaned = collapse_text(value)
-    cleaned = cleaned.replace("…", "...")
-    cleaned = re.sub(r"\s*\.\s*\.\s*\.", "...", cleaned)
-    cleaned = re.sub(r"\s*/\s*", "/", cleaned)
-    cleaned = re.sub(r"\s*\\\s*", r"\\", cleaned)
-    return collapse_text(cleaned)
-
-
-def blank_value(value: Any) -> bool:
-    return value is None or (isinstance(value, str) and value.strip() == "")
 
 
 def hf_device(torch_module):

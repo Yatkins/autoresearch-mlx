@@ -181,6 +181,7 @@ def run_experiment(
     log_path = artifact_dir / "run.log"
     prediction_path = artifact_dir / "predictions.jsonl"
     report_path = artifact_dir / "invoice_report.json"
+    comparison_path = artifact_dir / "invoice_comparison.tsv"
     description = scoped_description(experiment)
 
     env = os.environ.copy()
@@ -195,6 +196,7 @@ def run_experiment(
             "RESULTS_PATH": str(result_path),
             "PREDICTIONS_PATH": str(prediction_path),
             "REPORT_PATH": str(report_path),
+            "COMPARISON_PATH": str(comparison_path),
         }
     )
 

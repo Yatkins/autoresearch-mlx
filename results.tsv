@@ -1,17 +1,2 @@
 commit	accuracy	adjusted_score	cost_per_doc	latency_s	status	description
-0445589	0.653061	0.561219	0.001431	5.225	keep	one-invoice baseline Mistral OCR plus Mistral Small 4
-d0828be	0.489796	0.358039	0.000439	11.539	discard	round 1 PaddleOCR v4 OCR plus Mistral extraction
-0027b25-dirty	0.061224	0.000000	0.000000	8.965	discard	recheck local PaddleOCR v4 heuristic parser
-dc31c85-dirty	0.877551	0.768175	0.000000	7.125	keep	local PaddleOCR v4 heuristic table reconstruction
-35f5ca2	0.918367	0.804868	0.000000	7.620	keep	local PaddleOCR v4 row cleanup after table reconstruction
-f32e8df	0.201599	0.104659	0.000000	5.819	keep	all-doc local PaddleOCR v4 row cleanup after one-invoice win
-d084181	0.256661	0.159217	0.000000	5.849	keep	all-doc local Herrs and BW parser expansion
-c6e70c1	0.306394	0.208472	0.000000	5.877	keep	all-doc local Herrs four-decimal and BW description cleanup
-cf92edc	0.329485	0.231855	0.000000	5.859	keep	all-doc local Herrs quantity and BW footer cleanup
-2611ba4	0.463588	0.365582	0.000000	5.882	keep	all-doc local Menachem row parser and quantity fallback
-fe16e1b	0.562167	0.464865	0.000000	5.840	keep	all-doc local Israel Beigel parser and amount fallback
-591916a	0.717418	0.613510	0.001612	5.850	keep	all-doc API Mistral OCR plus Small 4 structured extraction
-591916a	0.722290	0.648267	0.001622	4.360	keep	all-doc API Mistral OCR table HTML plus Small 4 extraction
-591916a	0.598051	0.466241	0.000576	9.541	discard	all-doc API PaddleOCR v4 local OCR plus Mistral extraction
-591916a	0.029233	0.000000	0.000000	0.229	crash	all-doc API PaddleOCR v5 local OCR plus Mistral extraction
-591916a	0.221681	0.041168	0.002500	2.461	discard	all-doc API Azure prebuilt invoice
+dc2a389-dirty	0.708791	0.608084	0.000000	6.085	run	all-doc local PaddleOCR v4 raw output baseline

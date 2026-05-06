@@ -19,7 +19,7 @@ This repo is designed for “bring your own keys”: no credentials, invoices, p
 By default, the runner expects invoices one folder above the repo:
 
 ```text
-../Training_invoices/
+../Training_Invoices/
   1.pdf
   1.json
   2.pdf
@@ -43,7 +43,7 @@ Each document file should have a matching label JSON with the same stem. The cur
 Override the location with:
 
 ```bash
-export INVOICE_DATA_DIR=/path/to/Training_invoices
+export INVOICE_DATA_DIR=/path/to/Training_Invoices
 ```
 
 ## Setup
@@ -173,22 +173,24 @@ commit	accuracy	adjusted_score	cost_per_doc	latency_s	status	description
 
 Use `keep` for improvements, `discard` for losing ideas, and `crash` for failed runs. The loop should prefer higher `accuracy`; use `adjusted_score` as a tie-breaker.
 
-The scorer is tuned for business-impact extraction accuracy:
+The scorer is tuned for business-impact extraction accuracy. Model outputs are saved raw; normalization is only used inside the scorer and comparison report.
 
-- Critical line-item fields are item code, SKU/UPC/VIC when visible, description, quantity, unit price, line amount, discount, and deposit.
-- `Cases`, `Pieces`, `Deposit Qty`, and `Unit Per Case` are not scored because they are often bookkeeping defaults or not explicit on the invoice.
-- Missing discount/deposit-style zero values count as `0`.
-- Quantity can match when it is derivable from `Line Amount / Unit Price`.
-- Store and document-type wording is normalized, so values like `Einhorn's Supermarket` vs `Einhorn`, or `Invoice` vs `Bill`, do not drive the score.
-- Model outputs are written as extracted by default. Set `INVOICE_POSTPROCESS_OUTPUT=1` only when you explicitly want `train.py` to rewrite predictions before scoring.
+- Critical line-item fields are VIC/vendor item code, UPC/SKU/barcode when visible, description, quantity, unit price, line amount, discount, and deposit.
+- `Total Quantity` is optional and is not scored.
+- `Units Per Case` is synonymous with `CS Qty`, case quantity, pack size, and case pack.
+- Predictions are not rewritten to default missing values to `0`.
+- For zero-style fields such as adjustment, bottle deposit, cases, pieces, discount, and deposit, missing and zero are equivalent in the scorer.
+- Quantity can match when it is derivable from `Line Amount / Unit Price`, present as `Pieces` or `Cases`, or computed from `Cases * Units Per Case`.
+- Invoice number and credit number both score as `invoice_no`.
+- Document type is treated as model inference for Bill vs Credit.
+- Columns that are blank/zero in both truth and predictions for the whole evaluated set are ignored.
 
 ## Current Practical Notes
 
-- Mistral OCR plus structured extraction is the strongest current baseline.
-- PaddleOCR v4 works locally; pairing it with Mistral extraction is more useful than regex-only parsing.
-- Azure Prebuilt is wired, but requires Azure credentials.
-- HunyuanOCR can run locally with source Transformers and low DPI, but current output quality is weak on the sample invoice.
-- DeepSeek-OCR currently has Transformers/model-code compatibility issues on this Mac path and is better suited to a separate remote GPU environment.
+- The finalized local baseline is PaddleOCR v4 regex extraction at `accuracy=0.708791`, `adjusted_score=0.608084`.
+- Earlier rows from older metric definitions are not comparable to the finalized scorer.
+- Mistral OCR plus structured extraction, Mistral table HTML, Azure, and OpenRouter are wired for API comparison once credentials are loaded.
+- HunyuanOCR and DeepSeek-OCR are available as local/self-hosted experiments, but may require dependency or hardware-specific tuning.
 
 ## License
 

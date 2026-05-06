@@ -4,7 +4,7 @@ This repo is configured as an autonomous experiment loop for invoice OCR and str
 
 ## Goal
 
-Maximize invoice extraction `accuracy` on the fixed labeled set in `../Training_invoices`.
+Maximize invoice extraction `accuracy` on the fixed labeled set in `../Training_Invoices`.
 
 Use `adjusted_score` as a secondary metric. It starts from accuracy and penalizes average document cost, latency, low throughput, and crashes. Do not chase speed or cost at the expense of meaningful accuracy unless accuracy is essentially tied.
 
@@ -14,19 +14,30 @@ Use `adjusted_score` as a secondary metric. It starts from accuracy and penalize
 - `train.py` - mutable experiment runner. Change model/provider/prompt/parameters here.
 - `results.tsv` - experiment history.
 - `run.log` - ignored local run output.
-- `predictions.jsonl` and `invoice_report.json` - ignored local artifacts.
+- `predictions.jsonl`, `invoice_report.json`, and `invoice_comparison.tsv` - ignored local artifacts.
 
 ## Data
 
 The training/eval set is one folder up:
 
 ```bash
-../Training_invoices
+../Training_Invoices
 ```
 
 Each invoice should have a document file plus matching JSON label by stem, for example `1.pdf` and `1.json`.
 
-The label JSON has header fields plus `Rows`. The scorer canonicalizes field names and formats, so equivalent names like `InvoiceId` and `Invoice No`, or `$1,000.00` and `1000`, can match.
+The label JSON has header fields plus `Rows`. The scorer canonicalizes field names and formats, so equivalent names like `InvoiceId` and `Invoice No`, or `$1,000.00` and `1000`, can match. `Invoice No` and `Credit Number` are normalized to `invoice_no`, and `document_type` is normalized to `Bill` / `Credit` as a model-level inference.
+
+Scoring notes:
+
+- Predictions are saved raw; normalization is only for scoring and reporting.
+- `Total Quantity` is optional and not scored.
+- `UPC` means UPC/SKU/barcode. `VIC` means vendor item code, product code, item code, or vendor internal code.
+- `Units Per Case` also accepts CS Qty, case quantity, pack size, and case pack.
+- Quantity can match directly, from pieces/cases, from cases times units per case, or from line amount divided by unit price.
+- Predictions are not rewritten to default missing values to `0`.
+- For zero-style fields such as adjustment, bottle deposit, cases, pieces, discount, and deposit, missing and zero are equivalent in the scorer.
+- Columns that are blank/zero in both truth and predictions for the whole evaluated set are ignored.
 
 ## Credentials
 
@@ -115,6 +126,15 @@ After each run:
 
 ```bash
 grep "^accuracy:\\|^adjusted_score:\\|^avg_cost_usd:\\|^avg_latency_seconds:\\|^crash_rate:" run.log
+```
+
+Use `invoice_comparison.tsv` to audit true values, predicted values, per-field scores, and matched line rows.
+
+Current finalized baseline:
+
+```tsv
+accuracy	adjusted_score	description
+0.708791	0.608084	all-doc local PaddleOCR v4 raw output scorer zero equivalence
 ```
 
 ## Keep Or Revert
