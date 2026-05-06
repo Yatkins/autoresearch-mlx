@@ -1,9 +1,17 @@
 .DS_Store
+.zshrc
+.env
+.env.*
+!.env.example
 .venv/
 __pycache__/
 *.pyc
 *.log
 run.log
+predictions.jsonl
+invoice_report.json
+invoice_comparison.tsv
+api_runs/
 surfaces.txt
 surface-verify-prompt.md
 build-2-closeout.md

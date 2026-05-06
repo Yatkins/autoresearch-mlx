@@ -5,11 +5,31 @@ description = "Apple Silicon MLX port of Karpathy's autoresearch"
 readme = "README.md"
 requires-python = ">=3.10,<3.14"
 dependencies = [
-    "mlx>=0.30.0",
-    "numpy>=2.2.6",
-    "pyarrow>=21.0.0",
-    "regex>=2025.7.34",
     "requests>=2.32.0",
-    "rustbpe>=0.1.0",
-    "tiktoken>=0.11.0",
+]
+[project.optional-dependencies]
+local-ocr = [
+  "setuptools",
+  "pymupdf",
+  "pillow",
+  "opencv-python-headless",
+  "paddleocr",
+  "paddlepaddle",
+]
+
+hf-doc = [
+  "torch",
+  "torchvision",
+  "transformers @ git+https://github.com/huggingface/transformers@82a06db03535c49aa987719ed0746a76093b1ec4",
+  "accelerate",
+  "sentencepiece",
+  "einops",
+  "addict",
+  "easydict",
+  "matplotlib",
+  "protobuf",
+  "pytesseract",
+  "timm",
+  "pillow",
+  "pymupdf",
 ]

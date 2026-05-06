@@ -1,0 +1,72 @@
+{
+  "experiments": [
+    {
+      "name": "mistral_ocr_small4_v1",
+      "description": "all-doc API Mistral OCR plus Small 4 structured extraction",
+      "required_env": ["MISTRAL_API_KEY"],
+      "env": {
+        "INVOICE_EXPERIMENT": "mistral_ocr_small4_v1",
+        "MISTRAL_EXTRACT_MODEL": "mistral-small-2603",
+        "MISTRAL_TEMPERATURE": "0"
+      }
+    },
+    {
+      "name": "mistral_ocr_small4_table_html",
+      "description": "all-doc API Mistral OCR table HTML plus Small 4 extraction",
+      "required_env": ["MISTRAL_API_KEY"],
+      "env": {
+        "INVOICE_EXPERIMENT": "mistral_ocr_small4_table_html",
+        "MISTRAL_EXTRACT_MODEL": "mistral-small-2603",
+        "MISTRAL_TEMPERATURE": "0"
+      }
+    },
+    {
+      "name": "paddleocr_v4_mistral",
+      "description": "all-doc API PaddleOCR v4 local OCR plus Mistral extraction",
+      "required_env": ["MISTRAL_API_KEY"],
+      "env": {
+        "INVOICE_EXPERIMENT": "paddleocr_v4_mistral",
+        "MISTRAL_EXTRACT_MODEL": "mistral-small-2603",
+        "MISTRAL_TEMPERATURE": "0"
+      }
+    },
+    {
+      "name": "paddleocr_v5_mistral",
+      "description": "all-doc API PaddleOCR v5 local OCR plus Mistral extraction",
+      "required_env": ["MISTRAL_API_KEY"],
+      "env": {
+        "INVOICE_EXPERIMENT": "paddleocr_v5_mistral",
+        "MISTRAL_EXTRACT_MODEL": "mistral-small-2603",
+        "MISTRAL_TEMPERATURE": "0"
+      }
+    },
+    {
+      "name": "azure_prebuilt_invoice",
+      "description": "all-doc API Azure prebuilt invoice",
+      "required_env": ["AZURE_FORM_RECOGNIZER_ENDPOINT", "AZURE_FORM_RECOGNIZER_KEY"],
+      "env": {
+        "INVOICE_EXPERIMENT": "azure_prebuilt_invoice"
+      }
+    },
+    {
+      "name": "azure_custom_invoice",
+      "description": "all-doc API Azure custom invoice model",
+      "enabled": false,
+      "required_env": ["AZURE_FORM_RECOGNIZER_ENDPOINT", "AZURE_FORM_RECOGNIZER_KEY", "AZURE_CUSTOM_MODEL_ID"],
+      "env": {
+        "INVOICE_EXPERIMENT": "azure_custom_invoice"
+      }
+    },
+    {
+      "name": "openrouter_vision_image_only",
+      "description": "image-only API OpenRouter Qwen2.5-VL direct vision",
+      "enabled": false,
+      "required_env": ["OPENROUTER_API_KEY"],
+      "env": {
+        "INVOICE_EXPERIMENT": "openrouter_vision",
+        "OPENROUTER_MODEL": "qwen/qwen2.5-vl-72b-instruct",
+        "OPENROUTER_TEMPERATURE": "0"
+      }
+    }
+  ]
+}
