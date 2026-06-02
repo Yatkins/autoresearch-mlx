@@ -87,17 +87,6 @@ NUMERIC_FIELDS = {
 
 IDENTITY_FIELDS = {"invoice_no", "upc", "vic"}
 
-ZERO_EQUIVALENT_FIELDS = {
-    "adjustment",
-    "bottle_deposit",
-    "case",
-    "deposit",
-    "discount",
-    "holiday",
-    "pieces",
-    "units_per_case",
-}
-
 BOOLEAN_HINTS = (
     "invalid",
     "cog",
@@ -279,12 +268,7 @@ def score_predictions(
         metrics.comparisons = header_comparisons + line_comparisons
         documents[document_id] = metrics
 
-    ignored_columns = remove_ignored_empty_columns(documents)
     summary = summarize_documents(documents)
-    summary["ignored_empty_columns"] = [
-        {"section": section, "field": field}
-        for section, field in sorted(ignored_columns)
-    ]
     if report_path is not None:
         report_path.write_text(
             json.dumps(
@@ -733,8 +717,6 @@ def field_score(field_name: str, expected: str, actual: str | None, actual_row: 
         return 1.0
     if actual == expected:
         return 1.0
-    if field_name in ZERO_EQUIVALENT_FIELDS and zeroish(expected) and zeroish(actual):
-        return 1.0
     if field_name == "quantity":
         derived_quantity = quantity_from_amount_price(actual_row)
         if derived_quantity is not None and numeric_values_match(expected, derived_quantity):
@@ -811,51 +793,6 @@ def quantity_from_case_and_units(case_count: str | None, units_per_case: str | N
     except (InvalidOperation, ZeroDivisionError):
         return None
     return canonical_number(str(quantity))
-
-
-def remove_ignored_empty_columns(documents: dict[str, DocumentMetrics]) -> set[tuple[str, str]]:
-    ignored = empty_zero_columns(documents)
-    for metric in documents.values():
-        rows = [
-            row
-            for row in (metric.comparisons or [])
-            if (str(row.get("section")), str(row.get("field"))) not in ignored
-        ]
-        metric.comparisons = rows
-        metric.header_matches = sum(score_value(row) for row in rows if row.get("section") == "header")
-        metric.header_total = sum(1 for row in rows if row.get("section") == "header" and row.get("_score_value") is not None)
-        metric.line_matches = sum(score_value(row) for row in rows if row.get("section") == "line_item")
-        metric.line_total = sum(1 for row in rows if row.get("section") == "line_item" and row.get("_score_value") is not None)
-    return ignored
-
-
-def empty_zero_columns(documents: dict[str, DocumentMetrics]) -> set[tuple[str, str]]:
-    grouped: dict[tuple[str, str], list[dict[str, Any]]] = {}
-    for metric in documents.values():
-        for row in metric.comparisons or []:
-            if row.get("section") not in {"header", "line_item"} or row.get("_score_value") is None:
-                continue
-            grouped.setdefault((str(row["section"]), str(row["field"])), []).append(row)
-    ignored: set[tuple[str, str]] = set()
-    for key, rows in grouped.items():
-        if rows and all(zeroish(row.get("true_value")) and zeroish(row.get("predicted_value")) for row in rows):
-            ignored.add(key)
-    return ignored
-
-
-def zeroish(value: Any) -> bool:
-    if value is None:
-        return True
-    text = str(value).strip()
-    if text == "":
-        return True
-    number = canonical_number(text)
-    return number == "0"
-
-
-def score_value(row: dict[str, Any]) -> float:
-    value = row.get("_score_value")
-    return float(value) if value is not None else 0.0
 
 
 def summarize_documents(documents: dict[str, DocumentMetrics]) -> dict[str, Any]:

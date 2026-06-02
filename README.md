@@ -111,12 +111,22 @@ INVOICE_EXPERIMENT=mistral_ocr_small4_v1
 INVOICE_EXPERIMENT=mistral_ocr_small4_table_html
 INVOICE_EXPERIMENT=paddleocr_v4_mistral
 INVOICE_EXPERIMENT=azure_prebuilt_invoice
+INVOICE_EXPERIMENT=azure_prebuilt_mistral_mapper
+INVOICE_EXPERIMENT=azure_custom_mistral_mapper
+INVOICE_EXPERIMENT=glm_ocr
 INVOICE_EXPERIMENT=openrouter_vision
+INVOICE_EXPERIMENT=huggingface_vlm
+INVOICE_EXPERIMENT=huggingface_vlm_mistral_mapper
 INVOICE_EXPERIMENT=paddleocr_v4_regex
+INVOICE_EXPERIMENT=paddleocr_v4_mistral_mapper
 INVOICE_EXPERIMENT=donut_cord_regex
+INVOICE_EXPERIMENT=donut_mistral_mapper
 INVOICE_EXPERIMENT=layoutlmv3_invoice_token
+INVOICE_EXPERIMENT=layoutlmv3_mistral_mapper
 INVOICE_EXPERIMENT=hunyuanocr_direct
+INVOICE_EXPERIMENT=hunyuanocr_mistral_mapper
 INVOICE_EXPERIMENT=deepseek_ocr_regex
+INVOICE_EXPERIMENT=deepseek_ocr_mistral_mapper
 ```
 
 ## Overnight API Queue
@@ -137,12 +147,28 @@ Useful controls:
 ```bash
 python3 api_experiment_queue.py --dry-run
 python3 api_experiment_queue.py --max-runs 1
-python3 api_experiment_queue.py --include-disabled
 python3 api_experiment_queue.py --baseline-accuracy 0.562167 --baseline-adjusted-score 0.464865
 ```
 
 This command may send invoice PDFs/images or OCR text to the external providers
 listed in the queue.
+
+The queue includes mapper experiments where a model maps raw OCR/provider output
+into the invoice schema. This is how autoresearch should improve vendor-specific
+or provider-specific labels without adding alias logic to the scorer.
+
+The default queue tries all configured model families. Some local/HF lanes can
+be large, slow, or dependency-heavy, so use a small cap when smoke testing:
+
+```bash
+python3 api_experiment_queue.py --max-runs 1
+```
+
+Mistral calls retry transient `429`/`5xx` responses. Tune retries with:
+
+```bash
+MISTRAL_MAX_RETRIES=4 MISTRAL_RETRY_BASE_SLEEP=8
+```
 
 For HunyuanOCR on Apple Silicon, use lower render DPI to avoid MPS memory errors:
 
@@ -179,16 +205,16 @@ The scorer is tuned for business-impact extraction accuracy. Model outputs are s
 - `Total Quantity` is optional and is not scored.
 - `Units Per Case` is synonymous with `CS Qty`, case quantity, pack size, and case pack.
 - Predictions are not rewritten to default missing values to `0`.
-- For zero-style fields such as adjustment, bottle deposit, cases, pieces, discount, and deposit, missing and zero are equivalent in the scorer.
+- Missing values and zero values are scored as different values; blank only matches blank.
+- Extractors should only return `0` when the invoice visibly shows zero for that exact field.
+- `Adjustment` is a header-level invoice-total adjustment, excluding bottle deposit; leave it blank if no header adjustment is visible.
 - Quantity can match when it is derivable from `Line Amount / Unit Price`, present as `Pieces` or `Cases`, or computed from `Cases * Units Per Case`.
 - Invoice number and credit number both score as `invoice_no`.
 - Document type is treated as model inference for Bill vs Credit.
-- Columns that are blank/zero in both truth and predictions for the whole evaluated set are ignored.
 
 ## Current Practical Notes
 
-- The finalized local baseline is PaddleOCR v4 regex extraction at `accuracy=0.708791`, `adjusted_score=0.608084`.
-- Earlier rows from older metric definitions are not comparable to the finalized scorer.
+- Earlier rows from older metric/data definitions are not comparable to fresh runs after label corrections.
 - Mistral OCR plus structured extraction, Mistral table HTML, Azure, and OpenRouter are wired for API comparison once credentials are loaded.
 - HunyuanOCR and DeepSeek-OCR are available as local/self-hosted experiments, but may require dependency or hardware-specific tuning.
 

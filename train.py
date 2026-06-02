@@ -101,12 +101,14 @@ Return only valid JSON with this shape:
 }}
 
 Rules:
-- Return the exact invoice-visible values. Do not normalize formatting in the extracted data.
-- Use empty strings for missing fields. Do not default missing numeric fields to 0.
+- Return exact invoice-visible values. Do not normalize formatting in the extracted data.
+- Extract only what is visible on the invoice, except Document Type which is inferred as Bill or Credit.
+- Use empty strings for missing fields. Never default missing numeric fields to 0.
+- Return "0" or "0.00" only when the invoice visibly shows zero for that exact field.
 - Map vendor-specific column labels into this schema by meaning.
 - Keep UPC/SKU/barcode separate from vendor item code/product code/item code/VIC.
+- Adjustment is a header-level invoice-total adjustment, excluding bottle deposit. Do not fill it from line-level discounts, line-level deposits, or bottle deposit. If a header-level adjustment is visibly zero, return that visible zero. If no header-level adjustment is shown, return an empty string.
 - Quantity may be shown in different line-level count columns; when unclear, line amount divided by unit price is the best quantity check.
-- Document Type is a Bill vs Credit inference from the document semantics.
 - Invoice number and credit number both belong in Invoice No.
 - Prefer these header fields: {", ".join(TARGET_FIELDS)}.
 - Prefer these line item fields: {", ".join(TARGET_LINE_FIELDS)}.
@@ -215,17 +217,33 @@ def build_extractor(name: str):
         "mistral_ocr_small4_table_html": mistral_ocr_small4_table_html,
         "mistral_small4_direct_image": mistral_small4_direct_image,
         "azure_prebuilt_invoice": azure_prebuilt_invoice,
+        "azure_prebuilt_mistral_mapper": azure_prebuilt_mistral_mapper,
         "azure_custom_invoice": azure_custom_invoice,
+        "azure_custom_mistral_mapper": azure_custom_mistral_mapper,
+        "glm_ocr": glm_ocr,
+        "huggingface_vlm": huggingface_vlm,
+        "hf_vlm": huggingface_vlm,
+        "huggingface_vlm_mistral_mapper": huggingface_vlm_mistral_mapper,
         "openrouter_vision": openrouter_vision,
         "ollama_vision": ollama_vision,
         "paddleocr_v4_regex": paddleocr_v4_regex,
         "paddleocr_v5_regex": paddleocr_v5_regex,
         "paddleocr_v4_mistral": paddleocr_v4_mistral,
         "paddleocr_v5_mistral": paddleocr_v5_mistral,
+        "paddleocr_v4_mistral_mapper": paddleocr_v4_mistral_mapper,
+        "paddleocr_v5_mistral_mapper": paddleocr_v5_mistral_mapper,
+        "donut": donut_mistral_mapper,
         "donut_cord_regex": donut_cord_regex,
+        "donut_mistral_mapper": donut_mistral_mapper,
+        "layoutlmv3": layoutlmv3_invoice_token,
         "layoutlmv3_invoice_token": layoutlmv3_invoice_token,
+        "layoutlmv3_mistral_mapper": layoutlmv3_mistral_mapper,
+        "hunyuan_ocr": hunyuanocr_direct,
         "hunyuanocr_direct": hunyuanocr_direct,
+        "hunyuanocr_mistral_mapper": hunyuanocr_mistral_mapper,
+        "deepseek_ocr": deepseek_ocr_mistral_mapper,
         "deepseek_ocr_regex": deepseek_ocr_regex,
+        "deepseek_ocr_mistral_mapper": deepseek_ocr_mistral_mapper,
     }
     if name not in extractors:
         available = ", ".join(sorted(extractors))
@@ -268,12 +286,31 @@ def azure_prebuilt_invoice(path: Path) -> ExtractionResult:
     return ExtractionResult(fields, rows, cost, time.time() - started)
 
 
+def azure_prebuilt_mistral_mapper(path: Path) -> ExtractionResult:
+    started = time.time()
+    payload = azure_analyze_document(path, "prebuilt-invoice")
+    text = azure_payload_mapping_text(payload, "Azure prebuilt invoice")
+    fields, rows, chat_cost = run_mistral_schema_mapper(text, source_name="Azure prebuilt invoice")
+    cost = float(os.getenv("AZURE_PREBUILT_COST_PER_DOC", "0.01")) + chat_cost
+    return ExtractionResult(fields, rows, cost, time.time() - started)
+
+
 def azure_custom_invoice(path: Path) -> ExtractionResult:
     started = time.time()
     model_id = require_env("AZURE_CUSTOM_MODEL_ID")
     payload = azure_analyze_document(path, model_id)
     fields, rows = parse_azure_custom_invoice(payload)
     cost = float(os.getenv("AZURE_CUSTOM_COST_PER_DOC", os.getenv("AZURE_PREBUILT_COST_PER_DOC", "0.01")))
+    return ExtractionResult(fields, rows, cost, time.time() - started)
+
+
+def azure_custom_mistral_mapper(path: Path) -> ExtractionResult:
+    started = time.time()
+    model_id = require_env("AZURE_CUSTOM_MODEL_ID")
+    payload = azure_analyze_document(path, model_id)
+    text = azure_payload_mapping_text(payload, f"Azure custom invoice model {model_id}")
+    fields, rows, chat_cost = run_mistral_schema_mapper(text, source_name="Azure custom invoice")
+    cost = float(os.getenv("AZURE_CUSTOM_COST_PER_DOC", os.getenv("AZURE_PREBUILT_COST_PER_DOC", "0.01"))) + chat_cost
     return ExtractionResult(fields, rows, cost, time.time() - started)
 
 
@@ -311,6 +348,14 @@ def paddleocr_v5_mistral(path: Path) -> ExtractionResult:
     return paddleocr_mistral(path, "PP-OCRv5")
 
 
+def paddleocr_v4_mistral_mapper(path: Path) -> ExtractionResult:
+    return paddleocr_mistral(path, "PP-OCRv4")
+
+
+def paddleocr_v5_mistral_mapper(path: Path) -> ExtractionResult:
+    return paddleocr_mistral(path, "PP-OCRv5")
+
+
 def paddleocr_regex(path: Path, ocr_version: str) -> ExtractionResult:
     started = time.time()
     text = run_paddleocr(path, ocr_version)
@@ -321,7 +366,14 @@ def paddleocr_regex(path: Path, ocr_version: str) -> ExtractionResult:
 def paddleocr_mistral(path: Path, ocr_version: str) -> ExtractionResult:
     started = time.time()
     text = run_paddleocr(path, ocr_version)
-    fields, rows, chat_cost = run_mistral_text_extraction(text, model=os.getenv("MISTRAL_EXTRACT_MODEL", "mistral-small-2603"))
+    fields, rows, chat_cost = run_mistral_schema_mapper(text, source_name=f"PaddleOCR {ocr_version}")
+    return ExtractionResult(fields, rows, chat_cost, time.time() - started)
+
+
+def donut_mistral_mapper(path: Path) -> ExtractionResult:
+    started = time.time()
+    text = run_donut(path)
+    fields, rows, chat_cost = run_mistral_schema_mapper(text, source_name="Donut")
     return ExtractionResult(fields, rows, chat_cost, time.time() - started)
 
 
@@ -342,11 +394,25 @@ def hunyuanocr_direct(path: Path) -> ExtractionResult:
     return ExtractionResult(fields, rows, 0.0, time.time() - started)
 
 
+def hunyuanocr_mistral_mapper(path: Path) -> ExtractionResult:
+    started = time.time()
+    content = run_hunyuanocr(path)
+    fields, rows, chat_cost = run_mistral_schema_mapper(content, source_name="HunyuanOCR")
+    return ExtractionResult(fields, rows, chat_cost, time.time() - started)
+
+
 def deepseek_ocr_regex(path: Path) -> ExtractionResult:
     started = time.time()
     text = run_deepseek_ocr(path)
     fields, rows = parse_invoice_text_heuristic(text)
     return ExtractionResult(fields, rows, 0.0, time.time() - started)
+
+
+def deepseek_ocr_mistral_mapper(path: Path) -> ExtractionResult:
+    started = time.time()
+    text = run_deepseek_ocr(path)
+    fields, rows, chat_cost = run_mistral_schema_mapper(text, source_name="DeepSeek-OCR")
+    return ExtractionResult(fields, rows, chat_cost, time.time() - started)
 
 
 def layoutlmv3_invoice_token(path: Path) -> ExtractionResult:
@@ -355,25 +421,53 @@ def layoutlmv3_invoice_token(path: Path) -> ExtractionResult:
     return ExtractionResult(fields, [], 0.0, time.time() - started)
 
 
+def layoutlmv3_mistral_mapper(path: Path) -> ExtractionResult:
+    started = time.time()
+    fields = run_layoutlmv3_invoice_token(path)
+    text = json.dumps({"layoutlmv3_fields": fields}, indent=2, sort_keys=True)
+    mapped_fields, rows, chat_cost = run_mistral_schema_mapper(text, source_name="LayoutLMv3 token classifier")
+    return ExtractionResult(mapped_fields, rows, chat_cost, time.time() - started)
+
+
+def glm_ocr(path: Path) -> ExtractionResult:
+    model = os.getenv("GLM_OPENROUTER_MODEL", "z-ai/glm-4.5v")
+    return openrouter_vlm_extraction(path, model=model, temperature_env="GLM_TEMPERATURE")
+
+
+def huggingface_vlm(path: Path) -> ExtractionResult:
+    started = time.time()
+    content = run_huggingface_vlm(path)
+    try:
+        fields, rows = parse_extraction_json(content)
+    except Exception:
+        fields, rows = parse_invoice_text_heuristic(content)
+    return ExtractionResult(fields, rows, 0.0, time.time() - started)
+
+
+def huggingface_vlm_mistral_mapper(path: Path) -> ExtractionResult:
+    started = time.time()
+    content = run_huggingface_vlm(path)
+    fields, rows, chat_cost = run_mistral_schema_mapper(content, source_name="Hugging Face VLM")
+    return ExtractionResult(fields, rows, chat_cost, time.time() - started)
+
+
 def openrouter_vision(path: Path) -> ExtractionResult:
-    if path.suffix.lower() == ".pdf":
-        raise RuntimeError("OpenRouter vision experiment needs image input; convert PDFs or use Mistral/Azure for PDFs.")
+    model = os.getenv("OPENROUTER_MODEL", "qwen/qwen2.5-vl-72b-instruct")
+    return openrouter_vlm_extraction(path, model=model, temperature_env="OPENROUTER_TEMPERATURE")
+
+
+def openrouter_vlm_extraction(path: Path, model: str, temperature_env: str) -> ExtractionResult:
     started = time.time()
     api_key = require_env("OPENROUTER_API_KEY")
-    model = os.getenv("OPENROUTER_MODEL", "qwen/qwen2.5-vl-72b-instruct")
-    data_url = file_data_url(path)
+    content: list[dict[str, Any]] = [{"type": "text", "text": EXTRACTION_PROMPT}]
+    for data_url in document_image_data_urls(path):
+        content.append({"type": "image_url", "image_url": {"url": data_url}})
     payload = {
         "model": model,
-        "temperature": float(os.getenv("OPENROUTER_TEMPERATURE", "0")),
+        "temperature": float(os.getenv(temperature_env, os.getenv("OPENROUTER_TEMPERATURE", "0"))),
         "messages": [
             {"role": "system", "content": "You extract invoice data and return only valid JSON."},
-            {
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": EXTRACTION_PROMPT},
-                    {"type": "image_url", "image_url": {"url": data_url}},
-                ],
-            },
+            {"role": "user", "content": content},
         ],
         "response_format": {"type": "json_object"},
     }
@@ -425,6 +519,27 @@ def ollama_vision(path: Path) -> ExtractionResult:
     return ExtractionResult(fields, rows, 0.0, time.time() - started)
 
 
+def post_mistral_json(url: str, headers: dict[str, str], payload: dict[str, Any]) -> requests.Response:
+    max_retries = int(os.getenv("MISTRAL_MAX_RETRIES", "4"))
+    base_sleep = float(os.getenv("MISTRAL_RETRY_BASE_SLEEP", "8"))
+    response: requests.Response | None = None
+    for attempt in range(max_retries + 1):
+        response = requests.post(url, headers=headers, json=payload, timeout=REQUEST_TIMEOUT)
+        if response.status_code not in {429, 500, 502, 503, 504}:
+            return response
+        if attempt >= max_retries:
+            return response
+        retry_after = response.headers.get("Retry-After")
+        try:
+            sleep_seconds = float(retry_after) if retry_after else base_sleep * (2**attempt)
+        except ValueError:
+            sleep_seconds = base_sleep * (2**attempt)
+        time.sleep(min(sleep_seconds, 90.0))
+    if response is None:
+        raise RuntimeError("Mistral request did not produce a response.")
+    return response
+
+
 def run_mistral_ocr(path: Path, table_format: str | None, extract_header: bool = False, extract_footer: bool = False) -> tuple[str, float]:
     api_key = require_env("MISTRAL_API_KEY")
     body: dict[str, Any] = {
@@ -439,11 +554,10 @@ def run_mistral_ocr(path: Path, table_format: str | None, extract_header: bool =
     if extract_footer:
         body["extract_footer"] = True
 
-    response = requests.post(
+    response = post_mistral_json(
         "https://api.mistral.ai/v1/ocr",
         headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-        json=body,
-        timeout=REQUEST_TIMEOUT,
+        payload=body,
     )
     if response.status_code >= 400:
         raise RuntimeError(f"Mistral OCR failed: {response.status_code} {response.text[:500]}")
@@ -456,21 +570,24 @@ def run_mistral_ocr(path: Path, table_format: str | None, extract_header: bool =
 
 
 def run_mistral_text_extraction(markdown: str, model: str) -> tuple[dict[str, Any], list[dict[str, Any]], float]:
+    return run_mistral_json_prompt(f"{EXTRACTION_PROMPT}\n\nOCR text:\n{markdown}", model=model)
+
+
+def run_mistral_json_prompt(user_content: str, model: str) -> tuple[dict[str, Any], list[dict[str, Any]], float]:
     api_key = require_env("MISTRAL_API_KEY")
     payload = {
         "model": model,
         "temperature": float(os.getenv("MISTRAL_TEMPERATURE", "0")),
         "messages": [
             {"role": "system", "content": "You extract invoice data and return only valid JSON."},
-            {"role": "user", "content": f"{EXTRACTION_PROMPT}\n\nOCR text:\n{markdown}"},
+            {"role": "user", "content": user_content},
         ],
         "response_format": {"type": "json_object"},
     }
-    response = requests.post(
+    response = post_mistral_json(
         "https://api.mistral.ai/v1/chat/completions",
         headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-        json=payload,
-        timeout=REQUEST_TIMEOUT,
+        payload=payload,
     )
     if response.status_code >= 400:
         raise RuntimeError(f"Mistral extraction failed: {response.status_code} {response.text[:500]}")
@@ -478,6 +595,20 @@ def run_mistral_text_extraction(markdown: str, model: str) -> tuple[dict[str, An
     content = body["choices"][0]["message"]["content"]
     fields, rows = parse_extraction_json(content)
     return fields, rows, estimate_mistral_chat_cost(body)
+
+
+def run_mistral_schema_mapper(text: str, source_name: str) -> tuple[dict[str, Any], list[dict[str, Any]], float]:
+    model = os.getenv("MISTRAL_MAPPER_MODEL", os.getenv("MISTRAL_EXTRACT_MODEL", "mistral-small-2603"))
+    mapper_text = truncate_text(text, int(os.getenv("MAPPER_INPUT_MAX_CHARS", "60000")))
+    prompt = (
+        f"{EXTRACTION_PROMPT}\n\n"
+        f"Input source: {source_name}.\n"
+        "The input may contain raw OCR text, provider-specific labels, token labels, or prior model output. "
+        "Treat those labels as evidence, not as the final schema. Map every visible value by semantic meaning "
+        "into the requested JSON schema. Do not invent missing values.\n\n"
+        f"Input:\n{mapper_text}"
+    )
+    return run_mistral_json_prompt(prompt, model=model)
 
 
 def run_mistral_image_extraction(path: Path, model: str) -> tuple[dict[str, Any], list[dict[str, Any]], float]:
@@ -497,11 +628,10 @@ def run_mistral_image_extraction(path: Path, model: str) -> tuple[dict[str, Any]
         ],
         "response_format": {"type": "json_object"},
     }
-    response = requests.post(
+    response = post_mistral_json(
         "https://api.mistral.ai/v1/chat/completions",
         headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-        json=payload,
-        timeout=REQUEST_TIMEOUT,
+        payload=payload,
     )
     if response.status_code >= 400:
         raise RuntimeError(f"Mistral image extraction failed: {response.status_code} {response.text[:500]}")
@@ -511,11 +641,53 @@ def run_mistral_image_extraction(path: Path, model: str) -> tuple[dict[str, Any]
     return fields, rows, estimate_mistral_chat_cost(body)
 
 
+def azure_payload_mapping_text(payload: dict[str, Any], source_name: str) -> str:
+    analyze_result = payload.get("analyzeResult", {})
+    documents = analyze_result.get("documents", [])
+    lines = [f"{source_name} raw extraction"]
+    for document_index, document in enumerate(documents, start=1):
+        lines.append(f"\nDocument {document_index} fields:")
+        lines.extend(flatten_azure_fields(document.get("fields", {})))
+    content = analyze_result.get("content")
+    if content:
+        lines.append("\nFull OCR content:")
+        lines.append(str(content))
+    if not documents and not content:
+        lines.append(json.dumps(payload, indent=2, sort_keys=True))
+    return "\n".join(lines)
+
+
+def flatten_azure_fields(fields: dict[str, Any], prefix: str = "") -> list[str]:
+    lines: list[str] = []
+    for name, node in fields.items():
+        key = f"{prefix}.{name}" if prefix else str(name)
+        if not isinstance(node, dict):
+            lines.append(f"{key}: {node}")
+            continue
+        value = azure_field_value(node)
+        if value not in (None, ""):
+            lines.append(f"{key}: {value}")
+        content = node.get("content")
+        if content and content != value:
+            lines.append(f"{key}.content: {content}")
+        if isinstance(node.get("valueObject"), dict):
+            lines.extend(flatten_azure_fields(node["valueObject"], key))
+        for index, item in enumerate(node.get("valueArray", []) or [], start=1):
+            if isinstance(item, dict):
+                item_fields = item.get("valueObject") if isinstance(item.get("valueObject"), dict) else item
+                lines.extend(flatten_azure_fields(item_fields, f"{key}[{index}]"))
+    return lines
+
+
 def mistral_document_chunk(path: Path) -> dict[str, str]:
     data_url = file_data_url(path)
     if path.suffix.lower() == ".pdf":
         return {"type": "document_url", "document_url": data_url}
     return {"type": "image_url", "image_url": data_url}
+
+
+def document_image_data_urls(path: Path) -> list[str]:
+    return [file_data_url(image_path) for image_path in render_document_images(path)]
 
 
 def poll_azure_operation(operation_location: str, key: str) -> dict[str, Any]:
@@ -705,6 +877,55 @@ def run_hunyuanocr(path: Path) -> str:
     input_ids = inputs.get("input_ids")
     if input_ids is None:
         input_ids = inputs.get("inputs")
+    if input_ids is not None:
+        output_ids = [out_ids[len(in_ids) :] for in_ids, out_ids in zip(input_ids, output_ids)]
+    return clean_repeated_substrings(processor.batch_decode(output_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0])
+
+
+def run_huggingface_vlm(path: Path) -> str:
+    try:
+        from PIL import Image
+        from transformers import AutoProcessor
+    except ImportError as exc:
+        raise RuntimeError("Install HF document deps with: uv sync --extra hf-doc") from exc
+
+    import torch
+    import transformers
+
+    model_id = os.getenv("HF_VLM_MODEL", "Qwen/Qwen2.5-VL-7B-Instruct")
+    image = Image.open(render_document_images(path)[0]).convert("RGB")
+    processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=True, use_fast=False)
+    model_cls = getattr(transformers, "AutoModelForImageTextToText", None)
+    if model_cls is None:
+        model_cls = getattr(transformers, "AutoModelForVision2Seq", None)
+    if model_cls is None:
+        raise RuntimeError("This Transformers install does not expose a generic VLM auto-model class.")
+    device = hf_device(torch)
+    dtype = hf_dtype(torch)
+    model = model_cls.from_pretrained(
+        model_id,
+        trust_remote_code=True,
+        torch_dtype=dtype,
+        attn_implementation=os.getenv("HF_VLM_ATTN_IMPLEMENTATION", "eager"),
+    )
+    model.to(device=device, dtype=dtype)
+    model.eval()
+
+    prompt = os.getenv("HF_VLM_PROMPT", EXTRACTION_PROMPT)
+    messages = [{"role": "user", "content": [{"type": "image", "image": image}, {"type": "text", "text": prompt}]}]
+    if hasattr(processor, "apply_chat_template"):
+        text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+        inputs = processor(text=[text], images=[image], return_tensors="pt")
+    else:
+        inputs = processor(images=image, text=prompt, return_tensors="pt")
+    inputs = batch_to_device_dtype(inputs, device, dtype)
+    with torch.no_grad():
+        output_ids = model.generate(
+            **inputs,
+            max_new_tokens=int(os.getenv("HF_VLM_MAX_NEW_TOKENS", "1024")),
+            do_sample=os.getenv("HF_VLM_DO_SAMPLE", "0").lower() in {"1", "true", "yes"},
+        )
+    input_ids = inputs.get("input_ids") if isinstance(inputs, dict) else None
     if input_ids is not None:
         output_ids = [out_ids[len(in_ids) :] for in_ids, out_ids in zip(input_ids, output_ids)]
     return clean_repeated_substrings(processor.batch_decode(output_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0])
@@ -906,6 +1127,7 @@ def parse_invoice_text_heuristic(text: str) -> tuple[dict[str, Any], list[dict[s
         "Invoice Date": r"(?:invoice\s*date|date)[:\s]*(\d{1,2}[/-]\d{1,2}[/-]\d{2,4})",
         "Invoice Amount": r"(?:invoice\s*(?:amount|total)|amount\s*due|total)[:\s$]*([\d,]+\.\d{2})",
         "Total Quantity": r"(?:total\s*(?:quantity|qty))[:\s]*(\d+(?:\.\d+)?)",
+        "Adjustment": r"(?:invoice\s*)?adjustments?\s*(?:total)?[:\s$]*(-?\(?[\d,]+\.\d{2}\)?)",
         "Bottle Deposit": r"(?:bottle\s*deposit|deposit)[:\s$]*([\d,]+\.\d{2})",
     }
     for field, pattern in patterns.items():
@@ -934,14 +1156,6 @@ def parse_invoice_text_heuristic(text: str) -> tuple[dict[str, Any], list[dict[s
                     "Line Amount": match.group(6),
                 }
             )
-    if rows and "Total Quantity" not in fields:
-        total_quantity = sum((safe_numeric(row.get("Quantity")) for row in rows), start=0.0)
-        if total_quantity:
-            fields["Total Quantity"] = format_quantity(total_quantity)
-    if rows and "Invoice Amount" not in fields:
-        invoice_amount = sum((safe_numeric(row.get("Line Amount")) for row in rows), start=0.0)
-        if invoice_amount:
-            fields["Invoice Amount"] = format_amount(invoice_amount)
     return fields, rows
 
 
@@ -988,7 +1202,6 @@ def enrich_invoice_text_fields(flat: str, fields: dict[str, Any]) -> None:
     cda_total = re.search(r"total\s*cda\s*\$?\s*:\s*([\d,]+\.\d{2})", flat, flags=re.IGNORECASE)
     if cda_total:
         fields.setdefault("Bottle Deposit", cda_total.group(1))
-        fields.setdefault("Adjustment", cda_total.group(1))
     invoice_no = re.search(r"invoice\s*no\.?\s*[:#]?\s*([A-Z0-9\-]+)", flat, flags=re.IGNORECASE)
     if invoice_no:
         fields.setdefault("Invoice No", invoice_no.group(1))
@@ -1343,10 +1556,6 @@ def nearby_previous_numbers(lines: list[str], index: int) -> list[str]:
 
 def normalized_quantity(value: str) -> str | None:
     cleaned = collapse_text(value)
-    if cleaned.lower() in {"oos", "os", "oo"}:
-        return "0"
-    if cleaned == "01":
-        return "0"
     if re.fullmatch(r"\d+(?:\.\d+)?", cleaned):
         return cleaned
     return None
@@ -1477,6 +1686,14 @@ def clean_repeated_substrings(text: str) -> str:
         if count >= 10:
             return text[: n - length * (count - 1)]
     return text
+
+
+def truncate_text(text: str, max_chars: int) -> str:
+    if max_chars <= 0 or len(text) <= max_chars:
+        return text
+    keep_head = max_chars // 2
+    keep_tail = max_chars - keep_head
+    return f"{text[:keep_head]}\n\n[...truncated...]\n\n{text[-keep_tail:]}"
 
 
 def parse_extraction_json(content: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:

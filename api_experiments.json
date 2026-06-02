@@ -49,23 +49,119 @@
       }
     },
     {
+      "name": "azure_prebuilt_mistral_mapper",
+      "description": "all-doc API Azure prebuilt raw output plus Mistral schema mapper",
+      "required_env": ["AZURE_FORM_RECOGNIZER_ENDPOINT", "AZURE_FORM_RECOGNIZER_KEY", "MISTRAL_API_KEY"],
+      "env": {
+        "INVOICE_EXPERIMENT": "azure_prebuilt_mistral_mapper",
+        "MISTRAL_MAPPER_MODEL": "mistral-small-2603",
+        "MISTRAL_TEMPERATURE": "0"
+      }
+    },
+    {
       "name": "azure_custom_invoice",
       "description": "all-doc API Azure custom invoice model",
-      "enabled": false,
       "required_env": ["AZURE_FORM_RECOGNIZER_ENDPOINT", "AZURE_FORM_RECOGNIZER_KEY", "AZURE_CUSTOM_MODEL_ID"],
       "env": {
         "INVOICE_EXPERIMENT": "azure_custom_invoice"
       }
     },
     {
-      "name": "openrouter_vision_image_only",
-      "description": "image-only API OpenRouter Qwen2.5-VL direct vision",
-      "enabled": false,
+      "name": "azure_custom_mistral_mapper",
+      "description": "all-doc API Azure custom raw output plus Mistral schema mapper",
+      "required_env": ["AZURE_FORM_RECOGNIZER_ENDPOINT", "AZURE_FORM_RECOGNIZER_KEY", "AZURE_CUSTOM_MODEL_ID", "MISTRAL_API_KEY"],
+      "env": {
+        "INVOICE_EXPERIMENT": "azure_custom_mistral_mapper",
+        "MISTRAL_MAPPER_MODEL": "mistral-small-2603",
+        "MISTRAL_TEMPERATURE": "0"
+      }
+    },
+    {
+      "name": "glm_ocr_openrouter",
+      "description": "all-doc API OpenRouter GLM-4.5V direct vision OCR/schema extraction",
+      "required_env": ["OPENROUTER_API_KEY"],
+      "env": {
+        "INVOICE_EXPERIMENT": "glm_ocr",
+        "GLM_OPENROUTER_MODEL": "z-ai/glm-4.5v",
+        "GLM_TEMPERATURE": "0"
+      }
+    },
+    {
+      "name": "openrouter_qwen25_vl",
+      "description": "all-doc API OpenRouter Qwen2.5-VL direct vision",
       "required_env": ["OPENROUTER_API_KEY"],
       "env": {
         "INVOICE_EXPERIMENT": "openrouter_vision",
         "OPENROUTER_MODEL": "qwen/qwen2.5-vl-72b-instruct",
         "OPENROUTER_TEMPERATURE": "0"
+      }
+    },
+    {
+      "name": "huggingface_vlm",
+      "description": "all-doc local Hugging Face VLM direct JSON extraction",
+      "required_env": [],
+      "env": {
+        "INVOICE_EXPERIMENT": "huggingface_vlm",
+        "HF_VLM_MODEL": "Qwen/Qwen2.5-VL-7B-Instruct"
+      }
+    },
+    {
+      "name": "huggingface_vlm_mistral_mapper",
+      "description": "all-doc local Hugging Face VLM output plus Mistral schema mapper",
+      "required_env": ["MISTRAL_API_KEY"],
+      "env": {
+        "INVOICE_EXPERIMENT": "huggingface_vlm_mistral_mapper",
+        "HF_VLM_MODEL": "Qwen/Qwen2.5-VL-7B-Instruct",
+        "MISTRAL_MAPPER_MODEL": "mistral-small-2603",
+        "MISTRAL_TEMPERATURE": "0"
+      }
+    },
+    {
+      "name": "deepseek_ocr_mistral_mapper",
+      "description": "all-doc local DeepSeek-OCR text plus Mistral schema mapper",
+      "required_env": ["MISTRAL_API_KEY"],
+      "env": {
+        "INVOICE_EXPERIMENT": "deepseek_ocr_mistral_mapper",
+        "MISTRAL_MAPPER_MODEL": "mistral-small-2603",
+        "MISTRAL_TEMPERATURE": "0"
+      }
+    },
+    {
+      "name": "hunyuanocr_direct",
+      "description": "all-doc local HunyuanOCR direct JSON extraction",
+      "required_env": [],
+      "env": {
+        "INVOICE_EXPERIMENT": "hunyuanocr_direct"
+      }
+    },
+    {
+      "name": "hunyuanocr_mistral_mapper",
+      "description": "all-doc local HunyuanOCR output plus Mistral schema mapper",
+      "required_env": ["MISTRAL_API_KEY"],
+      "env": {
+        "INVOICE_EXPERIMENT": "hunyuanocr_mistral_mapper",
+        "MISTRAL_MAPPER_MODEL": "mistral-small-2603",
+        "MISTRAL_TEMPERATURE": "0"
+      }
+    },
+    {
+      "name": "donut_mistral_mapper",
+      "description": "all-doc local Donut output plus Mistral schema mapper",
+      "required_env": ["MISTRAL_API_KEY"],
+      "env": {
+        "INVOICE_EXPERIMENT": "donut_mistral_mapper",
+        "MISTRAL_MAPPER_MODEL": "mistral-small-2603",
+        "MISTRAL_TEMPERATURE": "0"
+      }
+    },
+    {
+      "name": "layoutlmv3_mistral_mapper",
+      "description": "all-doc local LayoutLMv3 token fields plus Mistral schema mapper",
+      "required_env": ["MISTRAL_API_KEY"],
+      "env": {
+        "INVOICE_EXPERIMENT": "layoutlmv3_mistral_mapper",
+        "MISTRAL_MAPPER_MODEL": "mistral-small-2603",
+        "MISTRAL_TEMPERATURE": "0"
       }
     }
   ]

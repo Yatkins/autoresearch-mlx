@@ -1,2 +1,19 @@
 commit	accuracy	adjusted_score	cost_per_doc	latency_s	status	description
 dc2a389-dirty	0.708791	0.608084	0.000000	6.085	run	all-doc local PaddleOCR v4 raw output baseline
+6066e3a	0.780541	0.695554	0.001700	4.832	keep	all-doc API Mistral OCR plus Small 4 structured extraction
+6066e3a	0.794456	0.707017	0.001711	4.948	keep	all-doc API Mistral OCR table HTML plus Small 4 extraction
+6066e3a	0.700111	0.567422	0.000672	10.472	discard	all-doc API PaddleOCR v4 local OCR plus Mistral extraction
+6066e3a	0.369453	0.167483	0.000000	0.236	crash	all-doc API PaddleOCR v5 local OCR plus Mistral extraction
+6066e3a	0.528811	0.362377	0.003333	2.372	discard	all-doc API Azure prebuilt invoice
+6066e3a	0.778404	0.685003	0.001710	5.248	discard	all-doc API Mistral OCR plus Small 4 structured extraction
+6066e3a	0.774275	0.688890	0.001691	4.853	discard	all-doc API Mistral OCR table HTML plus Small 4 extraction
+6066e3a	0.680384	0.547809	0.000644	10.073	discard	all-doc API PaddleOCR v4 local OCR plus Mistral extraction
+6066e3a	0.040462	0.000000	0.000000	0.228	crash	all-doc API PaddleOCR v5 local OCR plus Mistral extraction
+6066e3a	0.345858	0.180974	0.003333	2.186	discard	all-doc API Azure prebuilt invoice
+6066e3a	0.180567	0.000000	0.000178	1.638	discard	all-doc API Mistral OCR plus Small 4 structured extraction
+6066e3a	0.039637	0.000000	0.000000	1.068	crash	all-doc API Mistral OCR table HTML plus Small 4 extraction
+6066e3a	0.795378	0.673899	0.001713	7.755	keep	all-doc API Mistral OCR plus Small 4 structured extraction
+6066e3a	0.801158	0.713483	0.001704	4.960	keep	all-doc API Mistral OCR table HTML plus Small 4 extraction
+6066e3a	0.691013	0.558461	0.000638	10.305	discard	all-doc API PaddleOCR v4 local OCR plus Mistral extraction
+6066e3a	0.039637	0.000000	0.000000	0.237	crash	all-doc API PaddleOCR v5 local OCR plus Mistral extraction
+6066e3a	0.338427	0.174192	0.003333	2.108	discard	all-doc API Azure prebuilt invoice
