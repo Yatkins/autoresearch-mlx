@@ -1,0 +1,38 @@
+{
+    "Vendor": "Malba Trading",
+    "Vendor Physical Address": "PO BOX 575102, Whitestone, NY 11357",
+    "Vendor Phone Number": "7188076503",
+    "Invoice No": "75441",
+    "Invoice Date": "4/15/2026",
+    "Total Quantity": "70",
+    "Invoice Amount": "653.80",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Item Code": "104",
+            "Description": "POLAND SPRING 1 GALLON",
+            "Cases": "7",
+            "Unit Price": "9.50",
+            "Line Amount": "66.50",
+            "Discount": "0"
+        },
+        {
+            "Item Code": "104",
+            "Description": "POLAND SPRING 1 GALLON",
+            "Quantity": "35",
+            "Unit Price": "9.50",
+            "Line Amount": "332.50",
+            "Discount": "0"
+        },
+        {
+            "Item Code": "105",
+            "Description": "POLAND SPRING 1.5 LT 12 ...",
+            "Cases": "28",
+            "Quantity": "28",
+            "Unit Price": "9.10",
+            "Line Amount": "254.80",
+            "Discount": "0"
+        }
+    ],
+    "Adjustment": "0"
+}

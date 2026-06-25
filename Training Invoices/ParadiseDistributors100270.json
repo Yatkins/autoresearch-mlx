@@ -1,0 +1,19 @@
+{
+    "Vendor": "Paradise Distributors, LLC",
+    "Vendor Physical Address": "3592 Bedford Avenue, Brooklyn, NY, 11210",
+    "Invoice No": "100270",
+    "Invoice Date": "4/14/2026",
+    "Total Quantity": "-2",
+    "Invoice Amount": "-15.50",
+    "Document Type": "Credit",
+    "Rows": [
+        {
+            "Item Code": "99861",
+            "Description": "Credit For Return / Damaged Products=ITEM#99861",
+            "Quantity": "-2",
+            "Unit Price": "7.75",
+            "Line Amount": "-15.50"
+        }
+    ],
+    "Adjustment": "0.00"
+}

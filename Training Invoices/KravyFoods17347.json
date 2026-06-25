@@ -1,0 +1,32 @@
+{
+    "Vendor": "Kravy Foods",
+    "Vendor Physical Address": "28-36 Slater Dr Elizabeth NJ 07206",
+    "Vendor Phone Number": "7182410945",
+    "Vendor Website": "https://www.kravyfoods.com/",
+    "Vendor Email": "office@kravyfoods.com",
+    "Invoice No": "17347",
+    "Invoice Date": "4/12/2026",
+    "Total Quantity": "16",
+    "Invoice Amount": "640.00",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Quantity": "8.0",
+            "Unit Per Case": "12",
+            "Item Code": "KRF9048",
+            "SKU": "850011939048",
+            "Description": "Kravy Dip Dip Crackers Original",
+            "Unit Price": "40",
+            "Line Amount": "320"
+        },
+        {
+            "Quantity": "8.0",
+            "Unit Per Case": "12",
+            "Item Code": "KRF9055",
+            "SKU": "850011939055",
+            "Description": "Kravy Dip Dip Crackers Everything",
+            "Unit Price": "40",
+            "Line Amount": "320"
+        }
+    ]
+}

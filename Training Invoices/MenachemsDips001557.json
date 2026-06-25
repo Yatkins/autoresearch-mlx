@@ -1,0 +1,117 @@
+{
+    "Vendor": "Menachem's Dips, LLC",
+    "Vendor Phone Number": "7326203060",
+    "Invoice No": "001557",
+    "Invoice Date": "4/16/2026",
+    "Total Quantity": "178.00",
+    "Invoice Amount": "1040.58",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Item Code": "Je395",
+            "Description": "Jeruselam Dip",
+            "Quantity": "5.00",
+            "Unit Price": "3.69",
+            "Line Amount": "18.45"
+        },
+        {
+            "Item Code": "ch1001",
+            "Description": "Charif Dip",
+            "Quantity": "12.00",
+            "Unit Price": "3.69",
+            "Line Amount": "44.28"
+        },
+        {
+            "Item Code": "Pi1022",
+            "Description": "Crunchy Pickle Dip",
+            "Quantity": "48.00",
+            "Unit Price": "3.69",
+            "Line Amount": "177.12"
+        },
+        {
+            "Item Code": "Ch1081",
+            "Description": "Chummus w/ schug",
+            "Quantity": "4.00",
+            "Unit Price": "3.69",
+            "Line Amount": "14.76"
+        },
+        {
+            "Item Code": "Ch1047",
+            "Description": "Chumus Yerushalmi w/ sauteed onions",
+            "Quantity": "5.00",
+            "Unit Price": "3.69",
+            "Line Amount": "18.45"
+        },
+        {
+            "Item Code": "Ch1002",
+            "Description": "Chumus Yerushalmi",
+            "Quantity": "8.00",
+            "Unit Price": "3.69",
+            "Line Amount": "29.52"
+        },
+        {
+            "Item Code": "CI1102",
+            "Description": "Chummus Classic",
+            "Quantity": "6.00",
+            "Unit Price": "3.69",
+            "Line Amount": "22.14"
+        },
+        {
+            "Item Code": "Te1031",
+            "Description": "Techina Classic",
+            "Quantity": "10.00",
+            "Unit Price": "3.69",
+            "Line Amount": "36.90"
+        },
+        {
+            "Item Code": "Cr1004",
+            "Description": "Creamy Olive \\ Dip",
+            "Quantity": "6.00",
+            "Unit Price": "3.69",
+            "Line Amount": "22.14"
+        },
+        {
+            "Item Code": "Di1008",
+            "Description": "Dill Dip",
+            "Quantity": "10.00",
+            "Unit Price": "3.69",
+            "Line Amount": "36.90"
+        },
+        {
+            "Item Code": "Cr1006",
+            "Description": "Eggplant Babaganush '",
+            "Quantity": "12.00",
+            "Unit Price": "3.69",
+            "Line Amount": "44.28"
+        },
+        {
+            "Item Code": "Ga1011",
+            "Description": "Garlic Dip",
+            "Quantity": "10.00",
+            "Unit Price": "3.69",
+            "Line Amount": "36.90"
+        },
+        {
+            "Item Code": "Ah390",
+            "Description": "Al haish Eggplant babaganush",
+            "Quantity": "10.00",
+            "Unit Price": "3.69",
+            "Line Amount": "36.90"
+        },
+        {
+            "Item Code": "Ho1014",
+            "Description": "Hot \\Olive Dip",
+            "Quantity": "10.00",
+            "Unit Price": "3.69",
+            "Line Amount": "36.90"
+        },
+        {
+            "Item Code": "Ja1015",
+            "Description": "Jalepeno Dip",
+            "Quantity": "22.00",
+            "Unit Price": "3.69",
+            "Line Amount": "81.18"
+        }
+    ],
+    "Adjustment": "0.00"
+}

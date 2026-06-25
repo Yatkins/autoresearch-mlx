@@ -1,0 +1,196 @@
+{
+    "Vendor": "Galil Brands.",
+    "Vendor Physical Address": "45 GILPIN AVE, HAUPPAUGE, NY 11788",
+    "Vendor Phone Number": "5164967400",
+    "Vendor Fax Number": "5164968811",
+    "Vendor Website": "www.galilbrands.com",
+    "Vendor Email": "sales@galilbrands.com",
+    "Invoice No": "441182",
+    "Invoice Date": "4/10/2026",
+    "Total Quantity": "28",
+    "Invoice Amount": "1174.00",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Item Code": "108-291",
+            "Quantity": "4",
+            "Cases": "4",
+            "Unit Per Case": "6",
+            "Description": "ZWEET GUMMY SOUR LIPS",
+            "SKU": "794711009963",
+            "Unit Price": "17.00",
+            "Line Amount": "68.00"
+        },
+        {
+            "Item Code": "109-577",
+            "Quantity": "4",
+            "Cases": "4",
+            "Unit Per Case": "6",
+            "Description": "MENTOS VITAMIN GUM BERRIES",
+            "SKU": "8935001728047",
+            "Unit Price": "16.00",
+            "Line Amount": "64.00"
+        },
+        {
+            "Item Code": "109-591",
+            "Quantity": "1",
+            "Cases": "1",
+            "Unit Per Case": "7",
+            "Description": "MENTOS SHARING BAG- FRUIT 160G",
+            "SKU": "8723400782520",
+            "Unit Price": "24.50",
+            "Line Amount": "24.50"
+        },
+        {
+            "Item Code": "109-592",
+            "Quantity": "1",
+            "Cases": "1",
+            "Unit Per Case": "7",
+            "Description": "MENTOS SHARING BAG- MINT 160G",
+            "SKU": "897920001718",
+            "Unit Price": "24.50",
+            "Line Amount": "24.50"
+        },
+        {
+            "Item Code": "109-702",
+            "Quantity": "1",
+            "Cases": "1",
+            "Unit Per Case": "40",
+            "Description": "MENTOS STRAWBERRY",
+            "SKU": "000087108538",
+            "Unit Price": "30.00",
+            "Line Amount": "30.00"
+        },
+        {
+            "Item Code": "123-141",
+            "Quantity": "1",
+            "Cases": "1",
+            "Unit Per Case": "24",
+            "Description": "SPRING NECTAR MANGO CAN",
+            "SKU": "7290001247730",
+            "Unit Price": "39.00",
+            "Line Amount": "39.00"
+        },
+        {
+            "Item Code": "123-142",
+            "Quantity": "1",
+            "Cases": "1",
+            "Unit Per Case": "24",
+            "Description": "SPRING NECTAR PEACH CAN",
+            "SKU": "7290001247891",
+            "Unit Price": "39.00",
+            "Line Amount": "39.00"
+        },
+        {
+            "Item Code": "123-144",
+            "Quantity": "1",
+            "Cases": "1",
+            "Unit Per Case": "24",
+            "Description": "SPRING NECTAR STRWBRY/BANANA CAN",
+            "SKU": "7290001247723",
+            "Unit Price": "39.00",
+            "Line Amount": "39.00"
+        },
+        {
+            "Item Code": "148-205",
+            "Quantity": "1",
+            "Cases": "1",
+            "Unit Per Case": "12",
+            "Description": "GALIL PITTED SOUR CHERRY COMPOTE",
+            "SKU": "794711000540",
+            "Unit Price": "54.00",
+            "Line Amount": "54.00"
+        },
+        {
+            "Item Code": "155-248",
+            "Quantity": "5",
+            "Cases": "5",
+            "Unit Per Case": "12",
+            "Description": "SADAF ROSE WATER(385910)",
+            "SKU": "052851859108",
+            "Unit Price": "39.00",
+            "Line Amount": "195.00"
+        },
+        {
+            "Item Code": "155-550",
+            "Quantity": "1",
+            "Cases": "1",
+            "Unit Per Case": "24",
+            "Description": "SHEMSHAD SOUR PLUM FRUIT LAYER",
+            "SKU": "084613130637",
+            "Unit Price": "78.00",
+            "Line Amount": "78.00"
+        },
+        {
+            "Item Code": "155-552",
+            "Quantity": "1",
+            "Cases": "1",
+            "Unit Per Case": "24",
+            "Description": "SHEMSHAD SOUR CHERRY FRUIT LAYER",
+            "SKU": "084613130613",
+            "Unit Price": "78.00",
+            "Line Amount": "78.00"
+        },
+        {
+            "Item Code": "155-715",
+            "Quantity": "1",
+            "Cases": "1",
+            "Unit Per Case": "12",
+            "Description": "SOGOL LIQUID SAFFRON",
+            "SKU": "858176007633",
+            "Unit Price": "60.00",
+            "Line Amount": "60.00"
+        },
+        {
+            "Item Code": "157-062",
+            "Quantity": "1",
+            "Cases": "1",
+            "Unit Per Case": "6",
+            "Description": "IMPERIAL SALTANATI NOUGAT- GIFT B",
+            "SKU": "098001101031",
+            "Unit Price": "78.00",
+            "Line Amount": "78.00"
+        },
+        {
+            "Item Code": "157-064",
+            "Quantity": "1",
+            "Cases": "1",
+            "Unit Per Case": "6",
+            "Description": "IMPERIAL GAZ ARDI GOLD",
+            "SKU": "098001100423",
+            "Unit Price": "78.00",
+            "Line Amount": "78.00"
+        },
+        {
+            "Item Code": "157-065",
+            "Quantity": "1",
+            "Cases": "1",
+            "Unit Per Case": "6",
+            "Description": "IMPERIAL SOHAN SAFFRON- RED",
+            "SKU": "098001100386",
+            "Unit Price": "78.00",
+            "Line Amount": "78.00"
+        },
+        {
+            "Item Code": "157-066",
+            "Quantity": "1",
+            "Cases": "1",
+            "Unit Per Case": "6",
+            "Description": "IMPERIAL SOHAN EXT. PISTACHIOS- B",
+            "SKU": "098001100485",
+            "Unit Price": "78.00",
+            "Line Amount": "78.00"
+        },
+        {
+            "Item Code": "157-155",
+            "Quantity": "1",
+            "Cases": "1",
+            "Unit Per Case": "12",
+            "Description": "GALIL SHREDDED HALVA- ORIGINAL",
+            "SKU": "794711005033",
+            "Unit Price": "69.00",
+            "Line Amount": "69.00"
+        }
+    ],
+    "Adjustment": "0"
+}

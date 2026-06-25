@@ -197,7 +197,8 @@ def run_mistral(path: Path) -> dict:
     content.append({"type": "text", "text": full_prompt()})
     resp = client.chat.complete(
         model=MODEL_NAME,
-        messages=[{"role": "user", "content": content}]
+        messages=[{"role": "user", "content": content}],
+        temperature=0,  # deterministic output so experiments are comparable
     )
     return parse_json(resp.choices[0].message.content)
 

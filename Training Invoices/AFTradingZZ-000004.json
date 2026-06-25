@@ -1,0 +1,33 @@
+{
+    "Vendor": "A F Trading",
+    "Vendor Physical Address": "79 SKILLMAN STREET, BROOKLYN NY, 11205",
+    "Vendor Phone Number": "17186506832",
+    "Vendor Email": "AFTRADINGNY@GMAIL.COM",
+    "Invoice No": "ZZ-000004",
+    "Invoice Date": "3/24/2026",
+    "Total Quantity": "2",
+    "Invoice Amount": "82.80",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Unit Per Case": "48",
+            "Description": "Dove/Bar Refreshing/ Cucumber 90G",
+            "Quantity": "1",
+            "Cases": "1",
+            "Unit Price": "36.00",
+            "Line Amount": "36.00",
+            "Item Code": "SB53807",
+            "SKU": "8712561538077"
+        },
+        {
+            "Unit Per Case": "72",
+            "Description": "Pregnancy Test",
+            "Quantity": "1",
+            "Cases": "1",
+            "Unit Price": "46.80",
+            "Line Amount": "46.80",
+            "Item Code": "PH80005",
+            "SKU": "677421800054"
+        }
+    ]
+}

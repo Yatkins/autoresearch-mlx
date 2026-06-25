@@ -1,0 +1,70 @@
+{
+    "Vendor": "Klein's Naturals Ltd.",
+    "Vendor Physical Address": "4702 2nd Ave, Brooklyn, NY, 11232",
+    "Vendor Phone Number": "718-499-4299",
+    "Vendor Fax Number": "718-499-5223",
+    "Vendor Website": "www.kleinsnaturals.com",
+    "Invoice No": "KZ13652",
+    "Invoice Date": "4/14/2026",
+    "Total Quantity": "-75",
+    "Invoice Amount": "-354.60",
+    "Document Type": "Credit",
+    "Rows": [
+        {
+            "Item Code": "B11401",
+            "Description": "Peanuts Roasted UNS2alted 8oz.",
+            "Unit Price": "2.75",
+            "Line Amount": "-2.75",
+            "Quantity": "-1"
+        },
+        {
+            "Item Code": "B11916",
+            "Description": "Filberts In Shell 20/16oz.",
+            "Unit Price": "7.40",
+            "Line Amount": "-29.60",
+            "Quantity": "-4"
+        },
+        {
+            "Item Code": "B30500",
+            "Description": "Almonds Ground 6oz",
+            "Unit Price": "3.30",
+            "Line Amount": "-42.90",
+            "Quantity": "-13"
+        },
+        {
+            "Item Code": "B30502",
+            "Description": "Filberts Ground 6oz",
+            "Unit Price": "8.10",
+            "Line Amount": "-32.40",
+            "Quantity": "-4"
+        },
+        {
+            "Item Code": "B30503",
+            "Description": "Walnuts Ground 6oz",
+            "Unit Price": "3.00",
+            "Line Amount": "-12.00",
+            "Quantity": "-4"
+        },
+        {
+            "Item Code": "B30506",
+            "Description": "Coconut Shredded 6oz",
+            "Unit Price": "2.65",
+            "Line Amount": "-58.30",
+            "Quantity": "-22"
+        },
+        {
+            "Item Code": "B30507",
+            "Description": "Walnuts Chopped 6oz",
+            "Unit Price": "6.95",
+            "Line Amount": "-152.90",
+            "Quantity": "-22"
+        },
+        {
+            "Item Code": "B30511",
+            "Description": "Pecans Chopped 6 oz",
+            "Unit Price": "4.75",
+            "Line Amount": "-23.75",
+            "Quantity": "-5"
+        }
+    ]
+}

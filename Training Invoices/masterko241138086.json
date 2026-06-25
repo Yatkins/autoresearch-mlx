@@ -1,0 +1,63 @@
+{
+    "Vendor": "Masterko Distribution",
+    "Vendor Physical Address": "35 Goshen Turnpike Bloomingburg, NY 12721",
+    "Vendor Phone Number": "8453680999 103",
+    "Vendor Email Address": "billing+distribution@shefaappetizing.com",
+    "Invoice No": "241138086",
+    "Invoice Date": "6/2/2026",
+    "Total Quantity": "17",
+    "Bottle Deposit": "0.00",
+    "Invoice Amount": "157.6",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Quantity": "1.00",
+            "Item Code": "1676",
+            "Description": "1676 / Jalapeno Dip, 5 Lb.",
+            "Unit Price": "21",
+            "Line Amount": "21.00",
+            "SKU": null
+        },
+        {
+            "Quantity": "1.00",
+            "Item Code": "1692",
+            "Description": "1692 / Hummus 5 Lb.",
+            "Unit Price": "18",
+            "Line Amount": "18.00",
+            "SKU": null
+        },
+        {
+            "Quantity": "1.00",
+            "Item Code": "16611",
+            "Description": "16611 / Matbucha 5 Lb.",
+            "Unit Price": "22",
+            "Line Amount": "22.00",
+            "SKU": null
+        },
+        {
+            "Quantity": "1.00",
+            "Item Code": "16632",
+            "Description": "16632 / Turkish Eggplant, 5 Lb.",
+            "Unit Price": "22",
+            "Line Amount": "22.00",
+            "SKU": null
+        },
+        {
+            "Quantity": "1.00",
+            "Item Code": "1470",
+            "Description": "1470 / Gal. Tehina",
+            "Unit Price": "26",
+            "Line Amount": "26.00",
+            "SKU": null
+        },
+        {
+            "Quantity": "12.00",
+            "Item Code": "10792",
+            "Description": "10792 / Sour Pickles, 32 Oz. / Krunchy",
+            "Unit Price": "4.05",
+            "Line Amount": "48.6",
+            "SKU": null
+        }
+    ],
+    "Adjustment": "0.00"
+}

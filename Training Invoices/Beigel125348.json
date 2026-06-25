@@ -1,0 +1,110 @@
+{
+    "Vendor": "Israel Beigel Baking",
+    "Vendor Physical Address": "5700 Avenue D, Brooklyn, NY, 11203",
+    "Vendor Phone Number": "17184152929",
+    "Invoice No": "125348",
+    "Invoice Date": "4/20/2026",
+    "Total Quantity": "136",
+    "Invoice Amount": "632.75",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Item Code": "255",
+            "Description": "PAS 100% W/W 16 OZ MEZONOS",
+            "Quantity": "10",
+            "Unit Price": "3.4",
+            "Line Amount": "34.00"
+        },
+        {
+            "Item Code": "25",
+            "Description": "PAS 100% W/W BREAD 16 0Z",
+            "Quantity": "20",
+            "Unit Price": "3.40",
+            "Line Amount": "68.00"
+        },
+        {
+            "Item Code": "333",
+            "Description": "8 PACK BURGER BUNS",
+            "Quantity": "8",
+            "Unit Price": "3.85",
+            "Line Amount": "30.80"
+        },
+        {
+            "Item Code": "1089",
+            "Description": "PAS BURGER BUNS",
+            "Quantity": "6",
+            "Unit Price": "3.85",
+            "Line Amount": "23.10"
+        },
+        {
+            "Item Code": "8622",
+            "Description": "RETAIL PRETZEL BURGER BUNS",
+            "Quantity": "6",
+            "Unit Price": "5.25",
+            "Line Amount": "31.50"
+        },
+        {
+            "Item Code": "GF1",
+            "Description": "GLUTEN FREE ORIGINAL",
+            "Quantity": "10",
+            "Unit Price": "6.75",
+            "Line Amount": "67.50"
+        },
+        {
+            "Item Code": "W22",
+            "Description": "6\" W/W WRAPS",
+            "Quantity": "24",
+            "Unit Price": "3.4",
+            "Line Amount": "81.60"
+        },
+        {
+            "Item Code": "W11",
+            "Description": "6'' PLAIN WRAP",
+            "Quantity": "24",
+            "Unit Price": "3.4",
+            "Line Amount": "81.60"
+        },
+        {
+            "Item Code": "LCW",
+            "Description": "PAS SLIMMERS WHEAT WRAPS",
+            "Quantity": "12",
+            "Unit Price": "6.00",
+            "Line Amount": "72.00"
+        },
+        {
+            "Item Code": "01",
+            "Description": "PCK. 24 OZ B W",
+            "Quantity": "4",
+            "Unit Price": "9.00",
+            "Line Amount": "36.00"
+        },
+        {
+            "Item Code": "22",
+            "Description": "PCK. 24 PC CUPCAKES",
+            "Quantity": "6",
+            "Unit Price": "9.00",
+            "Line Amount": "54.00"
+        },
+        {
+            "Item Code": "W125:W125",
+            "Description": "PCK. CIN RUGELA",
+            "Quantity": "3",
+            "Unit Price": "6.30",
+            "Line Amount": "18.90"
+        },
+        {
+            "Item Code": "417656",
+            "Description": "ROYO LC EVERYTHING BAGEL 6PK",
+            "Quantity": "5",
+            "Unit Price": "8.75",
+            "Line Amount": "43.75"
+        },
+        {
+            "Item Code": "D02",
+            "Description": "ROLL UPS W/W",
+            "Quantity": "-2",
+            "Unit Price": "5",
+            "Line Amount": "-10"
+        }
+    ]
+}

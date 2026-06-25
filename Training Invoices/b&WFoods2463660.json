@@ -1,0 +1,85 @@
+{
+    "Vendor": "B&W Foods",
+    "Vendor Physical Address": "72 NEW HOOK ROAD PO BOX 82 BAYONNE NJ 07002",
+    "Vendor Phone Number": "7183694600",
+    "Vendor Fax Number": "7183691470",
+    "Vendor Website": "www.kayco.com",
+    "Invoice No": "2463660",
+    "Invoice Date": "4/14/2026",
+    "Total Quantity": "8",
+    "Invoice Amount": "225.66",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Cases": "2.0",
+            "Quantity": "2.0",
+            "Item Code": "711700",
+            "Description": "SALAD FRESH CRISPY LEAF 4OZ BELEAVES GARDENS",
+            "SKU": "840762097005",
+            "Unit Per Case": "6",
+            "Unit Price": "25.38",
+            "Line Amount": "50.76"
+        },
+        {
+            "Cases": "1.0",
+            "Quantity": "1.0",
+            "Item Code": "711701",
+            "Description": "SALAD FRESH SPRING MIX 4OZ BELEAVES GARDENS",
+            "SKU": "840762097012",
+            "Unit Per Case": "6",
+            "Unit Price": "25.38",
+            "Line Amount": "25.38"
+        },
+        {
+            "Cases": "2.0",
+            "Quantity": "2.0",
+            "Item Code": "711702",
+            "Description": "SALAD FRESH LETTUCE BABY ROMAINE 4OZ BELEAVES GARDENS",
+            "SKU": "840762097029",
+            "Unit Per Case": "6",
+            "Unit Price": "25.38",
+            "Line Amount": "50.76"
+        },
+        {
+            "Cases": "1.0",
+            "Quantity": "1.0",
+            "Item Code": "711703",
+            "Description": "SALAD FRESH LETTUCE BABY BUTTER 4OZ BELEAVES GARDENS",
+            "SKU": "840762097036",
+            "Unit Per Case": "6",
+            "Unit Price": "25.38",
+            "Line Amount": "25.38"
+        },
+        {
+            "Cases": "1.0",
+            "Quantity": "1.0",
+            "Item Code": "711704",
+            "Description": "SALAD FRESH LETTUCE MIXED 4OZ BELEAVES GARDENS",
+            "SKU": "840762097043",
+            "Unit Per Case": "6",
+            "Unit Price": "25.38",
+            "Line Amount": "25.38"
+        },
+        {
+            "Cases": "0.00",
+            "Quantity": "0.00",
+            "Item Code": "711715",
+            "Description": "SALAD FRESH CRISPY LEAF 9OZ BELEAVES GARDENS",
+            "SKU": "840762097159",
+            "Unit Per Case": "6",
+            "Unit Price": "48.00",
+            "Line Amount": "0"
+        },
+        {
+            "Cases": "1.0",
+            "Quantity": "1.0",
+            "Item Code": "711717",
+            "Description": "SALAD FRESH LETTUCE ROMAINE 9OZ BELEAVES GARDENS",
+            "SKU": "840762097173",
+            "Unit Per Case": "6",
+            "Unit Price": "48.00",
+            "Line Amount": "48.00"
+        }
+    ],
+    "Adjustment": "0.00"
+}

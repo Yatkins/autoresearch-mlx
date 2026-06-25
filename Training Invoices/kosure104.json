@@ -1,0 +1,38 @@
+{
+    "Vendor": "Ko-Shore Snacks",
+    "Vendor Phone Number": "3475989863",
+    "Vendor Email Address": "abrahamricht@gmail.com",
+    "Invoice No": "104",
+    "Invoice Date": "6/4/2026",
+    "Total Quantity": "26",
+    "Bottle Deposit": "0.00",
+    "Invoice Amount": "156.00",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Unit Price": "5.75",
+            "Quantity": "13",
+            "Line Amount": "74.75",
+            "Cases": "0",
+            "Pieces": "0",
+            "Description": "Mini Cakes",
+            "Discount": "0",
+            "Deposit": "0",
+            "Deposit Qty": "1",
+            "SKU": "33454000616"
+        },
+        {
+            "Unit Price": "6.25",
+            "Quantity": "13",
+            "Line Amount": "81.25",
+            "Cases": "0",
+            "Pieces": "0",
+            "Description": "Peanut Chew Pieces",
+            "Discount": "0",
+            "Deposit": "0",
+            "Deposit Qty": "1",
+            "SKU": "358689995101"
+        }
+    ],
+    "Adjustment": "0.00"
+}

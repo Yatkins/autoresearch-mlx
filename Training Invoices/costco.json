@@ -1,0 +1,50 @@
+{
+    "Vendor": "Costco Wholesale",
+    "Invoice Date": "6/4/2026",
+    "Total Quantity": "100",
+    "Bottle Deposit": "75.00",
+    "Invoice Amount": "2364",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Quantity": "40",
+            "Item Code": "723675",
+            "Unit Price": "21.49",
+            "Description": "KLXTRUSTCARE",
+            "Line Amount": "859.60",
+            "Cases": "0",
+            "Pieces": "0",
+            "Discount": "0",
+            "Deposit": "0",
+            "Deposit Qty": "1",
+            "SKU": null
+        },
+        {
+            "Quantity": "40",
+            "Item Code": "723675",
+            "Unit Price": "21.49",
+            "Description": "KLXTRUSTCARE",
+            "Line Amount": "859.60",
+            "Cases": "0",
+            "Pieces": "0",
+            "Discount": "0",
+            "Deposit": "0",
+            "Deposit Qty": "1",
+            "SKU": null
+        },
+        {
+            "Quantity": "20",
+            "Item Code": "1919326",
+            "Unit Price": "28.49",
+            "Description": "*** BOUNTY ***",
+            "Line Amount": "569.80",
+            "Cases": "0",
+            "Pieces": "0",
+            "Discount": "0",
+            "Deposit": "0",
+            "Deposit Qty": "1",
+            "SKU": null
+        }
+    ],
+    "Adjustment": "0.00"
+}

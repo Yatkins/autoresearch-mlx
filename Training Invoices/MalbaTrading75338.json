@@ -1,0 +1,47 @@
+{
+    "Vendor": "Malba Trading",
+    "Vendor Physical Address": "PO Box 575102, Whitestone, NY 11357",
+    "Vendor Phone Number": "7188076503",
+    "Invoice No": "75338",
+    "Invoice Date": "4/13/2026",
+    "Total Quantity": "88",
+    "Invoice Amount": "748.05",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Item Code": "1103",
+            "Unit Per Case": "24",
+            "Description": "POLAND SPRING 24 PK",
+            "Cases": "10",
+            "Unit Price": "5.95",
+            "Line Amount": "59.50",
+            "Discount": "0"
+        },
+        {
+            "Item Code": "1105",
+            "Description": "POLAND SPRING 1.5 LT 12 ...",
+            "Cases": "28",
+            "Unit Price": "9.10",
+            "Line Amount": "254.80",
+            "Discount": "0"
+        },
+        {
+            "Item Code": "1108",
+            "Description": "POLAND SPRING 3 LITER 6P...",
+            "Cases": "25",
+            "Unit Price": "8.15",
+            "Line Amount": "203.75",
+            "Discount": "0"
+        },
+        {
+            "Item Code": "1110",
+            "Unit Per Case": "24",
+            "Description": "POLAND SPORT CAP 24 PK",
+            "Cases": "25",
+            "Unit Price": "9.2",
+            "Line Amount": "230.00",
+            "Discount": "0"
+        }
+    ],
+    "Adjustment": "0"
+}
