@@ -17,8 +17,11 @@ from score import score_corpus  # do not change this import
 MODEL_BACKEND = "mistral"
 # Options: "mistral" | "openrouter" | "azure" | "ollama"
 
-MODEL_NAME = "mistral-ocr-latest"
-# mistral:     mistral-ocr-latest
+MODEL_NAME = "mistral-small-latest"
+# NOTE: mistral-ocr-latest is NOT a chat model (only valid on the OCR endpoint),
+# so it errors via chat.complete. mistral-small-latest is vision-capable and is
+# the working mistral baseline. PDFs are rendered to PNG by render_to_images().
+# mistral:     mistral-small-latest | mistral-medium-latest
 # openrouter:  mistralai/mistral-small-3.2-24b-instruct
 #              qwen/qwen2.5-vl-72b-instruct
 #              deepseek/deepseek-chat
@@ -129,6 +132,36 @@ def encode_file(path: Path) -> tuple[str, str]:
     media = media_map.get(suffix, "image/png")
     return base64.b64encode(path.read_bytes()).decode(), media
 
+# Chat/vision backends (mistral, openrouter, ollama) cannot read PDFs directly.
+# Render every page of a PDF to PNG so multipage invoices are fully covered;
+# pass through native image files unchanged. Returns a list of (base64, media).
+PDF_RENDER_SCALE = 2.0   # ~144 DPI relative to PDF points; readable without bloat
+MAX_IMG_WIDTH = 2000     # downscale wider renders to cap payload/latency
+
+def render_to_images(path: Path) -> list[tuple[str, str]]:
+    suffix = path.suffix.lower()
+    if suffix != ".pdf":
+        data, media = encode_file(path)
+        return [(data, media)]
+
+    import io
+    import pypdfium2 as pdfium
+    images = []
+    pdf = pdfium.PdfDocument(str(path))
+    try:
+        for page in pdf:
+            bitmap = page.render(scale=PDF_RENDER_SCALE)
+            pil = bitmap.to_pil().convert("RGB")
+            if pil.width > MAX_IMG_WIDTH:
+                h = int(pil.height * MAX_IMG_WIDTH / pil.width)
+                pil = pil.resize((MAX_IMG_WIDTH, h))
+            buf = io.BytesIO()
+            pil.save(buf, format="PNG")
+            images.append((base64.b64encode(buf.getvalue()).decode(), "image/png"))
+    finally:
+        pdf.close()
+    return images
+
 def parse_json(text: str) -> dict:
     text = text.strip()
     # Strip markdown fences if present
@@ -157,26 +190,28 @@ def full_prompt() -> str:
 def run_mistral(path: Path) -> dict:
     from mistralai import Mistral
     client = Mistral(api_key=os.environ["MISTRAL_API_KEY"])
-    data, media = encode_file(path)
+    content = [
+        {"type": "image_url", "image_url": {"url": f"data:{media};base64,{data}"}}
+        for data, media in render_to_images(path)
+    ]
+    content.append({"type": "text", "text": full_prompt()})
     resp = client.chat.complete(
         model=MODEL_NAME,
-        messages=[{"role": "user", "content": [
-            {"type": "image_url", "image_url": {"url": f"data:{media};base64,{data}"}},
-            {"type": "text", "text": full_prompt()},
-        ]}]
+        messages=[{"role": "user", "content": content}]
     )
     return parse_json(resp.choices[0].message.content)
 
 def run_openrouter(path: Path) -> dict:
     import httpx
-    data, media = encode_file(path)
+    content = [
+        {"type": "image_url", "image_url": {"url": f"data:{media};base64,{data}"}}
+        for data, media in render_to_images(path)
+    ]
+    content.append({"type": "text", "text": full_prompt()})
     resp = httpx.post(
         "https://openrouter.ai/api/v1/chat/completions",
         headers={"Authorization": f"Bearer {os.environ['OPENROUTER_API_KEY']}"},
-        json={"model": MODEL_NAME, "messages": [{"role": "user", "content": [
-            {"type": "image_url", "image_url": {"url": f"data:{media};base64,{data}"}},
-            {"type": "text", "text": full_prompt()},
-        ]}]},
+        json={"model": MODEL_NAME, "messages": [{"role": "user", "content": content}]},
         timeout=90,
     )
     return parse_json(resp.json()["choices"][0]["message"]["content"])
@@ -216,10 +251,10 @@ def run_azure(path: Path) -> dict:
 
 def run_ollama(path: Path) -> dict:
     import httpx
-    data, _ = encode_file(path)
+    images = [data for data, _ in render_to_images(path)]
     resp = httpx.post(
         "http://localhost:11434/api/generate",
-        json={"model": MODEL_NAME, "prompt": full_prompt(), "images": [data], "stream": False},
+        json={"model": MODEL_NAME, "prompt": full_prompt(), "images": images, "stream": False},
         timeout=120,
     )
     return parse_json(resp.json().get("response", ""))
