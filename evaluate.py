@@ -79,7 +79,9 @@ Example output structure (values are illustrative only):
 }
 """
 
-EXTRA_INSTRUCTIONS = ""
+EXTRA_INSTRUCTIONS = """
+The "Document Type" field must be exactly "Bill" for a standard invoice or bill, or exactly "Credit" for a credit memo / return / credit note. Do not output "Invoice", "INVOICE", or any other value.
+"""
 # Agent: add format hints here when per-field scores reveal systematic errors.
 # Examples:
 #   "Invoice Date must be returned exactly as printed on the invoice, e.g. 3/24/2026"
