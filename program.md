@@ -1,115 +1,167 @@
-# autoresearch-mlx
-
-This is an Apple Silicon (MLX) port of Karpathy's autoresearch — an experiment to have the LLM do its own research. All training runs natively on MLX with unified memory. No PyTorch or CUDA required.
-
-**Monorepo note:** This project may live inside a larger repo. Always stage only `autoresearch-mlx/` paths. Never use blind `git add -A`.
+# Invoice OCR Extraction — Autoresearch Program
 
 ## Setup
 
-To set up a new experiment, work with the user to:
+Do these steps exactly once per session before starting the loop:
 
-1. **Agree on a run tag**: propose a tag based on today's date (e.g. `mar5`). The branch `autoresearch/<tag>` must not already exist — this is a fresh run.
-2. **Create the branch**: `git checkout -b autoresearch/<tag>` from current master.
-3. **Read the in-scope files**: The repo is small. Read these files for full context:
-   - `README.md` — repository context.
-   - `prepare.py` — fixed constants, data prep, tokenizer, dataloader, evaluation. Do not modify.
-   - `train.py` — the file you modify. Model architecture, optimizer, training loop.
-4. **Verify data exists**: Check that `~/.cache/autoresearch/` contains data shards and a tokenizer. If not, tell the human to run `uv run prepare.py`.
-5. **Initialize results.tsv**: Create `results.tsv` with header row and baseline entry. Run `uv run train.py` once to establish YOUR baseline on this hardware. Do NOT use baseline numbers from other platforms.
-6. **Confirm and go**: Confirm setup looks good.
+1. Activate the environment: `source ocr-research/bin/activate`
+2. Load env vars: they are read automatically from `.env.local` by `evaluate.py` — no export needed
+3. Check which backends are available by verifying `.env.local` has non-empty values for:
+   - `MISTRAL_API_KEY` → mistral backend available
+   - `OPENROUTER_API_KEY` → openrouter backend available
+   - `AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT` + `AZURE_DOCUMENT_INTELLIGENCE_KEY` → azure available
+   - Ollama running locally → run `curl -s http://localhost:11434/api/tags` to check
+4. Run the baseline and record results:
+   ```
+   python evaluate.py
+   ```
+5. Fill in before starting the loop:
 
-Once you get confirmation, kick off the experimentation.
+   **Baseline overall score:** `[fill in]`
+   **Weakest fields (score < 0.80):** `[fill in from per-field output]`
+   **Errors:** `[fill in]`
+
+6. Commit the baseline: `git add evaluate.py score.py results.tsv && git commit -m "baseline"`
+
+---
 
 ## Experimentation
 
-Each experiment runs on Apple Silicon via MLX. The training script runs for a **fixed time budget of 5 minutes** (wall clock training time, excluding startup/compilation). You launch it simply as: `uv run train.py`.
+### Goal
 
-**What you CAN do:**
-- Modify `train.py` — this is the only file you edit. Everything is fair game: model architecture, optimizer, hyperparameters, training loop, batch size, model size, etc.
+Maximize `overall` in `results.tsv`. Score is 0.0–1.0: character-level field accuracy averaged equally across all fields present in each ground truth, averaged across all invoices. Higher is always better. Git commits are the ground truth of what actually improved — `results.tsv` logs everything including failures.
 
-**What you CANNOT do:**
-- Modify `prepare.py`. It is read-only. It contains the fixed evaluation, data loading, tokenizer, and training constants (time budget, sequence length, etc).
-- Install new packages or add dependencies. You can only use what's already in `pyproject.toml`.
-- Modify the evaluation harness. The `evaluate_bpb` function in `prepare.py` is the ground truth metric.
+---
 
-**The goal is simple: get the lowest val_bpb.** Since the time budget is fixed, you don't need to worry about training time — it's always 5 minutes. Everything is fair game: change the architecture, the optimizer, the hyperparameters, the batch size, the model size. The only constraint is that the code runs without crashing and finishes within the time budget.
+### The optimization hierarchy
 
-**Memory** is a soft constraint. MLX uses unified memory shared between CPU and GPU. Some increase is acceptable for meaningful val_bpb gains, but it should not blow up dramatically.
+Work through phases in order. Do not skip to model-swapping — prompt engineering and field mapping almost always produce larger gains with zero API cost increase.
 
-**Simplicity criterion**: All else being equal, simpler is better. A small improvement that adds ugly complexity is not worth it. Conversely, removing something and getting equal or better results is a great outcome — that's a simplification win. When evaluating whether to keep a change, weigh the complexity cost against the improvement magnitude. A 0.001 val_bpb improvement that adds 20 lines of hacky code? Probably not worth it. A 0.001 val_bpb improvement from deleting code? Definitely keep. An improvement of ~0 but much simpler code? Keep.
+---
 
-**The first run**: Your very first run should always be to establish the baseline, so you will run the training script as is.
+**Phase 1 — Prompt-driven field mapping (experiments 1–10)**
+
+The model will return field names that may not exactly match the ground truth keys. Do not hardcode aliases — instead, fix this through the prompt. The `EXTRACTION_PROMPT` in `evaluate.py` already lists the exact required field names. If scores are low, the model is likely:
+
+- Using different casing (e.g. `"vendor"` vs `"Vendor"`)
+- Using abbreviated names (e.g. `"inv_no"` vs `"Invoice No"`)
+- Nesting fields differently (e.g. returning address sub-fields instead of one string)
+- Returning `Rows` under a different key (e.g. `"items"`, `"line_items"`)
+
+To diagnose: add a temporary `print(json.dumps(extracted, indent=2))` for the first invoice in `evaluate.py`'s main loop, run once, read the raw output, then remove the debug line. Do not commit the debug print.
+
+Fix mapping failures by improving `EXTRACTION_PROMPT` — make the field name requirements more explicit, add a negative example showing what NOT to do, or add the exact key name in quotes with emphasis. Fix format failures (dates, amounts, phone numbers) through `EXTRA_INSTRUCTIONS`.
+
+The `Rows` sub-fields need particular attention: the ground truth uses `"Unit Per Case"`, `"Item Code"`, `"SKU"`, etc. The model may return these under different names or flatten them. Use `EXTRA_INSTRUCTIONS` to add per-subfield name enforcement if needed.
+
+---
+
+**Phase 2 — Prompt strategy exploration (experiments 11–25)**
+
+With field naming clean, explore prompt strategies:
+
+- **Explicit format constraints** — add to `EXTRA_INSTRUCTIONS`: date format, amount format (no currency symbols), phone number format (digits only). The scorer normalizes, but exact format match avoids edit-distance penalties entirely.
+- **Chain-of-thought** — ask the model to list fields it can see before emitting JSON. Prefix: "First, list every field you can identify on this invoice. Then return the JSON."
+- **Confidence filtering** — ask the model to omit fields it is uncertain about rather than guessing. Reduces hallucination on fields like `Holiday Invoice` or `Consession Vendor` that rarely appear.
+- **Two-pass extraction** — first pass extracts header fields (Vendor, Invoice No, Invoice Date, Invoice Amount). Second pass extracts Rows only. Merge results. Implement as two sequential API calls in `run_mistral` / `run_openrouter`.
+- **Few-shot example in prompt** — add one complete example extraction to `EXTRACTION_PROMPT` using a fake invoice. Show exact field names, date format, Rows structure. Keep the example compact to avoid token bloat.
+- **Row-by-row instruction** — instead of listing Rows sub-fields once, describe what each sub-field means (e.g. "Unit Per Case: how many individual units are in one case/box"). Helps with domain-specific fields the model may not recognize.
+
+One change per experiment. Commit if score improves, revert if not.
+
+---
+
+**Phase 3 — Model exploration (experiments 26–45)**
+
+Change `MODEL_BACKEND` and `MODEL_NAME`. Always carry forward the best prompt from Phase 2 — test each new model with that prompt, not the original baseline prompt. Models to try:
+
+| Backend | Model string | Notes |
+|---|---|---|
+| `mistral` | `mistral-ocr-latest` | baseline |
+| `openrouter` | `mistralai/mistral-small-3.2-24b-instruct` | fast, cheaper |
+| `openrouter` | `qwen/qwen2.5-vl-72b-instruct` | strong on structured docs |
+| `openrouter` | `deepseek/deepseek-chat` | good on tables/rows |
+| `azure` | _(no model string)_ | prebuilt-invoice, strong on standard fields |
+| `ollama` | `hunyuan-vision` | local, no data sovereignty concern |
+| `ollama` | `minicpm-v` | fast local option |
+
+When changing models, only change `MODEL_BACKEND` and `MODEL_NAME`. Do not change the prompt simultaneously.
+
+---
+
+**Phase 4 — Compound and hybrid strategies (experiments 46+)**
+
+Once best model + best prompt are known independently:
+
+- Combine them and measure whether the improvement stacks
+- **Hybrid routing**: use Azure prebuilt for header fields (it excels at structured invoice fields like vendor, date, total) and the best LLM for `Rows` (Azure often misses line item sub-fields). Merge the two outputs. Implement in `run_ocr()`.
+- **Confidence-based field filling**: run the primary model, identify null or suspiciously short fields, re-query with a targeted prompt for just those fields
+- Increase `MAX_INVOICES` to 40+ to validate that improvements hold across the full corpus, not just the first 20
+
+---
+
+### Rules — follow all of these
+
+- **Only modify `evaluate.py`** — never touch `score.py`, `InvoiceFormat.json`, or any file in `Training Invoices/`
+- **One logical change per experiment** — one prompt edit, or one model swap, or one structural change. Not combinations.
+- **8-minute hard limit** — if a run exceeds 8 minutes, reduce `MAX_INVOICES` by 5 and rerun. Log the timeout in `results.tsv`.
+- **On crash or all-zero scores** — revert immediately with `git checkout -- evaluate.py`. Do not spend more than 5 minutes debugging a single failed experiment.
+- **On improvement** — `git add evaluate.py && git commit -m "exp-N: one-line description, score X.XXXX"`
+- **On no improvement** — `git checkout -- evaluate.py`
+- **Log every attempt** — write to `results.tsv` whether the experiment succeeded or failed. Include a short description of what changed in the final column.
+- **Never invent field content** — do not add fake example data to the prompt that could be confused with real invoice data.
+- **Do not chase individual invoice failures** — optimize for corpus average, not perfect scores on outliers.
+
+---
 
 ## Output format
 
-Once the script finishes it prints a summary like this:
+Every `python evaluate.py` run must produce this exact stdout format (the loop reads the SCORE line):
 
 ```
+SCORE: 0.8234  (47.3s, 1 errors, 20 invoices)
+Per-field:
+  Vendor                              0.961  ████████████████████
+  Invoice No                          0.921  ██████████████████░░
+  Invoice Date                        0.887  █████████████████░░░
+  Invoice Amount                      0.843  ████████████████░░░░
+  Rows                                0.721  ██████████████░░░░░░
+  Vendor Phone Number                 0.503  ██████████░░░░░░░░░░
+  Holiday Invoice                     0.201  ████░░░░░░░░░░░░░░░░
+```
+
+`results.tsv` row format (tab-separated, one row per run):
+
+```
+<score>\t<backend>\t<model>\t<elapsed>\t<errors>err\t<n>inv\t<per_field_json>\t<description>
+```
+
 ---
-val_bpb:          2.534000
-training_seconds: 312.4
-total_seconds:    405.7
-peak_vram_mb:     27528.9
-mfu_percent:      0.00
-total_tokens_M:   39.8
-num_steps:        46
-num_params_M:     50.3
-depth:            8
-```
 
-Note that the script runs for a fixed 5-minute training budget. On Apple Silicon the throughput, step count, and absolute val_bpb will differ from NVIDIA results — that's expected. Compare only against your own baseline on the same hardware.
+## Loop procedure
 
-```
-grep "^val_bpb:" run.log
-```
+At the start of every session:
 
-## Logging results
+1. Read this file (`program.md`)
+2. Read `results.tsv` to find current best score and experiment count
+3. Run `git log --oneline -15` to see what has been committed
+4. Determine which phase applies based on experiment count and score plateau
+5. State your hypothesis for the next experiment in one sentence
+6. Make exactly one change to `evaluate.py`
+7. Run `python evaluate.py` and wait for completion
+8. Compare `SCORE` to the best committed score
+9. Commit if improved, revert if not, append to `results.tsv`
+10. Repeat from step 4
 
-When an experiment is done, log it to `results.tsv` (tab-separated, NOT comma-separated — commas break in descriptions).
+Pause and summarize if 6 consecutive experiments produce no improvement, or if the session has run for 6 hours.
 
-The TSV has a header row and 5 columns:
+---
 
-```
-commit	val_bpb	memory_gb	status	description
-```
+## Interpretation guide (for the human — read after overnight runs)
 
-1. git commit hash (short, 7 chars)
-2. val_bpb achieved (e.g. 1.234567) — use 0.000000 for crashes
-3. peak memory in GB, round to .1f (e.g. 12.3 — divide peak_vram_mb by 1024) — use 0.0 for crashes
-4. status: `keep`, `discard`, or `crash`
-5. short text description of what this experiment tried
-
-Example:
-
-```
-commit	val_bpb	memory_gb	status	description
-383abb4	2.667000	26.9	keep	baseline
-909dd59	2.588904	26.9	keep	halve total batch size to 2^16
-4161af3	2.533728	26.9	keep	increase matrix LR to 0.04
-```
-
-## The experiment loop
-
-The experiment runs on a dedicated branch (e.g. `autoresearch/mar5` or `autoresearch/mar5-gpu0`).
-
-LOOP FOREVER:
-
-1. Look at the git state: the current branch/commit we're on
-2. Tune `train.py` with an experimental idea by directly hacking the code.
-3. `git add autoresearch-mlx/train.py && git commit -m "experiment: <description>"` (never `git add -A` — this may be inside a larger repo)
-4. Run the experiment: `uv run train.py > run.log 2>&1` (redirect everything — do NOT use tee or let output flood your context)
-5. Read out the results: `grep "^val_bpb:\|^peak_vram_mb:" run.log`
-6. If the grep output is empty, the run crashed. Run `tail -n 50 run.log` to read the Python stack trace and attempt a fix. If you can't get things to work after more than a few attempts, give up.
-7. Record the results in the tsv
-8. If val_bpb improved (lower), `git add autoresearch-mlx/results.tsv && git commit --amend --no-edit` to include the log, advancing the branch
-9. If val_bpb is equal or worse, record the discard commit hash, then `git reset --hard <previous kept commit>` to discard it cleanly
-
-The idea is that you are a completely autonomous researcher trying things out. If they work, keep. If they don't, discard. And you're advancing the branch so that you can iterate. If you feel like you're getting stuck in some way, you can rewind but you should probably do this very very sparingly (if ever).
-
-**Timeout**: Each experiment should take ~7 minutes total (5 min training + ~1 min compile/eval overhead on Apple Silicon). If a run exceeds 15 minutes, kill it and treat it as a failure (discard and revert).
-
-**Crashes**: If a run crashes (OOM, or a bug, or etc.), use your judgment: If it's something dumb and easy to fix (e.g. a typo, a missing import), fix it and re-run. If the idea itself is fundamentally broken, just skip it, log "crash" as the status in the tsv, and move on.
-
-**NEVER STOP**: Once the experiment loop has begun (after the initial setup), do NOT pause to ask the human if you should continue. Do NOT ask "should I keep going?" or "is this a good stopping point?". The human might be asleep, or gone from a computer and expects you to continue working *indefinitely* until you are manually stopped. You are autonomous. If you run out of ideas, think harder — read papers referenced in the code, re-read the in-scope files for new angles, try combining previous near-misses, try more radical architectural changes. The loop runs until the human interrupts you, period.
-
-As an example use case, a user might leave you running while they sleep. If each experiment takes you ~7 minutes then you can run approx 8-9/hour, for a total of about 70 over the duration of the average human sleep. The user then wakes up to experimental results, all completed by you while they slept!
+- **Low `Rows` score across all models** → the prompt's Rows sub-field description needs more specificity; try two-pass extraction (Phase 2)
+- **Low `Vendor Phone Number` / `Vendor Fax Number`** → normalization is already handling digit-only comparison; if still low, the model is missing the field entirely, not formatting it wrong — add emphasis in the prompt
+- **Low `Holiday Invoice` / `Consession Vendor`** → these are rare fields; if ground truth is mostly empty and model returns empty, score should be ~1.0. If score is low, check whether ground truth has values the model is missing entirely
+- **Azure outperforming on header fields but losing on Rows** → implement hybrid routing in Phase 4
+- **Score plateau after Phase 2** → the limiting factor is the model's vision quality on your invoice layouts, not the prompt; move to Phase 3
+- **Git log vs results.tsv discrepancy** → normal; results.tsv has all attempts, git has only improvements. Count of git commits = number of genuine improvements

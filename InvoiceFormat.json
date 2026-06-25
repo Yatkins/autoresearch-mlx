@@ -1,0 +1,30 @@
+{
+    "Vendor": "",
+    "Vendor Physical Address": "",
+    "Vendor Phone Number": "",
+    "Vendor Fax Number": "",
+    "Vendor Email": "",
+    "Vendor Website": "",
+    "Invoice No": "",
+    "Invoice Date": "",
+    "Total Quantity": "",
+    "Adjustment": "", 
+    "Bottle Deposit": "",
+    "Invoice Amount": "",
+    "Document Type": "",
+    "Rows": [
+        {
+            "Item Code": "",
+            "SKU": "",
+            "Unit Per Case": "",
+            "Description": "",
+            "Quantity": "",
+            "Unit Price": "",
+            "Line Amount": "",
+            "Discount": "",
+            "Deposit": ""
+        }
+    ],
+    "Holiday Invoice": "",
+    "Consession Vendor": ""
+}
