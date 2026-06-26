@@ -81,6 +81,8 @@ Example output structure (values are illustrative only):
 
 EXTRA_INSTRUCTIONS = """
 The "Document Type" field must be exactly "Bill" for a standard invoice or bill, or exactly "Credit" for a credit memo / return / credit note. Do not output "Invoice", "INVOICE", or any other value.
+
+For the "Adjustment" and "Bottle Deposit" fields: if no explicit adjustment or bottle deposit amount is shown on the invoice, output "0.00" (these default to zero rather than being omitted). If a value is shown, use it.
 """
 # Agent: add format hints here when per-field scores reveal systematic errors.
 # Examples:
