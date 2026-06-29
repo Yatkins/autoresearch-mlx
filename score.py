@@ -87,26 +87,42 @@ def score_rows(pred_rows: list, truth_rows: list) -> float:
 
 def score_invoice(predicted: dict, ground_truth: dict) -> tuple[float, dict]:
     """
-    Score one invoice. Equal weight per field present in ground_truth.
+    Score one invoice. FLATTENED weighting: every field-cell is worth the same.
+    Each header field counts as one cell, and EACH Rows sub-field cell (one per
+    line-item per sub-field present in ground truth) also counts as one cell —
+    so a 16-row invoice's line items dominate its score rather than the whole
+    Rows block collectively counting as a single header-equivalent field.
+
     Fields absent from ground_truth are skipped entirely (not every invoice
     has every field — e.g. no Fax Number, no Bottle Deposit).
-    Returns (overall_score, per_field_scores).
+    Returns (overall_score, per_field_scores). per_field["Rows"] is the mean of
+    that invoice's row cells (for display); overall is the mean of ALL cells.
     """
     if not ground_truth:
         return 0.0, {}
 
-    field_scores = {}
+    field_scores = {}   # for per-field display
+    cells = []          # flattened list — every cell equal weight in overall
     for field, truth_val in ground_truth.items():
         pred_val = predicted.get(field)
         if field == "Rows":
-            field_scores[field] = score_rows(
-                pred_val if isinstance(pred_val, list) else [],
-                truth_val if isinstance(truth_val, list) else []
-            )
+            truth_rows = truth_val if isinstance(truth_val, list) else []
+            pred_rows = pred_val if isinstance(pred_val, list) else []
+            row_cells = []
+            for i, truth_row in enumerate(truth_rows):
+                if not isinstance(truth_row, dict):
+                    continue
+                pred_row = pred_rows[i] if i < len(pred_rows) and isinstance(pred_rows[i], dict) else {}
+                for sub, tv in truth_row.items():
+                    row_cells.append(edit_sim(pred_row.get(sub), tv))
+            cells.extend(row_cells)
+            field_scores[field] = sum(row_cells) / len(row_cells) if row_cells else 1.0
         else:
-            field_scores[field] = edit_sim(pred_val, truth_val)
+            s = edit_sim(pred_val, truth_val)
+            field_scores[field] = s
+            cells.append(s)
 
-    overall = sum(field_scores.values()) / len(field_scores) if field_scores else 0.0
+    overall = sum(cells) / len(cells) if cells else 0.0
     return overall, field_scores
 
 def score_corpus(results: list) -> dict:
