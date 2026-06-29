@@ -83,6 +83,8 @@ EXTRA_INSTRUCTIONS = """
 The "Document Type" field must be exactly "Bill" for a standard invoice or bill, or exactly "Credit" for a credit memo / return / credit note. Do not output "Invoice", "INVOICE", or any other value.
 
 For the "Adjustment" and "Bottle Deposit" fields: if no explicit adjustment or bottle deposit amount is shown on the invoice, output "0.00" (these default to zero rather than being omitted). If a value is shown, use it.
+
+Every element of "Rows" must ALWAYS include all of these sub-fields, even when a column is blank: Item Code, SKU, Unit Per Case, Description, Quantity, Cases, Pieces, Unit Price, Line Amount, Discount, Deposit, Deposit Qty. For "Cases", "Pieces", "Discount", and "Deposit", output "0" when that column is blank or absent (do not omit them). "Deposit Qty" is the deposit/unit count for the line — output the number shown (commonly "1"). Quantity is the number of units ordered for the line; if the layout has only a "Cases" column and no separate quantity column, use that column's value for Quantity.
 """
 # Agent: add format hints here when per-field scores reveal systematic errors.
 # Examples:
