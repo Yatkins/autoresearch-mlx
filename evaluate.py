@@ -14,10 +14,11 @@ from score import score_corpus, score_invoice, edit_sim  # do not change score.p
 # AGENT CONFIGURATION BLOCK — modify only within this section
 # ============================================================
 
-MODEL_BACKEND = "mistral"
-# Options: "mistral" | "openrouter" | "azure" | "ollama"
+MODEL_BACKEND = os.environ.get("MODEL_BACKEND", "mistral")
+# Options: "mistral" | "openrouter" | "azure" | "ollama" | "gemini"
+# (env override lets a sweep run many models without editing this file)
 
-MODEL_NAME = "mistral-small-latest"
+MODEL_NAME = os.environ.get("MODEL_NAME", "mistral-small-latest")
 # NOTE: mistral-ocr-latest is NOT a chat model (only valid on the OCR endpoint),
 # so it errors via chat.complete. mistral-small-latest is vision-capable and is
 # the working mistral baseline. PDFs are rendered to PNG by render_to_images().
@@ -100,6 +101,10 @@ PRICE_PER_M = {
     "mistralai/mistral-small-3.2-24b-instruct": (0.05, 0.10),
     "qwen/qwen2.5-vl-72b-instruct": (0.25, 0.75),
     "deepseek/deepseek-chat": (0.27, 1.10),
+    "gemini-2.5-pro": (1.25, 10.0),
+    "gemini-2.5-flash": (0.30, 2.50),
+    "mistral-ocr-latest": (1.0, 0.0),   # ~ $1 / 1000 pages; cost tracked approximately
+    "mistral-ocr-4": (1.0, 0.0),
 }
 PRICE_DEFAULT = (0.20, 0.60)  # fallback when model not in table
 
@@ -226,9 +231,41 @@ def full_prompt() -> str:
 
 # --- Backends ---
 
+# JSON schema for Mistral OCR's document annotation (OCR endpoint returns
+# structured fields directly rather than free markdown).
+_OCR_ROW_KEYS = ["Item Code", "SKU", "Unit Per Case", "Description", "Quantity",
+                 "Cases", "Pieces", "Unit Price", "Line Amount", "Discount", "Deposit", "Deposit Qty"]
+_OCR_TOP_KEYS = ["Vendor", "Vendor Physical Address", "Vendor Phone Number", "Vendor Fax Number",
+                 "Vendor Email", "Vendor Website", "Invoice No", "Invoice Date", "Total Quantity",
+                 "Adjustment", "Bottle Deposit", "Invoice Amount", "Document Type",
+                 "Holiday Invoice", "Consession Vendor"]
+_OCR_SCHEMA = {
+    "type": "object",
+    "properties": {
+        **{k: {"type": "string"} for k in _OCR_TOP_KEYS},
+        "Rows": {"type": "array", "items": {
+            "type": "object",
+            "properties": {k: {"type": "string"} for k in _OCR_ROW_KEYS}}},
+    },
+}
+
 def run_mistral(path: Path) -> dict:
     from mistralai import Mistral
     client = Mistral(api_key=os.environ["MISTRAL_API_KEY"])
+    # Mistral OCR models use the dedicated OCR endpoint with structured annotation,
+    # not chat.complete (which rejects "mistral-ocr-*").
+    if MODEL_NAME.startswith("mistral-ocr"):
+        data, media = render_to_images(path)[0]
+        doc = ({"type": "document_url", "document_url": f"data:application/pdf;base64,{data}"}
+               if media == "application/pdf"
+               else {"type": "image_url", "image_url": f"data:{media};base64,{data}"})
+        resp = client.ocr.process(
+            model=MODEL_NAME, document=doc,
+            document_annotation_format={"type": "json_schema", "json_schema":
+                {"name": "invoice", "schema": _OCR_SCHEMA, "strict": False}},
+        )
+        ann = getattr(resp, "document_annotation", None)
+        return parse_json(ann) if ann else {}
     content = [
         {"type": "image_url", "image_url": {"url": f"data:{media};base64,{data}"}}
         for data, media in render_to_images(path)
@@ -244,6 +281,27 @@ def run_mistral(path: Path) -> dict:
         _record_usage(getattr(u, "prompt_tokens", 0), getattr(u, "completion_tokens", 0))
     return parse_json(resp.choices[0].message.content)
 
+def run_gemini(path: Path) -> dict:
+    import httpx
+    key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+    if not key:
+        raise RuntimeError("GEMINI_API_KEY not set in .env.local")
+    parts = [{"inline_data": {"mime_type": media, "data": data}}
+             for data, media in render_to_images(path)]
+    parts.append({"text": full_prompt()})
+    resp = httpx.post(
+        f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL_NAME}:generateContent",
+        headers={"x-goog-api-key": key},
+        json={"contents": [{"parts": parts}], "generationConfig": {"temperature": 0}},
+        timeout=120,
+    )
+    body = resp.json()
+    um = body.get("usageMetadata") or {}
+    _record_usage(um.get("promptTokenCount", 0), um.get("candidatesTokenCount", 0))
+    cand = (body.get("candidates") or [{}])[0]
+    txt = "".join(p.get("text", "") for p in (cand.get("content", {}).get("parts") or []))
+    return parse_json(txt)
+
 def run_openrouter(path: Path) -> dict:
     import httpx
     content = [
@@ -254,8 +312,9 @@ def run_openrouter(path: Path) -> dict:
     resp = httpx.post(
         "https://openrouter.ai/api/v1/chat/completions",
         headers={"Authorization": f"Bearer {os.environ['OPENROUTER_API_KEY']}"},
-        json={"model": MODEL_NAME, "messages": [{"role": "user", "content": content}]},
-        timeout=90,
+        json={"model": MODEL_NAME, "messages": [{"role": "user", "content": content}],
+              "temperature": 0},  # deterministic for comparable experiments
+        timeout=120,
     )
     body = resp.json()
     u = body.get("usage") or {}
@@ -311,6 +370,7 @@ def run_ocr(path: Path) -> dict:
         "openrouter": run_openrouter,
         "azure":      run_azure,
         "ollama":     run_ollama,
+        "gemini":     run_gemini,
     }
     fn = dispatch.get(MODEL_BACKEND)
     if not fn:
