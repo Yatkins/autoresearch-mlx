@@ -30,7 +30,13 @@ MODEL_NAME = os.environ.get("MODEL_NAME", "mistral-small-latest")
 # ollama:      hunyuan-vision | llava | minicpm-v
 
 MAX_INVOICES = 20
-# Keep experiments under 8 min. Reduce if timing out.
+# Max TRAIN invoices per run. Keep experiments under 8 min. Reduce if timing out.
+
+TEST_COUNT = int(os.environ.get("TEST_COUNT", "7"))
+# Held-out TEST invoices, taken from the END of the sorted corpus. NEVER used for
+# prompt/format tuning — only for validating generalization. With 27 invoices this
+# gives 20 train / 7 test; add invoices and bump to e.g. 30 train / 10 test.
+# Run on the held-out set with: EVAL_SET=test python evaluate.py
 
 EXTRACTION_PROMPT = """
 You are an invoice data extraction system.
@@ -121,18 +127,27 @@ COST_CAP     = 0.10    # max cost penalty
 # FIXED INFRASTRUCTURE — agent must not modify below this line
 # ============================================================
 
-# Token usage accumulator — backends append (prompt_tokens, completion_tokens)
-# per API call so main() can estimate cost. Reset at the start of each run.
-_USAGE: list = []
+# Usage accumulators — backends append per API call so main() can estimate cost.
+# Reset at the start of each run. Token-priced backends use _USAGE; the page-priced
+# Mistral OCR endpoint uses _PAGES.
+_USAGE: list = []   # (prompt_tokens, completion_tokens)
+_PAGES: list = []   # pages billed by per-page OCR backends
+
+OCR_PRICE_PER_PAGE = 0.001  # Mistral OCR ≈ $1 / 1000 pages
 
 def _record_usage(prompt_tokens, completion_tokens):
     _USAGE.append((int(prompt_tokens or 0), int(completion_tokens or 0)))
+
+def _record_pages(n):
+    _PAGES.append(int(n or 0))
 
 def estimate_cost(model: str) -> float:
     pin, pout = PRICE_PER_M.get(model, PRICE_DEFAULT)
     tin = sum(u[0] for u in _USAGE)
     tout = sum(u[1] for u in _USAGE)
-    return (tin / 1e6) * pin + (tout / 1e6) * pout
+    token_cost = (tin / 1e6) * pin + (tout / 1e6) * pout
+    page_cost = sum(_PAGES) * OCR_PRICE_PER_PAGE
+    return token_cost + page_cost
 
 def load_env():
     env_file = Path(".env.local")
@@ -146,23 +161,31 @@ def load_env():
             if k and v:
                 os.environ[k] = v
 
-def load_corpus(limit: int) -> list:
+def load_corpus(limit: int, split: str = "train") -> list:
     """
     Expects Training Invoices/ to contain paired files:
         SomeInvoice.pdf  (or .png / .jpg)
         SomeInvoice.json  (ground truth)
     Returns list of (image_path, ground_truth_dict).
+
+    The sorted corpus is split deterministically: the LAST TEST_COUNT invoices are
+    the held-out TEST set; everything before is TRAIN (capped at `limit`).
+    split="train" (default) returns train[:limit]; split="test" returns the held-out set.
     """
     invoice_dir = Path("Training Invoices")
-    pairs = []
-    for gt_file in sorted(invoice_dir.glob("*.json"))[:limit]:
+    all_pairs = []
+    for gt_file in sorted(invoice_dir.glob("*.json")):
         for ext in [".pdf", ".png", ".jpg", ".jpeg", ".tiff"]:
             img = gt_file.with_suffix(ext)
             if img.exists():
                 with open(gt_file) as f:
-                    pairs.append((img, json.load(f)))
+                    all_pairs.append((img, json.load(f)))
                 break
-    return pairs
+    if TEST_COUNT > 0:
+        train_pairs, test_pairs = all_pairs[:-TEST_COUNT], all_pairs[-TEST_COUNT:]
+    else:
+        train_pairs, test_pairs = all_pairs, []
+    return test_pairs if split == "test" else train_pairs[:limit]
 
 def encode_file(path: Path) -> tuple[str, str]:
     suffix = path.suffix.lower()
@@ -264,6 +287,9 @@ def run_mistral(path: Path) -> dict:
             document_annotation_format={"type": "json_schema", "json_schema":
                 {"name": "invoice", "schema": _OCR_SCHEMA, "strict": False}},
         )
+        ui = getattr(resp, "usage_info", None)
+        pages = getattr(ui, "pages_processed", None) if ui else None
+        _record_pages(pages if pages else 1)
         ann = getattr(resp, "document_annotation", None)
         return parse_json(ann) if ann else {}
     content = [
@@ -436,8 +462,10 @@ def build_report(results, names, scores, meta: dict) -> str:
 def main():
     load_env()
     _USAGE.clear()
+    _PAGES.clear()
+    eval_set = os.environ.get("EVAL_SET", "train")
     start = time.time()
-    corpus = load_corpus(MAX_INVOICES)
+    corpus = load_corpus(MAX_INVOICES, split=eval_set)
 
     if not corpus:
         print("SCORE: 0.0000  (0.0s, 0 invoices found — check Training Invoices/ path)")
@@ -468,7 +496,7 @@ def main():
     cost_pen = min(COST_CAP, max(0.0, (cost_per - COST_FREE) * COST_RATE))
     adjusted = overall - lat_pen - cost_pen
 
-    print(f"SCORE: {overall:.4f}  ({elapsed:.1f}s, {errors} errors, {n} invoices)")
+    print(f"SCORE: {overall:.4f}  ({elapsed:.1f}s, {errors} errors, {n} invoices, {eval_set} set)")
     print(f"Adjusted: {adjusted:.4f} (lat -{lat_pen:.3f}, cost -{cost_pen:.3f})  "
           f"Latency: {elapsed:.1f}s ({lat_per:.1f}s/inv)  Cost: ${cost:.4f} (${cost_per:.5f}/inv, est.)")
     print("Per-field:")
@@ -492,7 +520,7 @@ def main():
     # Append to results.tsv (columns: score, adjusted, latency_s, cost_usd,
     # backend, model, errors, invoices, report, per_field_json, description)
     with open("results.tsv", "a") as f:
-        desc = f"backend={MODEL_BACKEND} model={MODEL_NAME}"
+        desc = f"[{eval_set}] backend={MODEL_BACKEND} model={MODEL_NAME}"
         per_field_json = json.dumps(scores["per_field"])
         f.write(
             f"{overall:.4f}\t{adjusted:.4f}\t{elapsed:.1f}\t{cost:.4f}\t"
