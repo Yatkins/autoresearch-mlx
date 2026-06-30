@@ -38,12 +38,19 @@ def normalize(value: Any) -> str:
     s = re.sub(r'[$€£]', '', s)
     s = re.sub(r',(?=\d{3})', '', s)  # remove thousands commas only
 
+    # Numeric: drop trailing zeros after a decimal point so 64.00 == 64 and
+    # 46.80 == 46.8 (decimal-place differences are not penalized). Integers and
+    # alphanumeric codes (e.g. barcodes/SKUs) are left untouched.
+    if re.fullmatch(r'-?\d+\.\d+', s):
+        s = s.rstrip('0').rstrip('.')
+
     # Phone/fax: strip all non-digit characters for comparison
     if re.match(r'^[\d\s\(\)\-\+\.ext]+$', s) and len(re.sub(r'\D', '', s)) >= 7:
         return re.sub(r'\D', '', s)
 
-    # General: lowercase, collapse whitespace
-    s = s.lower()
+    # General: lowercase, drop commas (missing commas in addresses are not
+    # penalized), collapse whitespace
+    s = s.lower().replace(',', ' ')
     s = re.sub(r'\s+', ' ', s)
     return s.strip()
 
