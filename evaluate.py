@@ -55,6 +55,7 @@ Top-level fields:
 - Vendor Phone Number
 - Vendor Fax Number
 - Vendor Email Address
+- Vendor Contact
 - Vendor Website
 - Invoice No
 - Invoice Date
