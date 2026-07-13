@@ -65,9 +65,23 @@ defaults) so a sweep runs many models without editing the file. `evaluate.py` au
 
 - **Flattened / per-cell equal weight.** Each header field = 1 cell; EACH `Rows` sub-field
   cell (per line-item × per sub-field present in GT) = 1 cell. So line items DOMINATE each
-  invoice's score → optimization should focus on `Rows` accuracy. Reference under this scorer
-  ≈ 0.7183 (was 0.8233 under the old whole-Rows-as-one-field metric; **old scores are not
-  comparable**, results.tsv was reset at that point).
+  invoice's score → optimization should focus on `Rows` accuracy.
+- **TWO corpus metrics reported (user-directed 2026-07-13); `score_corpus` returns both:**
+  - `overall` = **extractions-equal** (GLOBAL per-cell) — pools EVERY cell across ALL
+    invoices and averages ONCE. "1 extraction = 1 extraction" corpus-wide; a cell weighs the
+    same regardless of invoice or invoice size. Many-row invoices contribute more cells.
+    **This is the PRIMARY / optimization target.**
+  - `overall_invoice` = **invoices-equal** — each invoice's own cell-mean, then those means
+    averaged equally (each invoice counts once; this was the pre-2026-07-13 `overall`).
+    Reported for comparison only — do NOT optimize it.
+  - (The user explicitly rejected a third "all-fields-equal" metric — do not add it back.)
+  - `per_field` is pooled globally (display only). `score_invoice` still returns a per-invoice
+    mean (used only by the report). All build on the shared `_invoice_cells()` helper.
+  - **results.tsv columns changed** to: score, score_invoice, adjusted, latency_s, cost_usd,
+    backend, model, errors, invoices, report, per_field_json, description. `leaderboard.py`
+    ranks by `score` and shows `score_invoice` alongside.
+  - **This changed all scores — old baselines are NOT comparable; re-baseline.** (Metric
+    history: whole-Rows≈0.8233 → flattened per-invoice≈0.7183 → now global per-cell primary.)
 - **Character-level** similarity (Levenshtein), not exact match: 1 char off on 10 chars = 0.9.
 - **`normalize()` tolerances** (in score.py): dates → YYYY-MM-DD; currency symbols + thousands
   commas stripped; **trailing decimal zeros dropped** (`64.00`==`64`, `46.80`==`46.8`; integers

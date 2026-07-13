@@ -53,6 +53,7 @@ Top-level fields:
 - Vendor
 - Vendor Physical Address
 - Vendor Phone Number
+- Vendor Phone Number 2
 - Vendor Fax Number
 - Vendor Email Address
 - Vendor Contact
@@ -113,6 +114,8 @@ PRICE_PER_M = {
     "deepseek/deepseek-chat": (0.27, 1.10),
     "gemini-2.5-pro": (1.25, 10.0),
     "gemini-2.5-flash": (0.30, 2.50),
+    "google/gemini-2.5-pro": (1.25, 10.0),      # same model via OpenRouter
+    "google/gemini-2.5-flash": (0.30, 2.50),    # OpenRouter route (avoids native free-tier rate limits)
     "mistral-ocr-latest": (1.0, 0.0),   # ~ $1 / 1000 pages; cost tracked approximately
     "mistral-ocr-4": (1.0, 0.0),
 }
@@ -422,7 +425,9 @@ def build_report(results, names, scores, meta: dict) -> str:
     lines.append(f"# Run report — {meta['timestamp']}")
     lines.append("")
     lines.append(f"- backend/model: `{meta['backend']}` / `{meta['model']}`")
-    lines.append(f"- overall (flattened): **{meta['overall']:.4f}**   adjusted: {meta['adjusted']:.4f}")
+    lines.append(f"- overall (extractions-equal, PRIMARY): **{meta['overall']:.4f}**   "
+                 f"invoices-equal: {meta.get('overall_invoice', meta['overall']):.4f}   "
+                 f"adjusted: {meta['adjusted']:.4f}")
     lines.append(f"- latency: {meta['latency']:.1f}s total ({meta['lat_per']:.1f}s/invoice)   "
                  f"cost: ${meta['cost']:.4f} (${meta['cost_per']:.5f}/invoice, est.)   "
                  f"errors: {meta['errors']}   invoices: {meta['n']}")
@@ -489,7 +494,8 @@ def main():
     scores = score_corpus(results)
     elapsed = time.time() - start
 
-    overall = scores["overall"]
+    overall = scores["overall"]                              # extractions-equal (primary)
+    overall_invoice = scores.get("overall_invoice", overall)  # invoices-equal
     n = scores["n_invoices"]
     cost = estimate_cost(MODEL_NAME)
     lat_per = elapsed / n if n else 0.0
@@ -503,6 +509,8 @@ def main():
     print(f"SCORE: {overall:.4f}  ({elapsed:.1f}s, {errors} errors, {n} invoices, {eval_set} set)")
     print(f"Adjusted: {adjusted:.4f} (lat -{lat_pen:.3f}, cost -{cost_pen:.3f})  "
           f"Latency: {elapsed:.1f}s ({lat_per:.1f}s/inv)  Cost: ${cost:.4f} (${cost_per:.5f}/inv, est.)")
+    print(f"Weighting: extractions-equal(PRIMARY)={overall:.4f}  "
+          f"invoices-equal={overall_invoice:.4f}")
     print("Per-field:")
     for field, s in sorted(scores["per_field"].items(), key=lambda x: x[1]):
         bar = "█" * int(s * 20) + "░" * (20 - int(s * 20))
@@ -512,7 +520,8 @@ def main():
     timestamp = time.strftime("%Y%m%d_%H%M%S", time.localtime(start))
     meta = {
         "timestamp": timestamp, "backend": MODEL_BACKEND, "model": MODEL_NAME,
-        "overall": overall, "adjusted": adjusted, "latency": elapsed, "lat_per": lat_per,
+        "overall": overall, "overall_invoice": overall_invoice,
+        "adjusted": adjusted, "latency": elapsed, "lat_per": lat_per,
         "cost": cost, "cost_per": cost_per, "errors": errors, "n": n,
     }
     reports_dir = Path("reports")
@@ -521,13 +530,16 @@ def main():
     report_file.write_text(build_report(results, names, scores, meta))
     print(f"Report: {report_file}")
 
-    # Append to results.tsv (columns: score, adjusted, latency_s, cost_usd,
-    # backend, model, errors, invoices, report, per_field_json, description)
+    # Append to results.tsv (columns: score, score_invoice, adjusted, latency_s,
+    # cost_usd, backend, model, errors, invoices, report, per_field_json, description).
+    # `score` is the PRIMARY extractions-equal metric (optimization target);
+    # score_invoice = invoices-equal (reported for comparison).
     with open("results.tsv", "a") as f:
         desc = f"[{eval_set}] backend={MODEL_BACKEND} model={MODEL_NAME}"
         per_field_json = json.dumps(scores["per_field"])
         f.write(
-            f"{overall:.4f}\t{adjusted:.4f}\t{elapsed:.1f}\t{cost:.4f}\t"
+            f"{overall:.4f}\t{overall_invoice:.4f}\t{adjusted:.4f}\t"
+            f"{elapsed:.1f}\t{cost:.4f}\t"
             f"{MODEL_BACKEND}\t{MODEL_NAME}\t{errors}\t{n}\t"
             f"{report_file.name}\t{per_field_json}\t{desc}\n"
         )

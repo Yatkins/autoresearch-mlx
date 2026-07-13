@@ -92,24 +92,21 @@ def score_rows(pred_rows: list, truth_rows: list) -> float:
     
     return sum(row_scores) / len(row_scores)
 
-def score_invoice(predicted: dict, ground_truth: dict) -> tuple[float, dict]:
+def _invoice_cells(predicted: dict, ground_truth: dict) -> tuple[list, dict]:
     """
-    Score one invoice. FLATTENED weighting: every field-cell is worth the same.
-    Each header field counts as one cell, and EACH Rows sub-field cell (one per
-    line-item per sub-field present in ground truth) also counts as one cell —
-    so a 16-row invoice's line items dominate its score rather than the whole
-    Rows block collectively counting as a single header-equivalent field.
-
-    Fields absent from ground_truth are skipped entirely (not every invoice
-    has every field — e.g. no Fax Number, no Bottle Deposit).
-    Returns (overall_score, per_field_scores). per_field["Rows"] is the mean of
-    that invoice's row cells (for display); overall is the mean of ALL cells.
+    FLATTENED scoring for one invoice. Returns (cells, field_cells):
+      - cells: flat list of every scored cell (one per header field, plus one per
+        Rows sub-field per line-item present in ground truth).
+      - field_cells: field name -> list of that field's cells (Rows keeps all its
+        row cells; header fields have a single-element list).
+    Fields absent from ground_truth are skipped (not every invoice has every field).
+    This is the single source of truth for cells; both per-invoice and corpus
+    aggregation build on it so weighting is consistent.
     """
+    cells: list = []
+    field_cells: dict[str, list] = {}
     if not ground_truth:
-        return 0.0, {}
-
-    field_scores = {}   # for per-field display
-    cells = []          # flattened list — every cell equal weight in overall
+        return cells, field_cells
     for field, truth_val in ground_truth.items():
         pred_val = predicted.get(field)
         if field == "Rows":
@@ -123,34 +120,69 @@ def score_invoice(predicted: dict, ground_truth: dict) -> tuple[float, dict]:
                 for sub, tv in truth_row.items():
                     row_cells.append(edit_sim(pred_row.get(sub), tv))
             cells.extend(row_cells)
-            field_scores[field] = sum(row_cells) / len(row_cells) if row_cells else 1.0
+            field_cells[field] = row_cells
         else:
             s = edit_sim(pred_val, truth_val)
-            field_scores[field] = s
             cells.append(s)
+            field_cells[field] = [s]
+    return cells, field_cells
 
+def score_invoice(predicted: dict, ground_truth: dict) -> tuple[float, dict]:
+    """
+    Score one invoice (for per-invoice display/reporting). Every field-cell is
+    worth the same: each header field = 1 cell; EACH Rows sub-field cell = 1 cell,
+    so a 16-row invoice's line items dominate its own score.
+    Returns (overall_score, per_field_scores). per_field["Rows"] is the mean of
+    that invoice's row cells; overall is the mean of ALL of this invoice's cells.
+    NOTE: the corpus `overall` is NOT the mean of these per-invoice scores — see
+    score_corpus, which pools every cell across all invoices (global per-cell).
+    """
+    if not ground_truth:
+        return 0.0, {}
+    cells, field_cells = _invoice_cells(predicted, ground_truth)
+    field_scores = {f: (sum(c) / len(c) if c else 1.0) for f, c in field_cells.items()}
     overall = sum(cells) / len(cells) if cells else 0.0
     return overall, field_scores
 
 def score_corpus(results: list) -> dict:
     """
     results: list of (predicted_dict, ground_truth_dict)
-    Returns overall score + per-field averages across corpus.
+
+    Computes TWO aggregations of the same per-cell scores (user-directed 2026-07-13):
+
+      - overall           = "all extractions equal" (GLOBAL per-cell). Every cell in the
+                            whole corpus pooled and averaged ONCE — one extraction weighs
+                            the same regardless of invoice or invoice size. PRIMARY /
+                            optimization target. Many-row invoices contribute more cells.
+      - overall_invoice   = "all invoices equal". Each invoice's own cell-mean, then those
+                            per-invoice means averaged equally. Small invoices' cells weigh
+                            more. (This was the pre-2026-07-13 `overall`.)
+
+    per_field is pooled globally: each field's score is the mean over ALL of its cells
+    across the corpus (for Rows, all row cells corpus-wide) — for display only.
     """
     if not results:
-        return {"overall": 0.0, "per_field": {}, "n_invoices": 0}
+        return {"overall": 0.0, "overall_invoice": 0.0,
+                "per_field": {}, "n_invoices": 0, "n_cells": 0}
 
-    all_field_scores: dict[str, list[float]] = {}
-    invoice_scores = []
+    global_cells: list = []
+    field_cells_all: dict[str, list] = {}
+    invoice_means: list = []
 
     for predicted, ground_truth in results:
-        inv_score, field_scores = score_invoice(predicted, ground_truth)
-        invoice_scores.append(inv_score)
-        for field, s in field_scores.items():
-            all_field_scores.setdefault(field, []).append(s)
+        cells, field_cells = _invoice_cells(predicted, ground_truth)
+        global_cells.extend(cells)
+        invoice_means.append(sum(cells) / len(cells) if cells else 0.0)
+        for field, c in field_cells.items():
+            field_cells_all.setdefault(field, []).extend(c)
 
+    per_field = {f: sum(c) / len(c) for f, c in field_cells_all.items() if c}
+    overall = sum(global_cells) / len(global_cells) if global_cells else 0.0
+    overall_invoice = sum(invoice_means) / len(invoice_means) if invoice_means else 0.0
     return {
-        "overall": sum(invoice_scores) / len(invoice_scores),
-        "per_field": {f: sum(v) / len(v) for f, v in all_field_scores.items()},
-        "n_invoices": len(invoice_scores),
+        "overall": overall,
+        "overall_invoice": overall_invoice,
+        "per_field": per_field,
+        "n_invoices": len(results),
+        "n_cells": len(global_cells),
     }

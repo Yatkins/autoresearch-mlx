@@ -1,12 +1,10 @@
 {
-    "Store": "Foodex",
     "Vendor": "Mehadrin Ice Cream",
     "Vendor Physical Address": "100 Trumbull St ., Elizabeth, NJ 07206",
-    "Vendor Phone Number": "7184569494 Fax:",
+    "Vendor Phone Number": "7184569494",
     "Invoice No": "2610217607",
     "Invoice Date": "6/25/2026",
     "Total Quantity": "37",
-    "Bottle Deposit": "0.00",
     "Invoice Amount": "496.5",
     "Document Type": "Bill",
     "Rows": [
