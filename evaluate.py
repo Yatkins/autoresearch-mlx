@@ -130,6 +130,29 @@ COST_FREE    = 0.005   # no cost penalty up to this many USD/invoice
 COST_RATE    = 4.0     # penalty per USD/invoice beyond the free allowance
 COST_CAP     = 0.10    # max cost penalty
 
+# --- Post-processing (applied to every backend's output in run_ocr) ---
+def _num(v):
+    """Parse the first numeric value from a cell like '10', '10.0', '2 cs'. -> float|None."""
+    if v is None:
+        return None
+    m = re.search(r'-?\d+(?:\.\d+)?', str(v).replace(",", ""))
+    return float(m.group()) if m else None
+
+def postprocess(extracted: dict) -> dict:
+    """Derive/repair fields after extraction. Total Quantity is usually NOT printed on
+    the invoice — it's the sum of the line-item Quantity column (verified: 48/49 GT
+    files) — so derive it from Rows rather than trusting the model's blank/guessed value."""
+    if not isinstance(extracted, dict):
+        return extracted
+    rows = extracted.get("Rows")
+    if isinstance(rows, list) and rows:
+        qtys = [_num(r.get("Quantity")) for r in rows if isinstance(r, dict)]
+        qtys = [q for q in qtys if q is not None]
+        if qtys:
+            total = sum(qtys)
+            extracted["Total Quantity"] = str(int(total)) if total == int(total) else str(total)
+    return extracted
+
 # ============================================================
 # FIXED INFRASTRUCTURE — agent must not modify below this line
 # ============================================================
@@ -408,7 +431,7 @@ def run_ocr(path: Path) -> dict:
     fn = dispatch.get(MODEL_BACKEND)
     if not fn:
         raise ValueError(f"Unknown MODEL_BACKEND: {MODEL_BACKEND}")
-    return fn(path)
+    return postprocess(fn(path))
 
 # --- Reporting ---
 
@@ -536,6 +559,9 @@ def main():
     # score_invoice = invoices-equal (reported for comparison).
     with open("results.tsv", "a") as f:
         desc = f"[{eval_set}] backend={MODEL_BACKEND} model={MODEL_NAME}"
+        note = os.environ.get("EXP_NOTE", "").strip()
+        if note:
+            desc += f" | {note}"
         per_field_json = json.dumps(scores["per_field"])
         f.write(
             f"{overall:.4f}\t{overall_invoice:.4f}\t{adjusted:.4f}\t"
