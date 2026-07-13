@@ -1,0 +1,213 @@
+{
+    "Vendor": "Twenty Four Six Foods LLC",
+    "Vendor Physical Address": "961 Elton Street Brooklyn N.Y. 11208",
+    "Vendor Phone Number": "7182409040",
+    "Vendor Fax Number": "7182409041 Fax",
+    "Invoice No": "A246-011440",
+    "Invoice Date": "7/1/2026",
+    "Total Quantity": "47",
+    "Invoice Amount": "1603",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Quantity": "1",
+            "Item Code": "AC100",
+            "Description": "Acai FZ Berries Sweetened 15/14oz 4pk/3.5oz",
+            "Unit Price": "85.50",
+            "Line Amount": "85.50",
+            "Universal Product Code": "195893120741"
+        },
+        {
+            "Quantity": "2",
+            "Item Code": "AC101",
+            "Description": "Acai FZ Berries Unsweetened 15/14oz 4pk/3.5oz",
+            "Unit Price": "85.50",
+            "Line Amount": "171.00",
+            "Universal Product Code": "195893120734"
+        },
+        {
+            "Quantity": "1",
+            "Item Code": "BC205",
+            "Description": "KItov White Beans 12/500gr.",
+            "Unit Price": "42.8",
+            "Line Amount": "42.80",
+            "Universal Product Code": "7290010068074"
+        },
+        {
+            "Quantity": "1",
+            "Item Code": "BC207",
+            "Description": "KItov Cholent Mix (Mix Beans) 12/500gr.",
+            "Unit Price": "42.80",
+            "Line Amount": "42.80",
+            "Universal Product Code": "7290010068197"
+        },
+        {
+            "Quantity": "1",
+            "Item Code": "BC212",
+            "Description": "Kitov Jasmine white Rice 12/500g",
+            "Unit Price": "37.60",
+            "Line Amount": "37.60",
+            "Universal Product Code": "7290010068067"
+        },
+        {
+            "Quantity": "1",
+            "Item Code": "BC215",
+            "Description": "Kitov Vacuum Pack instant oats-Original 12/16oz (450g)",
+            "Unit Price": "49.60",
+            "Line Amount": "49.60",
+            "Universal Product Code": "7290013719256"
+        },
+        {
+            "Quantity": "1",
+            "Item Code": "BH300",
+            "Description": "Best Select - Instant oatmeal original 12/10PK",
+            "Unit Price": "34.20",
+            "Line Amount": "34.20",
+            "Universal Product Code": "723800644945"
+        },
+        {
+            "Quantity": "1",
+            "Item Code": "BIE15942",
+            "Description": "Bake-It-Easy Pizza Bagels 8/8pk 28oz.",
+            "Unit Price": "68.5",
+            "Line Amount": "68.5",
+            "Universal Product Code": "051497409456"
+        },
+        {
+            "Quantity": "10",
+            "Item Code": "BM108",
+            "Description": "Puffs potato Hearts 36/0.5z",
+            "Unit Price": "20.20",
+            "Line Amount": "202.00",
+            "Universal Product Code": "723800642484"
+        },
+        {
+            "Quantity": "6",
+            "Item Code": "BM109",
+            "Description": "Puffs potato rings 36/0.5z",
+            "Unit Price": "20.20",
+            "Line Amount": "121.20",
+            "Universal Product Code": "723800642477"
+        },
+        {
+            "Quantity": "1",
+            "Item Code": "BM112",
+            "Description": "Puffs Potato Hearts BB 36/0.5z",
+            "Unit Price": "20.20",
+            "Line Amount": "20.20",
+            "Universal Product Code": "723800643986"
+        },
+        {
+            "Quantity": "2",
+            "Item Code": "BM114",
+            "Description": "Puffs potato Sky Mix Onion 36/0.5z",
+            "Unit Price": "20.20",
+            "Line Amount": "40.4",
+            "Universal Product Code": "723800644068"
+        },
+        {
+            "Quantity": "1",
+            "Item Code": "C103",
+            "Description": "Lemon Juice 6/33.8 oz All Year",
+            "Unit Price": "21.00",
+            "Line Amount": "21.00",
+            "Universal Product Code": "850066382004"
+        },
+        {
+            "Quantity": "1",
+            "Item Code": "GC101",
+            "Description": "Granola Chik Homemade Original Crunch 6/10oz.",
+            "Unit Price": "57.80",
+            "Line Amount": "57.80",
+            "Universal Product Code": "850014821036"
+        },
+        {
+            "Quantity": "2",
+            "Item Code": "PM100",
+            "Description": "Pomodori 8 Slice Pizza 6* 8 slice",
+            "Unit Price": "60",
+            "Line Amount": "120",
+            "Universal Product Code": "799975167992"
+        },
+        {
+            "Quantity": "2",
+            "Item Code": "SF01283",
+            "Description": "Sunday Snacks Party Puffs - BBQ 48/.05oz",
+            "Unit Price": "23.60",
+            "Line Amount": "47.20",
+            "Universal Product Code": "850046321283"
+        },
+        {
+            "Quantity": "4",
+            "Item Code": "SF01429",
+            "Description": "Sunday Snacks Party Puffs Sea Salt 48/.05oz",
+            "Unit Price": "23.60",
+            "Line Amount": "94.4",
+            "Universal Product Code": "850046321429"
+        },
+        {
+            "Quantity": "2",
+            "Item Code": "SF06Z1781",
+            "Description": "Sunday Snacks Potato Crisps Sea Salt 48/.6oz",
+            "Unit Price": "34.00",
+            "Line Amount": "68.00",
+            "Universal Product Code": "850046321801"
+        },
+        {
+            "Quantity": "1",
+            "Item Code": "SF2002",
+            "Description": "Drizzilicious French Toast 12/4oz.",
+            "Unit Price": "30.00",
+            "Line Amount": "30.00",
+            "Universal Product Code": "853762002887"
+        },
+        {
+            "Quantity": "1",
+            "Item Code": "SF2006",
+            "Description": "Drizzilicious Lemon Cake Bites 12/4oz.",
+            "Unit Price": "30.00",
+            "Line Amount": "30.00",
+            "Universal Product Code": "850061874641"
+        },
+        {
+            "Quantity": "1",
+            "Item Code": "SF205",
+            "Description": "Drizzilicious S'mores 6/10/.74z",
+            "Unit Price": "42.90",
+            "Line Amount": "42.9",
+            "Universal Product Code": "857900005273"
+        },
+        {
+            "Quantity": "1",
+            "Item Code": "SF206",
+            "Description": "Drizzilicious Cinnamon Swirl 6/10/.74z",
+            "Unit Price": "42.90",
+            "Line Amount": "42.9",
+            "Universal Product Code": "857900005266"
+        },
+        {
+            "Quantity": "1",
+            "Item Code": "SF5Z21207",
+            "Description": "Sunday Snack Potato Crisps sea salt 12/5oz",
+            "Unit Price": "24",
+            "Line Amount": "24",
+            "Universal Product Code": "850046321207"
+        },
+        {
+            "Quantity": "1",
+            "Item Code": "SKS002",
+            "Description": "SK Natural Sweet Yellow Smoothies Tropical Fruits 12/13.26oz",
+            "Unit Price": "51.00",
+            "Line Amount": "51.00",
+            "Universal Product Code": "611138446150"
+        },
+        {
+            "Quantity": "1",
+            "Item Code": "SLK120",
+            "Description": "Cholent Spice 12/10oz",
+            "Unit Price": "58",
+            "Line Amount": "58.00",
+            "Universal Product Code": "702708268019"
+        }
+    ]
+}

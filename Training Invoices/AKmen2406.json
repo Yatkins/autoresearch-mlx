@@ -1,0 +1,35 @@
+{
+    "Vendor": "AK. Mechanice",
+    "Vendor Physical Address": "1163 east 32nd st Brooklyn, NY 11210",
+    "Vendor Phone Number": "18485258190",
+    "Vendor Email Address": "powerme101@gmail.com",
+    "Invoice No": "2406",
+    "Invoice Date": "6/26/2026",
+    "Total Quantity": "4",
+    "Invoice Amount": "4888.13",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Item Code": "Sales",
+            "Description": "there was no power to mechys showcase. when we reset the braker it kept of tripping. the wires in the 3 quarter inch pipe that goes under the floor melted we ran two new 2/20 lines title of 6 wires to restore power to the show case, each half of the show case is on its own 2/20 brakers.",
+            "Quantity": "2",
+            "Unit Price": "1700",
+            "Line Amount": "3400"
+        },
+        {
+            "Item Code": "Sales",
+            "Description": "we repaired the power to the outlet for the scale.",
+            "Quantity": "1",
+            "Unit Price": "550",
+            "Line Amount": "550"
+        },
+        {
+            "Item Code": "Sales",
+            "Description": "there was no power to the warming table, we found the short and repaired it to restore power.",
+            "Quantity": "1",
+            "Unit Price": "550",
+            "Line Amount": "550"
+        }
+    ],
+    "Adjustment": "388.13"
+}

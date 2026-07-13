@@ -1,0 +1,35 @@
+{
+    "Vendor": "Reisman's Bakery",
+    "Vendor Physical Address": "PO Box 112 Brooklyn, NY 11204",
+    "Vendor Phone Number": "7183311975",
+    "Vendor Website": "www.ReismansBakery.com",
+    "Invoice No": "R638766",
+    "Invoice Date": "7/1/2026",
+    "Total Quantity": "32",
+    "Invoice Amount": "180.88",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Quantity": "16",
+            "Description": "Value Pack Brownie Bar",
+            "Unit Price": "5.95",
+            "Line Amount": "95.2",
+            "Universal Product Code": "078619000933"
+        },
+        {
+            "Quantity": "10",
+            "Description": "Value Pack Black & Whites",
+            "Unit Price": "5.95",
+            "Line Amount": "59.5",
+            "Universal Product Code": "078619002166"
+        },
+        {
+            "Quantity": "6",
+            "Description": "Value Pack Sprinkle Cookies",
+            "Unit Price": "5.95",
+            "Line Amount": "35.7",
+            "Universal Product Code": "078619001220"
+        }
+    ],
+    "Adjustment": "-9.52"
+}

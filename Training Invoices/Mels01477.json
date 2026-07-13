@@ -15,16 +15,14 @@
             "Item Code": "DB6",
             "Description": "Reeses",
             "Unit Price": "44",
-            "Line Amount": "44",
-            "SKU": null
+            "Line Amount": "44"
         },
         {
             "Quantity": "1",
             "Unit Per Case": "12",
             "Description": "Italian Ice Cherry",
             "Unit Price": "16",
-            "Line Amount": "16",
-            "SKU": null
+            "Line Amount": "16"
         },
         {
             "Quantity": "1",
@@ -32,8 +30,7 @@
             "Item Code": "NED1",
             "Description": "Dibs Crunch",
             "Unit Price": "49",
-            "Line Amount": "49",
-            "SKU": null
+            "Line Amount": "49"
         },
         {
             "Quantity": "1",
@@ -41,8 +38,7 @@
             "Item Code": "NEC1",
             "Description": "Drumstik Cone Vanila",
             "Unit Price": "39",
-            "Line Amount": "39",
-            "SKU": null
+            "Line Amount": "39"
         },
         {
             "Quantity": "1",
@@ -50,8 +46,7 @@
             "Item Code": "NEC2",
             "Description": "Drumstik Cone Choc",
             "Unit Price": "39",
-            "Line Amount": "39",
-            "SKU": null
+            "Line Amount": "39"
         },
         {
             "Quantity": "1",
@@ -59,8 +54,7 @@
             "Item Code": "NEC3",
             "Description": "Oreo Cone",
             "Unit Price": "39",
-            "Line Amount": "39",
-            "SKU": null
+            "Line Amount": "39"
         },
         {
             "Quantity": "1",
@@ -68,8 +62,7 @@
             "Item Code": "PU",
             "Description": "Orange Push-Up",
             "Unit Price": "33",
-            "Line Amount": "33",
-            "SKU": null
+            "Line Amount": "33"
         },
         {
             "Quantity": "1",
@@ -77,8 +70,7 @@
             "Item Code": "MB1",
             "Description": "Snicker Ice Crm Bar",
             "Unit Price": "42",
-            "Line Amount": "42",
-            "SKU": null
+            "Line Amount": "42"
         },
         {
             "Quantity": "1",
@@ -86,8 +78,7 @@
             "Item Code": "MB2",
             "Description": "Twix Ice Cream Bar",
             "Unit Price": "42",
-            "Line Amount": "42",
-            "SKU": null
+            "Line Amount": "42"
         },
         {
             "Quantity": "1",
@@ -95,8 +86,7 @@
             "Item Code": "HDB2",
             "Description": "Van Almond",
             "Unit Price": "39",
-            "Line Amount": "39",
-            "SKU": null
+            "Line Amount": "39"
         },
         {
             "Quantity": "1",
@@ -104,8 +94,7 @@
             "Item Code": "HDC2",
             "Description": "Chocolate",
             "Unit Price": "25",
-            "Line Amount": "25",
-            "SKU": null
+            "Line Amount": "25"
         },
         {
             "Quantity": "1",
@@ -113,8 +102,7 @@
             "Item Code": "HDC5",
             "Description": "Coffee",
             "Unit Price": "25",
-            "Line Amount": "25",
-            "SKU": null
+            "Line Amount": "25"
         },
         {
             "Quantity": "1",
@@ -122,8 +110,7 @@
             "Item Code": "HDP3",
             "Description": "Strawberry",
             "Unit Price": "44",
-            "Line Amount": "44",
-            "SKU": null
+            "Line Amount": "44"
         },
         {
             "Quantity": "1",
@@ -131,8 +118,7 @@
             "Item Code": "HDP5",
             "Description": "Butter Pecan",
             "Unit Price": "44",
-            "Line Amount": "44",
-            "SKU": null
+            "Line Amount": "44"
         },
         {
             "Quantity": "1",
@@ -140,8 +126,7 @@
             "Item Code": "HDP12",
             "Description": "Cookie & Cream",
             "Unit Price": "44",
-            "Line Amount": "44",
-            "SKU": null
+            "Line Amount": "44"
         }
     ],
     "Adjustment": "-28"

@@ -1,0 +1,149 @@
+{
+    "Vendor": "Mehadrin Milk Products Inc.",
+    "Vendor Physical Address": "5653 Royalmount Ave Mount Royal, Quebec, H4P 2P9",
+    "Vendor Phone Number": "5143410758",
+    "Vendor Fax Number": "5143410752",
+    "Vendor Email Address": "mehadrin@mehadrinmilk.com",
+    "Invoice No": "FC00014512",
+    "Invoice Date": "6/29/2026",
+    "Total Quantity": "238.00",
+    "Invoice Amount": "6135.88",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Item Code": "35P5",
+            "Description": "Golden Flow Heavy Cream 35% (473 ml.)",
+            "Quantity": "6.00",
+            "Unit Per Case": "1",
+            "Unit Price": "5.25",
+            "Line Amount": "31.50",
+            "Universal Product Code": "727891001267"
+        },
+        {
+            "Item Code": "HOMO2L",
+            "Description": "Mehadrin Homogenized 3.25% milk (2Lt.)",
+            "Quantity": "50.00",
+            "Unit Per Case": "9",
+            "Unit Price": "47.25",
+            "Line Amount": "2362.50",
+            "Universal Product Code": "10066181001547"
+        },
+        {
+            "Item Code": "1P2",
+            "Description": "Mehadrin Milk 1%(2 Lt.)",
+            "Quantity": "1.00",
+            "Unit Per Case": "9",
+            "Unit Price": "47.25",
+            "Line Amount": "47.25",
+            "Universal Product Code": "10066181001561"
+        },
+        {
+            "Item Code": "2P200",
+            "Description": "Mehadrin Milk 2% (200ml.)",
+            "Quantity": "12.00",
+            "Unit Per Case": "1",
+            "Unit Price": "0.86",
+            "Line Amount": "10.32",
+            "Universal Product Code": "066181001311"
+        },
+        {
+            "Item Code": "2P1",
+            "Description": "Mehadrin Milk 2% (1 Lt. Carton)",
+            "Quantity": "16.00",
+            "Unit Per Case": "1",
+            "Unit Price": "2.73",
+            "Line Amount": "43.68",
+            "Universal Product Code": "066181001045"
+        },
+        {
+            "Item Code": "2P2",
+            "Description": "Mehadrin Milk 2% (2 Lt.)",
+            "Quantity": "40.00",
+            "Unit Per Case": "9",
+            "Unit Price": "47.25",
+            "Line Amount": "1890.00",
+            "Universal Product Code": "10066181001554"
+        },
+        {
+            "Item Code": "GFBOPC",
+            "Description": "Golden Flow Blood Orange Pomegranate (1.75 Lt.)",
+            "Quantity": "2.00",
+            "Unit Per Case": "8",
+            "Unit Price": "56.00",
+            "Line Amount": "112.00",
+            "Universal Product Code": "10027891001562"
+        },
+        {
+            "Item Code": "GFGFC",
+            "Description": "Golden Flow Grapefruit Juice (1.50 Lt.)",
+            "Quantity": "0.00",
+            "Unit Per Case": "6",
+            "Unit Price": "43.00",
+            "Line Amount": "0.00",
+            "Universal Product Code": "10027891000367"
+        },
+        {
+            "Item Code": "GFLEMRC",
+            "Description": "Golden Flow Lemonade Raspberry (1.54",
+            "Quantity": "0.00",
+            "Unit Per Case": "6",
+            "Unit Price": "26.00",
+            "Line Amount": "0.00",
+            "Universal Product Code": "00727891001144"
+        },
+        {
+            "Item Code": "GFOJC",
+            "Description": "Golden Flow Orange Juice (1.89 Lt.)",
+            "Quantity": "12.00",
+            "Unit Per Case": "8",
+            "Unit Price": "64.00",
+            "Line Amount": "768.00",
+            "Universal Product Code": "10727891000359"
+        },
+        {
+            "Item Code": "GFOJLTC",
+            "Description": "Golden Flow Orange Juice Light (52 oz.)",
+            "Quantity": "0.00",
+            "Unit Per Case": "6",
+            "Unit Price": "41.00",
+            "Line Amount": "0.00",
+            "Universal Product Code": "10027891000381"
+        },
+        {
+            "Item Code": "GFOMC",
+            "Description": "Golden Flow Orange Mango Juice (1.75 Lt.)",
+            "Quantity": "2.00",
+            "Unit Per Case": "8",
+            "Unit Price": "56.00",
+            "Line Amount": "112.00",
+            "Universal Product Code": "10027891000169"
+        },
+        {
+            "Item Code": "GFORPC",
+            "Description": "Golden Flow Orange Raspberry Passion Juice (1.75 Lt.)",
+            "Quantity": "2.00",
+            "Unit Per Case": "8",
+            "Unit Price": "56.00",
+            "Line Amount": "112.00",
+            "Universal Product Code": "10027891000190"
+        },
+        {
+            "Item Code": "GFOSBC",
+            "Description": "Golden Flow Orange Strawberry Banana Juice (1.75 Lt.)",
+            "Quantity": "2.00",
+            "Unit Per Case": "8",
+            "Unit Price": "56.00",
+            "Line Amount": "112.00",
+            "Universal Product Code": "10027891000183"
+        },
+        {
+            "Item Code": "CASE",
+            "Description": "Milk Case Deposit",
+            "Quantity": "93.00",
+            "Unit Price": "5.00",
+            "Line Amount": "465.00",
+            "Universal Product Code": null
+        }
+    ],
+    "Adjustment": "69.63"
+}

@@ -15,12 +15,8 @@
             "Description": "8/59oz BLOOD ORANGE POME",
             "Unit Price": "31.20",
             "Line Amount": "31.20",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Cases": "1",
+            "Pieces": "0"
         },
         {
             "Quantity": "4",
@@ -28,12 +24,8 @@
             "Description": "8/64oz ORANGE JUICE",
             "Unit Price": "38.00",
             "Line Amount": "152.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Cases": "4",
+            "Pieces": "0"
         },
         {
             "Quantity": "4",
@@ -41,12 +33,8 @@
             "Description": "LAKE FRM 8/59oz OJ",
             "Unit Price": "35.60",
             "Line Amount": "142.40",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Cases": "4",
+            "Pieces": "0"
         },
         {
             "Quantity": "1",
@@ -54,12 +42,8 @@
             "Description": "8/59oz ORA/STRAW/BANANA",
             "Unit Price": "31.20",
             "Line Amount": "31.20",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Cases": "1",
+            "Pieces": "0"
         },
         {
             "Quantity": "9",
@@ -67,12 +51,8 @@
             "Description": "1/64oz APPLE CIDER",
             "Unit Price": "3.60",
             "Line Amount": "32.40",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Cases": "1",
+            "Pieces": "0"
         },
         {
             "Quantity": "60",
@@ -80,12 +60,8 @@
             "Description": "1% H/G PLASTIC",
             "Unit Price": "3.00",
             "Line Amount": "180.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Cases": "5",
+            "Pieces": "0"
         },
         {
             "Quantity": "1",
@@ -93,12 +69,8 @@
             "Description": "6/64oz ALMOND MILK VANILLA",
             "Unit Price": "19.80",
             "Line Amount": "19.80",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Cases": "1",
+            "Pieces": "0"
         },
         {
             "Quantity": "2",
@@ -106,12 +78,8 @@
             "Description": "8/64oz ORANGE JUICE",
             "Unit Price": "38.00",
             "Line Amount": "76.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Cases": "2",
+            "Pieces": "0"
         },
         {
             "Quantity": "2",
@@ -119,12 +87,8 @@
             "Description": "LAKE FRM 8/59oz OJ",
             "Unit Price": "35.60",
             "Line Amount": "71.20",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Cases": "2",
+            "Pieces": "0"
         },
         {
             "Quantity": "24",
@@ -132,12 +96,8 @@
             "Description": "1/2 GAL.R.PLAS",
             "Unit Price": "3.00",
             "Line Amount": "72.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Cases": "2",
+            "Pieces": "0"
         },
         {
             "Quantity": "36",
@@ -145,12 +105,8 @@
             "Description": "1% H/G PLASTIC",
             "Unit Price": "3.00",
             "Line Amount": "108.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Cases": "3",
+            "Pieces": "0"
         },
         {
             "Quantity": "3",
@@ -158,12 +114,8 @@
             "Description": "8/64oz ORANGE JUICE",
             "Unit Price": "38.00",
             "Line Amount": "114.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Cases": "3",
+            "Pieces": "0"
         },
         {
             "Quantity": "1",
@@ -171,12 +123,8 @@
             "Description": "8/59oz ORANGE MANGO",
             "Unit Price": "31.20",
             "Line Amount": "31.20",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Cases": "1",
+            "Pieces": "0"
         },
         {
             "Quantity": "24",
@@ -184,12 +132,8 @@
             "Description": "1/2 GAL.R.PLAS",
             "Unit Price": "3.00",
             "Line Amount": "72.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Cases": "2",
+            "Pieces": "0"
         },
         {
             "Quantity": "84",
@@ -197,12 +141,8 @@
             "Description": "1% H/G PLASTIC",
             "Unit Price": "3.00",
             "Line Amount": "252.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Cases": "7",
+            "Pieces": "0"
         },
         {
             "Quantity": "8",
@@ -211,11 +151,7 @@
             "Unit Price": "2.75",
             "Line Amount": "22.00",
             "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Pieces": "8"
         },
         {
             "Quantity": "8",
@@ -224,11 +160,7 @@
             "Unit Price": "5.00",
             "Line Amount": "40.00",
             "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Pieces": "8"
         },
         {
             "Quantity": "1",
@@ -236,12 +168,8 @@
             "Description": "6/64oz ALMOND MILK ORIGINA",
             "Unit Price": "19.80",
             "Line Amount": "19.80",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Cases": "1",
+            "Pieces": "0"
         },
         {
             "Quantity": "-8",
@@ -250,11 +178,7 @@
             "Unit Price": "1.65",
             "Line Amount": "-13.20",
             "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Pieces": "-8"
         },
         {
             "Quantity": "-3",
@@ -263,11 +187,7 @@
             "Unit Price": "3.00",
             "Line Amount": "-9.00",
             "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Pieces": "-3"
         },
         {
             "Quantity": "-4",
@@ -276,11 +196,7 @@
             "Unit Price": "4.45",
             "Line Amount": "-17.80",
             "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Pieces": "-4"
         },
         {
             "Quantity": "2",
@@ -288,12 +204,8 @@
             "Description": "FRENCH GREEN BEANS 12/16",
             "Unit Price": "24.00",
             "Line Amount": "48.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Cases": "2",
+            "Pieces": "0"
         },
         {
             "Quantity": "5",
@@ -301,12 +213,8 @@
             "Description": "WHOLE GREEN BEANS 12/16c",
             "Unit Price": "25.80",
             "Line Amount": "129.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Cases": "5",
+            "Pieces": "0"
         },
         {
             "Quantity": "1",
@@ -314,12 +222,8 @@
             "Description": "MANGO 20/16oz",
             "Unit Price": "57.00",
             "Line Amount": "57.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Cases": "1",
+            "Pieces": "0"
         },
         {
             "Quantity": "1",
@@ -327,12 +231,8 @@
             "Description": "MIXED PEPPER STRIPS 12/16",
             "Unit Price": "21.00",
             "Line Amount": "21.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Cases": "1",
+            "Pieces": "0"
         }
     ],
     "Adjustment": "0.00"

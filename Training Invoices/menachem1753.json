@@ -1,0 +1,153 @@
+{
+    "Vendor": "Menachem's Dips, LLC",
+    "Vendor Physical Address": "103 Chateau Dr Lakewood, NJ 08701",
+    "Vendor Phone Number": "7326203060",
+    "Vendor Phone Number 2": "7329018902",
+    "Invoice No": "001753",
+    "Invoice Date": "6/30/2026",
+    "Total Quantity": "56",
+    "Invoice Amount": "211.89",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Item Code": "Ch1081",
+            "Description": "Chunmus w/ schug",
+            "Unit Price": "3.69",
+            "Line Amount": "-11.07",
+            "Quantity": "-3"
+        },
+        {
+            "Item Code": "Ch1047",
+            "Description": "Chumus Yerushalmi w/ sauteed onions",
+            "Unit Price": "3.69",
+            "Line Amount": "-18.45",
+            "Quantity": "-5"
+        },
+        {
+            "Item Code": "Ch1002",
+            "Description": "Chumus Yerushalmi",
+            "Unit Price": "3.69",
+            "Line Amount": "-18.45",
+            "Quantity": "-5"
+        },
+        {
+            "Item Code": "CL1102",
+            "Description": "Chumnus Classic",
+            "Unit Price": "3.69",
+            "Line Amount": "-14.76",
+            "Quantity": "-4"
+        },
+        {
+            "Item Code": "Co1003",
+            "Description": "Coleslaw",
+            "Unit Price": "3.69",
+            "Line Amount": "-7.38",
+            "Quantity": "-2"
+        },
+        {
+            "Item Code": "Je395",
+            "Description": "Jeruselam Dip",
+            "Unit Price": "3.69",
+            "Line Amount": "11.07",
+            "Quantity": "3"
+        },
+        {
+            "Item Code": "Ch1081",
+            "Description": "Chunmus w/ schug",
+            "Unit Price": "3.69",
+            "Line Amount": "14.76",
+            "Quantity": "4"
+        },
+        {
+            "Item Code": "Ch1047",
+            "Description": "Chumus Yerushalmi w/ sauteed onions",
+            "Unit Price": "3.69",
+            "Line Amount": "11.07",
+            "Quantity": "3"
+        },
+        {
+            "Item Code": "Ch1002",
+            "Description": "Chumus Yerushalmi",
+            "Unit Price": "3.69",
+            "Line Amount": "29.52",
+            "Quantity": "8"
+        },
+        {
+            "Item Code": "CL1102",
+            "Description": "Chummus Classic",
+            "Unit Price": "3.69",
+            "Line Amount": "22.14",
+            "Quantity": "6"
+        },
+        {
+            "Item Code": "Co1003",
+            "Description": "Coleslaw",
+            "Unit Price": "3.69",
+            "Line Amount": "14.76",
+            "Quantity": "4"
+        },
+        {
+            "Item Code": "Cr1004",
+            "Description": "Creamy Olive \\ Dip",
+            "Unit Price": "3.69",
+            "Line Amount": "7.38",
+            "Quantity": "2"
+        },
+        {
+            "Item Code": "Ho1014",
+            "Description": "Hot \\Olive Dip",
+            "Unit Price": "3.69",
+            "Line Amount": "25.83",
+            "Quantity": "7"
+        },
+        {
+            "Item Code": "Spa387",
+            "Description": "Spanish Mushrooms",
+            "Unit Price": "3.69",
+            "Line Amount": "11.07",
+            "Quantity": "3"
+        },
+        {
+            "Item Code": "Pe1021",
+            "Description": "Pepper Dip",
+            "Unit Price": "3.69",
+            "Line Amount": "29.52",
+            "Quantity": "8"
+        },
+        {
+            "Item Code": "Hu398",
+            "Description": "Hungarian Dip",
+            "Unit Price": "3.69",
+            "Line Amount": "25.83",
+            "Quantity": "7"
+        },
+        {
+            "Item Code": "Ri1023",
+            "Description": "Rich olive dip",
+            "Unit Price": "3.69",
+            "Line Amount": "25.83",
+            "Quantity": "7"
+        },
+        {
+            "Item Code": "Sa1028",
+            "Description": "Sauteed Eggplant",
+            "Unit Price": "3.69",
+            "Line Amount": "14.76",
+            "Quantity": "4"
+        },
+        {
+            "Item Code": "Sw1045",
+            "Description": "sweet Onion Dip",
+            "Unit Price": "3.69",
+            "Line Amount": "7.38",
+            "Quantity": "2"
+        },
+        {
+            "Item Code": "Tu1033",
+            "Description": "Tuna Fish",
+            "Unit Price": "4.44",
+            "Line Amount": "31.08",
+            "Quantity": "7"
+        }
+    ]
+}

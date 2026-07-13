@@ -1,0 +1,131 @@
+{
+    "Vendor": "BT Packaging",
+    "Vendor Physical Address": "6465 Durocher Suite 200 Montreal Quebec H2V 3Z1",
+    "Vendor Phone Number": "5143459207",
+    "Vendor Fax Number": "5143459646",
+    "Vendor Email Address": "Info@embbt.ca",
+    "Invoice No": "159668",
+    "Invoice Date": "6/18/2026",
+    "Total Quantity": "136",
+    "Invoice Amount": "5389.05",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Quantity": "33",
+            "Unit Per Case": "1",
+            "Item Code": "BR-VILEDA",
+            "Description": "Vileda Broom & Dustpan",
+            "Unit Price": "11.65",
+            "Line Amount": "384.44",
+            "Universal Product Code": "683010210739"
+        },
+        {
+            "Quantity": "8",
+            "Unit Per Case": "8",
+            "Item Code": "U-Com-Sc",
+            "Description": "(STS-P710C) 7&10 Setting Clear Hard Combo Plates 16+16 8/cs",
+            "Unit Price": "54.00",
+            "Line Amount": "431.99",
+            "Universal Product Code": "842233135100"
+        },
+        {
+            "Quantity": "8",
+            "Unit Per Case": "8",
+            "Item Code": "U-Com-ScB",
+            "Description": "(STS-BC512C) 5 &12 Setting Clear Hard Combo Bowls 16+16 8/cs",
+            "Unit Price": "54.00",
+            "Line Amount": "431.99",
+            "Universal Product Code": "842233135131"
+        },
+        {
+            "Quantity": "8",
+            "Unit Per Case": "8",
+            "Item Code": "U-Com-Sw",
+            "Description": "(STS-P710W) 7&10 Setting White Hard Combo Plates 16+16 8/cs",
+            "Unit Price": "54.00",
+            "Line Amount": "431.99",
+            "Universal Product Code": "842233135117"
+        },
+        {
+            "Quantity": "8",
+            "Unit Per Case": "8",
+            "Item Code": "U-Com-SwB",
+            "Description": "(STS-BC512W) 5 & 12 Setting White Hard Combo Bowls 16+16 8/cs",
+            "Unit Price": "54.00",
+            "Line Amount": "431.99",
+            "Universal Product Code": "842233135124"
+        },
+        {
+            "Quantity": "8",
+            "Unit Per Case": "10",
+            "Item Code": "U-cont-1624",
+            "Description": "(BDC1624B) BASIX 16 oz Deli Combo Container 10/24pkg",
+            "Unit Price": "48.00",
+            "Line Amount": "384.00",
+            "Universal Product Code": "842233128393"
+        },
+        {
+            "Quantity": "8",
+            "Unit Per Case": "10",
+            "Item Code": "U-cont-824",
+            "Description": "(BDC824B) BASIX 8oz Deli Combo Container 10/24pkg",
+            "Unit Price": "48.00",
+            "Line Amount": "384.00",
+            "Universal Product Code": "842233128386"
+        },
+        {
+            "Quantity": "0",
+            "Unit Per Case": "10",
+            "Item Code": "U-CU-SLUSH-C10",
+            "Description": "(PPT10CF) Plastimade 10 Oz Pet Cup Combo W/Lid 40/Pkg 10/cs",
+            "Unit Price": "70.00",
+            "Line Amount": "0.00",
+            "Universal Product Code": "842233134523"
+        },
+        {
+            "Quantity": "1",
+            "Unit Per Case": "10",
+            "Item Code": "U-CU-SLUSH-C12",
+            "Description": "(PPT12SCF) Plastimade 12 Oz Pet Cup Combo W/Lid 36/Pkg 10/cs",
+            "Unit Price": "58.25",
+            "Line Amount": "58.25",
+            "Universal Product Code": "842233133212"
+        },
+        {
+            "Quantity": "2",
+            "Unit Per Case": "10",
+            "Item Code": "U-CU-SLUSH-C16",
+            "Description": "(PPT16CF) Plastimade 16 Oz Pet Cup Combo W/Lid 32/Pkg 10/cs",
+            "Unit Price": "58.25",
+            "Line Amount": "116.50",
+            "Universal Product Code": "842233133229"
+        },
+        {
+            "Quantity": "4",
+            "Unit Per Case": "10",
+            "Item Code": "U-CU-SLUSH-C20",
+            "Description": "(PPT20CF) Plastimade 20 Oz Pet Cup Combo W/Lid 28/Pkg 10/cs",
+            "Unit Price": "58.25",
+            "Line Amount": "233.00",
+            "Universal Product Code": "842233133236"
+        },
+        {
+            "Quantity": "4",
+            "Unit Per Case": "10",
+            "Item Code": "U-CU-SLUSH-C24",
+            "Description": "(PPT24CF) Plastimade 24 Oz Pet Cup Combo W/Lid 24/Pkg 10/cs",
+            "Unit Price": "58.25",
+            "Line Amount": "232.99",
+            "Universal Product Code": "842233133243"
+        },
+        {
+            "Quantity": "44",
+            "Unit Per Case": "4",
+            "Item Code": "U-Mr Clean 4L",
+            "Description": "Mr Clean Citrus 3.78/l 4/cs",
+            "Unit Price": "26.50",
+            "Line Amount": "1166.00",
+            "Universal Product Code": "037000315049"
+        }
+    ]
+}

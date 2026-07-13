@@ -1,0 +1,93 @@
+{
+    "Vendor": "A&B Famous Gefilte Fish, Inc.",
+    "Vendor Physical Address": "209 McLean Blvd. Paterson, NJ 07504",
+    "Vendor Phone Number": "9735234101",
+    "Vendor Fax Number": "9732784111",
+    "Invoice No": "JR-12621",
+    "Invoice Date": "7/7/2026",
+    "Total Quantity": "10",
+    "Invoice Amount": "1070.26",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Unit Per Case": "12",
+            "Item Code": "2Lb",
+            "Description": "A&B 2 Lb Gefilte Fish 12 Rolls 2 Lb.",
+            "Unit Price": "140.00",
+            "Line Amount": "140.00",
+            "Quantity": "1"
+        },
+        {
+            "Unit Per Case": "24",
+            "Item Code": "A24",
+            "Description": "A&B Regular Gefilte Fish 24 Rolls 20 0z.",
+            "Unit Price": "178.50",
+            "Line Amount": "357.00",
+            "Quantity": "2"
+        },
+        {
+            "Unit Per Case": "12",
+            "Item Code": "FSA",
+            "Description": "A&B Fancy Salmon Gefilte Fish 12 Rolls/20 0z.",
+            "Unit Price": "113.75",
+            "Line Amount": "56.88",
+            "Quantity": "0.5"
+        },
+        {
+            "Unit Per Case": "12",
+            "Item Code": "HBR908",
+            "Description": "HBR908 High Breeze Frozen (Whole) Strawberries 12/16 Oz.",
+            "Unit Price": "44.75",
+            "Line Amount": "44.75",
+            "Quantity": "1"
+        },
+        {
+            "Unit Per Case": "12",
+            "Item Code": "KA",
+            "Description": "A&B Famous Kishka 12 Rolls 1 Lb.",
+            "Unit Price": "33.00",
+            "Line Amount": "33.00",
+            "Quantity": "1"
+        },
+        {
+            "Unit Per Case": "12",
+            "Item Code": "NSU",
+            "Description": "A&B No Sugar Gefilte Fish 12 Rolls 20 0z.",
+            "Unit Price": "96.75",
+            "Line Amount": "48.38",
+            "Quantity": "0.5"
+        },
+        {
+            "Unit Per Case": "24",
+            "Item Code": "R24",
+            "Description": "Royal Gefilte Fish 24 Rolls 20 0z.",
+            "Unit Price": "144.00",
+            "Line Amount": "144.00",
+            "Quantity": "1"
+        },
+        {
+            "Unit Per Case": "12",
+            "Item Code": "R60",
+            "Description": "R60 Chef Tzali Falafel Balls 12/12 0z. 9 Lb.",
+            "Unit Price": "39.75",
+            "Line Amount": "39.75",
+            "Quantity": "1"
+        },
+        {
+            "Unit Per Case": "12",
+            "Item Code": "RF40",
+            "Description": "RF40 A&B (KFP] Premium Tilapia Fillets (35/02.) 12 14 Oz.",
+            "Unit Price": "49.50",
+            "Line Amount": "49.50",
+            "Quantity": "1"
+        },
+        {
+            "Unit Per Case": "12",
+            "Item Code": "TWIN",
+            "Description": "A&B Twin Pack Gefilte Fish 12 Pack 2 X 1 Lb.",
+            "Unit Price": "157.00",
+            "Line Amount": "157.00",
+            "Quantity": "1"
+        }
+    ]
+}

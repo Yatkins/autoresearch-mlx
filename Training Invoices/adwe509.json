@@ -1,0 +1,54 @@
+{
+    "Vendor": "ADWE Products & Imports Inc",
+    "Vendor Physical Address": "1274 49TH STREET BROOKLYN NY 11219",
+    "Vendor Phone Number": "7188548385",
+    "Vendor Fax Number": "7188536767",
+    "Invoice No": "509930",
+    "Invoice Date": "7/1/2026",
+    "Total Quantity": "228",
+    "Invoice Amount": "853.20",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Quantity": "72",
+            "Item Code": "A03",
+            "Description": "TOOTHPASTE OCEAN BREEZE 5.4oz",
+            "Unit Price": "3.85",
+            "Line Amount": "277.20",
+            "Universal Product Code": "040168100297"
+        },
+        {
+            "Quantity": "72",
+            "Item Code": "A02",
+            "Description": "TOOTHGEL ANTI TARTAR",
+            "Unit Price": "3.95",
+            "Line Amount": "284.40",
+            "Universal Product Code": "040168100266"
+        },
+        {
+            "Quantity": "60",
+            "Item Code": "BC",
+            "Description": "PERSONAL CLOTHS (24)",
+            "Unit Price": "3.5",
+            "Line Amount": "210.00",
+            "Universal Product Code": "7290011372002"
+        },
+        {
+            "Quantity": "12",
+            "Item Code": "A19",
+            "Description": "MOUTHWASH MINT 175ML",
+            "Unit Price": "3.2",
+            "Line Amount": "38.40",
+            "Universal Product Code": "74016810059"
+        },
+        {
+            "Quantity": "12",
+            "Item Code": "A21",
+            "Description": "SHABBOS SOAP LIQUID",
+            "Unit Price": "3.60",
+            "Line Amount": "43.20",
+            "Universal Product Code": "740168100135"
+        }
+    ],
+    "Adjustment": "0.00"
+}

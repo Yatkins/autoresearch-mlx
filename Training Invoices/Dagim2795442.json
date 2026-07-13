@@ -1,13 +1,12 @@
 {
     "Vendor": "Dagim Tahorim Co., Inc.",
-    "Vendor Physical Address": "1663 62ND STREET BROOKLYN, NY, 11204",
+    "Vendor Physical Address": "1663 62ND STREET BROOKLYN, NY 11204",
     "Vendor Phone Number": "7188511006",
     "Vendor Fax Number": "7189729120",
     "Vendor Website": "WWW.DAGIMFISH.COM",
     "Invoice No": "2795442",
     "Invoice Date": "6/1/2026",
     "Total Quantity": "19",
-    "Bottle Deposit": "0.00",
     "Invoice Amount": "1129.00",
     "Document Type": "Bill",
     "Rows": [
@@ -15,98 +14,57 @@
             "Quantity": "10",
             "Description": "LIVYOSON TUNA POUCH CHUNK LIGHT 6-43 OZ.",
             "Unit Price": "52.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
             "Line Amount": "520.00",
-            "SKU": null
+            "Universal Product Code": null
         },
         {
             "Quantity": "3",
             "Description": "DAGIM MAYONNAISE 4-1 GALLON {USA}",
             "Unit Price": "55.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
             "Line Amount": "165.00",
-            "SKU": "046676911509"
+            "Universal Product Code": "046676911509"
         },
         {
             "Quantity": "1",
             "Description": "DAGIM IMT CRAB STICKS 12 LBS.",
             "Unit Price": "72.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
             "Line Amount": "72.00",
-            "SKU": "046676800001"
+            "Universal Product Code": "046676800001"
         },
         {
             "Quantity": "1",
             "Description": "DAGIM STICKS BOX 12-25 OZ.",
             "Unit Price": "89.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
             "Line Amount": "89.00",
-            "SKU": "04667607777"
+            "Universal Product Code": "04667607777"
         },
         {
             "Quantity": "1",
             "Description": "DY MINCED FISH STICKS 12-24 OZ.",
             "Unit Price": "80.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
             "Line Amount": "80.00",
-            "SKU": "04667661116"
+            "Universal Product Code": "04667661116"
         },
         {
             "Quantity": "1",
             "Description": "BRD. FLOUNDER BAG 12-14 OZ.",
             "Unit Price": "79.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
             "Line Amount": "79.00",
-            "SKU": "04667661114"
+            "Universal Product Code": "04667661114"
         },
         {
             "Quantity": "1",
             "Description": "BRD. TILAPIA BAG 12-14 OZ.",
             "Unit Price": "69.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
             "Line Amount": "69.00",
-            "SKU": "04667661115"
+            "Universal Product Code": "04667661115"
         },
         {
             "Quantity": "1",
             "Description": "MINI FALAFEL BALLS 1214 OZ.",
             "Unit Price": "55.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
             "Line Amount": "55.00",
-            "SKU": "04667691202"
+            "Universal Product Code": "04667691202"
         }
-    ],
-    "Adjustment": "0.00"
+    ]
 }

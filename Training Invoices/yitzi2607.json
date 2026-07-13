@@ -1,0 +1,35 @@
+{
+    "Vendor": "Yitzy's Distributor of Fine Foods",
+    "Vendor Physical Address": "3114 Avenue J Brooklyn, NY 11210",
+    "Vendor Email Address": "yitzysfoods@gmail.com",
+    "Invoice No": "I260702253",
+    "Invoice Date": "7/2/2026",
+    "Total Quantity": "5",
+    "Invoice Amount": "186.56",
+    "Rows": [
+        {
+            "Unit Per Case": "12",
+            "Description": "OPB CRC -12/cs",
+            "Quantity": "2",
+            "Unit Price": "20.86",
+            "Item Code": "DY-OPB",
+            "Line Amount": "41.72"
+        },
+        {
+            "Description": "MSQ CRC 12/Cs",
+            "Quantity": "1",
+            "Unit Price": "93.9",
+            "Item Code": "DY-40035",
+            "Line Amount": "93.9",
+            "Unit Per Case": "12"
+        },
+        {
+            "Unit Per Case": "12",
+            "Description": "OPBAJ CRC 12/cs",
+            "Quantity": "2",
+            "Unit Price": "25.47",
+            "Item Code": "DY-OPBAJ",
+            "Line Amount": "50.94"
+        }
+    ]
+}

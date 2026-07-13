@@ -1,0 +1,202 @@
+{
+    "Vendor": "Cortelyou Snacks Corp.",
+    "Vendor Physical Address": "679 McDonald Ave. Brooklyn, NY 11218",
+    "Vendor Phone Number": "6469928050",
+    "Vendor Fax Number": "6463140040",
+    "Invoice No": "62020266262026",
+    "Invoice Date": "6/20/2026",
+    "Total Quantity": "41.00",
+    "Bottle Deposit": "0.00",
+    "Invoice Amount": "1996.40",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Item Code": "350",
+            "Description": "Kokosh Choc - 2 Strips",
+            "Quantity": "1.00",
+            "Unit Price": "20.57",
+            "Line Amount": "20.57"
+        },
+        {
+            "Item Code": "428",
+            "Description": "Bundt Cake 7\" Marble Sliced",
+            "Quantity": "4.00",
+            "Unit Price": "8.91",
+            "Line Amount": "35.64"
+        },
+        {
+            "Item Code": "429",
+            "Description": "Bundt Cake 7\" Choc. Sliced",
+            "Quantity": "4.00",
+            "Unit Price": "8.91",
+            "Line Amount": "35.64"
+        },
+        {
+            "Item Code": "466",
+            "Description": "Bulk Marble Cookies - 7.5 Lb",
+            "Quantity": "1.00",
+            "Unit Price": "20.90",
+            "Line Amount": "20.90"
+        },
+        {
+            "Unit Per Case": "12",
+            "Item Code": "5231",
+            "Description": "8 Pck Frankfurter Buns - Box 12",
+            "Quantity": "5.00",
+            "Unit Price": "30.76",
+            "Line Amount": "153.78"
+        },
+        {
+            "Unit Per Case": "8",
+            "Item Code": "5863SL",
+            "Description": "Crusto Sourdough SLICED - 8 Pcs",
+            "Quantity": "1.00",
+            "Unit Price": "59.40",
+            "Line Amount": "59.40"
+        },
+        {
+            "Unit Per Case": "18",
+            "Item Code": "600",
+            "Description": "Pck Rugelach Chocolate - Box 18",
+            "Quantity": "2.00",
+            "Unit Price": "89.10",
+            "Line Amount": "178.20"
+        },
+        {
+            "Unit Per Case": "18",
+            "Item Code": "601",
+            "Description": "Pck Rugelach Cinnamon - Box 18",
+            "Quantity": "2.00",
+            "Unit Price": "89.10",
+            "Line Amount": "178.20"
+        },
+        {
+            "Unit Per Case": "20",
+            "Item Code": "617",
+            "Description": "Pck Mandelbread - Box 20",
+            "Quantity": "1.00",
+            "Unit Price": "99.00",
+            "Line Amount": "99.00"
+        },
+        {
+            "Unit Per Case": "12",
+            "Item Code": "619",
+            "Description": "Pck Brownie Cake - Box 12",
+            "Quantity": "1.00",
+            "Unit Price": "59.40",
+            "Line Amount": "59.40"
+        },
+        {
+            "Unit Per Case": "18",
+            "Item Code": "624",
+            "Description": "Pck Rainbow Cake - Box 18",
+            "Quantity": "1.00",
+            "Unit Price": "89.10",
+            "Line Amount": "89.10"
+        },
+        {
+            "Unit Per Case": "18",
+            "Item Code": "628",
+            "Description": "Pck Brownie Blast Mini - Box 18",
+            "Quantity": "2.00",
+            "Unit Price": "78.80",
+            "Line Amount": "157.61"
+        },
+        {
+            "Unit Per Case": "12",
+            "Item Code": "631",
+            "Description": "Pck Kichel Egg - Box 12",
+            "Quantity": "2.00",
+            "Unit Price": "54.12",
+            "Line Amount": "108.24"
+        },
+        {
+            "Unit Per Case": "12",
+            "Item Code": "631E",
+            "Description": "Pck Kichel Everything - Box 12",
+            "Quantity": "1.00",
+            "Unit Price": "56.10",
+            "Line Amount": "56.10"
+        },
+        {
+            "Unit Per Case": "12",
+            "Item Code": "632",
+            "Description": "Pck Kichel Sugar - Box 12",
+            "Quantity": "1.00",
+            "Unit Price": "56.10",
+            "Line Amount": "56.10"
+        },
+        {
+            "Unit Per Case": "16",
+            "Item Code": "633",
+            "Description": "Pck Hamantashen - Box 16",
+            "Quantity": "1.00",
+            "Unit Price": "79.20",
+            "Line Amount": "79.20"
+        },
+        {
+            "Unit Per Case": "9",
+            "Item Code": "660",
+            "Description": "Pck Rugelach Chocolate Family - Box 9",
+            "Quantity": "2.00",
+            "Unit Price": "69.30",
+            "Line Amount": "138.60"
+        },
+        {
+            "Unit Per Case": "9",
+            "Item Code": "661",
+            "Description": "Pck Rugelach Cinnamon Family - Box 9",
+            "Quantity": "1.00",
+            "Unit Price": "69.30",
+            "Line Amount": "69.30"
+        },
+        {
+            "Unit Per Case": "12",
+            "Item Code": "675B",
+            "Description": "Up For Grabs Mini Blue & White/ 12 Per Case",
+            "Quantity": "1.00",
+            "Unit Price": "44.09",
+            "Line Amount": "44.09"
+        },
+        {
+            "Unit Per Case": "12",
+            "Item Code": "675P",
+            "Description": "Up For Grabs Mini Pink & White/ 12 Per Case",
+            "Quantity": "1.00",
+            "Unit Price": "44.09",
+            "Line Amount": "44.09"
+        },
+        {
+            "Unit Per Case": "12",
+            "Item Code": "684",
+            "Description": "Up For Grabs Linzer Cookies/ 12 Per Case",
+            "Quantity": "1.00",
+            "Unit Price": "53.86",
+            "Line Amount": "53.86"
+        },
+        {
+            "Unit Per Case": "12",
+            "Item Code": "713",
+            "Description": "Ptg Choc Babka - Box 12",
+            "Quantity": "1.00",
+            "Unit Price": "61.38",
+            "Line Amount": "61.38"
+        },
+        {
+            "Unit Per Case": "8",
+            "Item Code": "851",
+            "Description": "Par Baked Babka Cinn. Large - 8 Pcs",
+            "Quantity": "3.00",
+            "Unit Price": "46.20",
+            "Line Amount": "138.60"
+        },
+        {
+            "Unit Per Case": "8",
+            "Item Code": "L5863",
+            "Description": "Loose Crusto Sourdough - 8 Pcs",
+            "Quantity": "1.00",
+            "Unit Price": "59.40",
+            "Line Amount": "59.40"
+        }
+    ]
+}

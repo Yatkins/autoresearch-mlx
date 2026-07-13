@@ -1,0 +1,127 @@
+{
+    "Vendor": "Ruby Wines, Inc.",
+    "Vendor Physical Address": "625 Bodwell St. Ext. - Avon, MA 02322-1019",
+    "Vendor Phone Number": "5085887007",
+    "Vendor Fax Number": "5085887997",
+    "Vendor Website": "RUBYWINES.COM",
+    "Invoice No": "245290",
+    "Invoice Date": "6/24/2026",
+    "Total Quantity": "16",
+    "Invoice Amount": "2777.00",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Item Code": "171223",
+            "Quantity": "1",
+            "Description": "BARKAN CAB SAUV 23/24",
+            "Unit Price": "1.00",
+            "Discount": "0",
+            "Line Amount": "1",
+            "Discount Type": "dollar"
+        },
+        {
+            "Item Code": "173083",
+            "Quantity": "1",
+            "Description": "BARKAN MALBEC 23/24",
+            "Unit Price": "144",
+            "Discount": "8",
+            "Line Amount": "136",
+            "Discount Type": "dollar"
+        },
+        {
+            "Item Code": "172763",
+            "Quantity": "1",
+            "Description": "BARKAN PETIT SYRAH 21/23",
+            "Unit Price": "144",
+            "Discount": "8",
+            "Line Amount": "136",
+            "Discount Type": "dollar"
+        },
+        {
+            "Item Code": "173793",
+            "Quantity": "2",
+            "Description": "BARKAN PLATINUM CAB SAUV 21/23",
+            "Unit Price": "196.00",
+            "Discount": "0",
+            "Line Amount": "392",
+            "Discount Type": "dollar"
+        },
+        {
+            "Item Code": "172143",
+            "Quantity": "1",
+            "Description": "BARKAN SAUV BL",
+            "Unit Price": "144.00",
+            "Discount": "8",
+            "Line Amount": "136",
+            "Discount Type": "dollar"
+        },
+        {
+            "Item Code": "173723",
+            "Quantity": "1",
+            "Description": "CARMEL PEACH MOSCATO",
+            "Unit Price": "120",
+            "Discount": "16.00",
+            "Line Amount": "104.00",
+            "Discount Type": "dollar"
+        },
+        {
+            "Item Code": "170043",
+            "Quantity": "1",
+            "Description": "CARMEL SACRAMENTAL",
+            "Unit Price": "104",
+            "Discount": "8",
+            "Line Amount": "96",
+            "Discount Type": "dollar"
+        },
+        {
+            "Item Code": "171173",
+            "Quantity": "1",
+            "Description": "CARMEL SELECT EM RIES CHENIN",
+            "Unit Price": "136.00",
+            "Discount": "8",
+            "Line Amount": "128",
+            "Discount Type": "dollar"
+        },
+        {
+            "Item Code": "18293",
+            "Quantity": "1",
+            "Description": "DOM CASTEL PETITE CASTEL 24",
+            "Unit Price": "600",
+            "Line Amount": "600"        
+        },
+        {
+            "Item Code": "174003",
+            "Quantity": "1",
+            "Description": "PSAGOT ROSE 25",
+            "Unit Price": "268",
+            "Discount": "12",
+            "Line Amount": "256.00",
+            "Discount Type": "dollar"
+        },
+        {
+            "Item Code": "173473",
+            "Quantity": "2",
+            "Description": "PSAGOT SINAI RED 24",
+            "Unit Price": "264",
+            "Discount": "0",
+            "Line Amount": "528",
+            "Discount Type": "dollar"
+        },
+        {
+            "Item Code": "172743",
+            "Quantity": "2",
+            "Description": "RASHI CONCORD LIGHT RED",
+            "Unit Price": "60",
+            "Discount": "4",
+            "Line Amount": "112",
+            "Discount Type": "dollar"
+        },
+        {
+            "Item Code": "173963",
+            "Quantity": "1",
+            "Description": "YATIR DAROM RED",
+            "Unit Price": "152",
+            "Line Amount": "152"        }
+    ],
+    "Adjustment": "0.00"
+}

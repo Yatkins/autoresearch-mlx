@@ -1,0 +1,94 @@
+{
+    "Vendor": "Abes Ice Cream",
+    "Vendor Physical Address": "P.O. BOX 155 Monroe, NY 10949",
+    "Vendor Phone Number": "8454662237",
+    "Vendor Email Address": "billing@abesicecream.us",
+    "Invoice No": "AI-003250",
+    "Invoice Date": "7/7/2026",
+    "Total Quantity": "11.0",
+    "Invoice Amount": "315.94",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Quantity": "1",
+            "Unit Per Case": "3",
+            "Item Code": "AW301",
+            "Description": "ICE CREAM ROYAL VANILLA - 3 x",
+            "Unit Price": "24.62",
+            "Line Amount": "24.62",
+            "Cases": "1",
+            "Pieces": "3"
+        },
+        {
+            "Quantity": "1",
+            "Unit Per Case": "3",
+            "Item Code": "AW302",
+            "Description": "ICE CREAM COOKIE & CREAM - 3 x",
+            "Unit Price": "24.62",
+            "Line Amount": "24.62",
+            "Cases": "1",
+            "Pieces": "3"
+        },
+        {
+            "Quantity": "1",
+            "Unit Per Case": "3",
+            "Item Code": "AW307",
+            "Description": "ICE CREAM VANILLA FUDGE 3 x 56",
+            "Unit Price": "24.62",
+            "Line Amount": "24.62",
+            "Cases": "1",
+            "Pieces": "3"
+        },
+        {
+            "Quantity": "1",
+            "Unit Per Case": "3",
+            "Item Code": "AW308",
+            "Description": "ICE CREAM VANILLA CARAMEL - 3",
+            "Unit Price": "24.62",
+            "Line Amount": "24.62",
+            "Cases": "1",
+            "Pieces": "3"
+        },
+        {
+            "Quantity": "1",
+            "Unit Per Case": "4",
+            "Item Code": "AW321",
+            "Description": "PAREVE ROYAL VANILLA - 4 x 56o",
+            "Unit Price": "34.5",
+            "Line Amount": "34.50",
+            "Cases": "1",
+            "Pieces": "4"
+        },
+        {
+            "Quantity": "1",
+            "Unit Per Case": "4",
+            "Item Code": "AW327",
+            "Description": "PAREVE COOKIE & CREAM - 4 x 5",
+            "Unit Price": "34.5",
+            "Line Amount": "34.5",
+            "Cases": "1",
+            "Pieces": "4"
+        },
+        {
+            "Quantity": "1",
+            "Unit Per Case": "4",
+            "Item Code": "AW328",
+            "Description": "PAREVE COOKIE DOUGH - 4 x 56o",
+            "Unit Price": "34.50",
+            "Line Amount": "34.5",
+            "Cases": "1",
+            "Pieces": "4"
+        },
+        {
+            "Quantity": "4",
+            "Unit Per Case": "3",
+            "Item Code": "AW340",
+            "Description": "MANGO SORBETTO 3 x 48oz (1.5 L",
+            "Unit Price": "28.49",
+            "Line Amount": "113.96",
+            "Cases": "4",
+            "Pieces": "12"
+        }
+    ],
+    "Adjustment": "0.00"
+}

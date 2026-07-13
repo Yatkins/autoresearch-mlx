@@ -1,7 +1,8 @@
 import json
 import os
 
-os.chdir(r'/Users/compudime/Documents/TrainingInvoices')
+os.chdir(r'/Users/compudime/Documents/Scan-N-Save/Autoresearch-MLX/Training Invoices')
+#/Users/compudime/Documents/Scan-N-Save/autoresearch-mlx
 
 # TrainingInvoices is a folder containing JSON files
 invoices_folder = os.getcwd()
@@ -27,7 +28,7 @@ for filename in os.listdir():
                     for item in row['Cells']:
                         if 'Val' in item:
                             json_row[item['Name']]=item['Val']
-                    json_row['SKU'] = json_row.pop('UPC', None)
+                    json_row['Universal Product Code'] = json_row.pop('UPC', None)
                     json_row.pop('calcValue', None)
                     json_row.pop('calcValue (2)', None)
                     json_row.pop('Invalid Line', None)
@@ -50,6 +51,7 @@ for filename in os.listdir():
         json_data.pop('Error Fields', None)
         json_data.pop('Type', None)
         json_data.pop('File Name', None)
+        json_data.pop('Store', None)
         json_data['Adjustment'] = json_data.pop('Surcharge', None)
 
         output_filename = os.path.splitext(filename)[0] + "_transformed.json"

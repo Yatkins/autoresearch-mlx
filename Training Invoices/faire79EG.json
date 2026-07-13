@@ -3,7 +3,6 @@
     "Invoice No": "79EGPQ4AN6",
     "Invoice Date": "6/16/2026",
     "Total Quantity": "65",
-    "Bottle Deposit": "0.00",
     "Invoice Amount": "134.44",
     "Document Type": "Bill",
     "Rows": [
@@ -14,12 +13,7 @@
             "Quantity": "1",
             "Unit Price": "3.2",
             "Line Amount": "3.2",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Universal Product Code": null
         },
         {
             "Unit Per Case": "10",
@@ -28,12 +22,7 @@
             "Quantity": "1",
             "Unit Price": "4.4",
             "Line Amount": "4.40",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Universal Product Code": null
         },
         {
             "Unit Per Case": "10",
@@ -42,12 +31,7 @@
             "Quantity": "1",
             "Unit Price": "8.9",
             "Line Amount": "8.9",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Universal Product Code": null
         },
         {
             "Unit Per Case": "5",
@@ -55,12 +39,7 @@
             "Quantity": "1",
             "Unit Price": "2.95",
             "Line Amount": "2.95",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Universal Product Code": null
         },
         {
             "Unit Per Case": "5",
@@ -68,12 +47,7 @@
             "Quantity": "1",
             "Unit Price": "2.95",
             "Line Amount": "2.95",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Universal Product Code": null
         },
         {
             "Unit Per Case": "5",
@@ -82,12 +56,7 @@
             "Quantity": "1",
             "Unit Price": "2.95",
             "Line Amount": "2.95",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Universal Product Code": null
         },
         {
             "Unit Per Case": "5",
@@ -95,12 +64,7 @@
             "Quantity": "1",
             "Unit Price": "6.25",
             "Line Amount": "6.25",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Universal Product Code": null
         },
         {
             "Item Code": "010034",
@@ -108,12 +72,7 @@
             "Quantity": "5",
             "Unit Price": "1.49",
             "Line Amount": "7.45",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": "850037358069"
+            "Universal Product Code": "850037358069"
         },
         {
             "Item Code": "010134",
@@ -121,12 +80,7 @@
             "Quantity": "6",
             "Unit Price": "1.49",
             "Line Amount": "8.94",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": "850037358076"
+            "Universal Product Code": "850037358076"
         },
         {
             "Item Code": "010234",
@@ -134,12 +88,7 @@
             "Quantity": "5",
             "Unit Price": "1.49",
             "Line Amount": "7.45",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": "850037358083"
+            "Universal Product Code": "850037358083"
         },
         {
             "Item Code": "010334",
@@ -147,12 +96,7 @@
             "Quantity": "5",
             "Unit Price": "1.49",
             "Line Amount": "7.45",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": "850037358564"
+            "Universal Product Code": "850037358564"
         },
         {
             "Item Code": "010434",
@@ -160,12 +104,7 @@
             "Quantity": "5",
             "Unit Price": "1.49",
             "Line Amount": "7.45",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": "850037358571"
+            "Universal Product Code": "850037358571"
         },
         {
             "Item Code": "020034",
@@ -173,12 +112,7 @@
             "Quantity": "5",
             "Unit Price": "1.49",
             "Line Amount": "7.45",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": "850037358090"
+            "Universal Product Code": "850037358090"
         },
         {
             "Item Code": "020134",
@@ -186,12 +120,7 @@
             "Quantity": "5",
             "Unit Price": "1.49",
             "Line Amount": "7.45",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": "850037358106"
+            "Universal Product Code": "850037358106"
         },
         {
             "Item Code": "020234",
@@ -199,12 +128,7 @@
             "Quantity": "5",
             "Unit Price": "1.49",
             "Line Amount": "7.45",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": "850037358113"
+            "Universal Product Code": "850037358113"
         },
         {
             "Item Code": "020334",
@@ -212,12 +136,7 @@
             "Quantity": "5",
             "Unit Price": "1.49",
             "Line Amount": "7.45",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": "850037358601"
+            "Universal Product Code": "850037358601"
         },
         {
             "Item Code": "020434",
@@ -225,12 +144,7 @@
             "Quantity": "5",
             "Unit Price": "1.49",
             "Line Amount": "7.45",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": "850048023475"
+            "Universal Product Code": "850048023475"
         },
         {
             "Unit Per Case": "10",
@@ -238,12 +152,7 @@
             "Quantity": "1",
             "Unit Price": "3.9",
             "Line Amount": "3.90",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Universal Product Code": null
         },
         {
             "Unit Per Case": "10",
@@ -251,12 +160,7 @@
             "Quantity": "1",
             "Unit Price": "3.9",
             "Line Amount": "3.9",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Universal Product Code": null
         },
         {
             "Unit Per Case": "5",
@@ -265,12 +169,7 @@
             "Quantity": "1",
             "Unit Price": "3.45",
             "Line Amount": "3.45",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": "681070114608"
+            "Universal Product Code": "681070114608"
         },
         {
             "Unit Per Case": "10",
@@ -279,12 +178,7 @@
             "Quantity": "1",
             "Unit Price": "3.9",
             "Line Amount": "3.9",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Universal Product Code": null
         },
         {
             "Unit Per Case": "10",
@@ -292,12 +186,7 @@
             "Quantity": "1",
             "Unit Price": "3.90",
             "Line Amount": "3.9",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Universal Product Code": null
         },
         {
             "Unit Per Case": "10",
@@ -306,12 +195,7 @@
             "Quantity": "1",
             "Unit Price": "3.90",
             "Line Amount": "3.90",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Universal Product Code": null
         },
         {
             "Unit Per Case": "10",
@@ -319,13 +203,7 @@
             "Quantity": "1",
             "Unit Price": "3.90",
             "Line Amount": "3.9",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Universal Product Code": null
         }
-    ],
-    "Adjustment": "0.00"
+    ]
 }

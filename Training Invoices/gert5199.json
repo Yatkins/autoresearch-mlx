@@ -1,0 +1,32 @@
+{
+    "Vendor": "Gertel's Inc",
+    "Invoice No": "AV-005199",
+    "Invoice Date": "7/6/2026",
+    "Total Quantity": "44",
+    "Invoice Amount": "104.96",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Quantity": "16",
+            "Item Code": "820",
+            "Description": "Oberlander Cinnamon Buns",
+            "Unit Price": "0.28",
+            "Line Amount": "4.48"
+        },
+        {
+            "Quantity": "10",
+            "Item Code": "849",
+            "Description": "Oberlander Vanilla Buns",
+            "Unit Price": "4.3",
+            "Line Amount": "43"
+        },
+        {
+            "Quantity": "18",
+            "Item Code": "F3",
+            "Description": "Shimis Whole Wheat Wraps 6inch",
+            "Unit Price": "3.5",
+            "Line Amount": "63"
+        }
+    ],
+    "Adjustment": "-5.52"
+}

@@ -1,0 +1,36 @@
+{
+    "Vendor": "PEPSI COLA BOTTLING COMPANY OF NEW YORK",
+    "Vendor Physical Address": "117-02 15TH AVENUE COLLEGE POINT, NY 11356",
+    "Vendor Phone Number": "6312269000",
+    "Invoice No": "2340828977",
+    "Invoice Date": "5/20/2026",
+    "Total Quantity": "-2",
+    "Bottle Deposit": "-1.50",
+    "Invoice Amount": "-28.20",
+    "Document Type": "Credit",
+    "Rows": [
+        {
+            "Item Code": "14300",
+            "Description": "2L 6PK DT CAF FREE PEPSI DP",
+            "Quantity": "-1",
+            "Unit Price": "13.25",
+            "Deposit": "0.30",
+            "Line Amount": "-13.55",
+            "Unit Per Case": "6",
+            "Deposit Qty": "-1",
+            "Universal Product Code": "012000172137"
+        },
+        {
+            "Item Code": "15534",
+            "Description": "120Z 12PK CH MT DEW DP",
+            "Quantity": "-1",
+            "Unit Price": "13.45",
+            "Deposit": "1.20",
+            "Line Amount": "-14.65",
+            "Unit Per Case": "2",
+            "Deposit Qty": "-1",
+            "Universal Product Code": "012000809965"
+        }
+    ],
+    "Adjustment": "0.00"
+}

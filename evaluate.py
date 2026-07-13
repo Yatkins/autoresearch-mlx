@@ -29,13 +29,16 @@ MODEL_NAME = os.environ.get("MODEL_NAME", "mistral-small-latest")
 # azure:       (ignored — uses prebuilt-invoice)
 # ollama:      hunyuan-vision | llava | minicpm-v
 
-MAX_INVOICES = 20
-# Max TRAIN invoices per run. Keep experiments under 8 min. Reduce if timing out.
+MAX_INVOICES = 39
+# Max TRAIN invoices per run. Corpus is 49 paired invoices; with TEST_COUNT=10 held
+# out that leaves 39 train, so 39 uses the FULL train set every run. Keep runs under
+# 8 min — for fast prompt iteration on slow backends you may temporarily lower this
+# (the TEST split is unaffected). Reduce if timing out.
 
-TEST_COUNT = int(os.environ.get("TEST_COUNT", "7"))
+TEST_COUNT = int(os.environ.get("TEST_COUNT", "10"))
 # Held-out TEST invoices, taken from the END of the sorted corpus. NEVER used for
-# prompt/format tuning — only for validating generalization. With 27 invoices this
-# gives 20 train / 7 test; add invoices and bump to e.g. 30 train / 10 test.
+# prompt/format tuning — only for validating generalization. Corpus = 49 invoices →
+# 39 train / 10 test (~80/20). Keep TEST_COUNT fixed so the test set stays stable.
 # Run on the held-out set with: EVAL_SET=test python evaluate.py
 
 EXTRACTION_PROMPT = """
@@ -51,7 +54,7 @@ Top-level fields:
 - Vendor Physical Address
 - Vendor Phone Number
 - Vendor Fax Number
-- Vendor Email
+- Vendor Email Address
 - Vendor Website
 - Invoice No
 - Invoice Date

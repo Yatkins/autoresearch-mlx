@@ -1,0 +1,494 @@
+{
+    "Vendor": "General Trading",
+    "Vendor Physical Address": "455 16th Street Carlstadt, NJ 07072",
+    "Vendor Phone Number": "2019357717",
+    "Vendor Website": "www.general-trading.com",
+    "Invoice No": "1544988",
+    "Invoice Date": "7/7/2026",
+    "Total Quantity": "80",
+    "Invoice Amount": "3661.01",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Quantity": "1",
+            "Description": "VINTAGE SELTZER",
+            "Unit Per Case": "12",
+            "Line Amount": "8.35",
+            "Unit Price": "8.35",
+            "Universal Product Code": "072521049608"
+        },
+        {
+            "Quantity": "4",
+            "Description": "VINTAGE SELTZER",
+            "Unit Per Case": "2",
+            "Line Amount": "8.58",
+            "Unit Price": "2.145",
+            "Universal Product Code": "072521060108"
+        },
+        {
+            "Quantity": "1",
+            "Description": "AZ FRUIT PUNCH",
+            "Unit Per Case": "4",
+            "Line Amount": "11.43",
+            "Unit Price": "11.43",
+            "Universal Product Code": "613008710194"
+        },
+        {
+            "Quantity": "1",
+            "Description": "AZ KIWI STRAWBERRY",
+            "Unit Per Case": "4",
+            "Line Amount": "11.43",
+            "Unit Price": "11.43",
+            "Universal Product Code": "613008719845"
+        },
+        {
+            "Quantity": "1",
+            "Description": "AZ ICE TEA WITH RASPBERY",
+            "Unit Per Case": "4",
+            "Line Amount": "11.43",
+            "Unit Price": "11.43",
+            "Universal Product Code": "613008724382"
+        },
+        {
+            "Quantity": "1",
+            "Description": "AZ MUCHO MANGO",
+            "Unit Per Case": "4",
+            "Line Amount": "11.43",
+            "Unit Price": "11.43",
+            "Universal Product Code": "613008740382"
+        },
+        {
+            "Quantity": "2",
+            "Description": "AZ WATERMELON",
+            "Unit Per Case": "4",
+            "Line Amount": "11.43",
+            "Unit Price": "5.72",
+            "Universal Product Code": "613008740412"
+        },
+        {
+            "Quantity": "1",
+            "Description": "PRINGLES ORIGINAL",
+            "Unit Per Case": "12",
+            "Line Amount": "11.6",
+            "Unit Price": "11.6",
+            "Universal Product Code": "038000845512"
+        },
+        {
+            "Quantity": "1",
+            "Description": "TIC TAC CITRUS ADVENTURE",
+            "Unit Per Case": "12",
+            "Line Amount": "20.80",
+            "Unit Price": "20.80",
+            "Universal Product Code": "009800003518"
+        },
+        {
+            "Quantity": "1",
+            "Description": "TIC TAC DR PEPPER",
+            "Unit Per Case": "12",
+            "Line Amount": "20.8",
+            "Unit Price": "20.8",
+            "Universal Product Code": "009800008070"
+        },
+        {
+            "Quantity": "1",
+            "Description": "GERB APPLE JUICE",
+            "Unit Per Case": "6",
+            "Line Amount": "15.23",
+            "Unit Price": "15.23",
+            "Universal Product Code": "015000020712"
+        },
+        {
+            "Quantity": "1",
+            "Description": "GERB PEAR JUICE",
+            "Unit Per Case": "6",
+            "Line Amount": "15.23",
+            "Unit Price": "15.23",
+            "Universal Product Code": "015000020842"
+        },
+        {
+            "Quantity": "1",
+            "Description": "GERB PUFFS STRAW/APPLE",
+            "Unit Per Case": "6",
+            "Line Amount": "16.04",
+            "Unit Price": "16.04",
+            "Universal Product Code": "015000045203"
+        },
+        {
+            "Quantity": "1",
+            "Description": "GERB PUFFS BANANA",
+            "Unit Per Case": "6",
+            "Line Amount": "16.04",
+            "Unit Price": "16.04",
+            "Universal Product Code": "015000045210"
+        },
+        {
+            "Quantity": "1",
+            "Description": "GERB PUFFS SWT POTATO",
+            "Unit Per Case": "6",
+            "Line Amount": "16.04",
+            "Unit Price": "16.04",
+            "Universal Product Code": "015000045227"
+        },
+        {
+            "Quantity": "1",
+            "Description": "GERB PUFFS PEACH",
+            "Unit Per Case": "6",
+            "Line Amount": "16.04",
+            "Unit Price": "16.04",
+            "Universal Product Code": "015000045258"
+        },
+        {
+            "Quantity": "1",
+            "Description": "GERB PUFFS APPLE/CINN",
+            "Unit Per Case": "6",
+            "Line Amount": "16.04",
+            "Unit Price": "16.04",
+            "Universal Product Code": "015000045265"
+        },
+        {
+            "Quantity": "1",
+            "Description": "GERB PUFFS BLUEBERRY",
+            "Unit Per Case": "6",
+            "Line Amount": "16.04",
+            "Unit Price": "16.04",
+            "Universal Product Code": "015000045296"
+        },
+        {
+            "Quantity": "4",
+            "Description": "GERBER OATMEAL&FR CEREAL",
+            "Unit Per Case": "5",
+            "Line Amount": "16.54",
+            "Unit Price": "4.135",
+            "Universal Product Code": "015000687755"
+        },
+        {
+            "Quantity": "3",
+            "Description": "GERBER MULTIGRN&FRT CER",
+            "Unit Per Case": "5",
+            "Line Amount": "19.51",
+            "Unit Price": "6.50",
+            "Universal Product Code": "015000687786"
+        },
+        {
+            "Quantity": "1",
+            "Description": "CHEX CINNAMON",
+            "Unit Per Case": "6",
+            "Line Amount": "27.46",
+            "Unit Price": "27.46",
+            "Universal Product Code": "016000103719"
+        },
+        {
+            "Quantity": "1",
+            "Description": "REESE S PUFFS",
+            "Unit Per Case": "10",
+            "Line Amount": "69.39",
+            "Unit Price": "69.39",
+            "Universal Product Code": "016000121256"
+        },
+        {
+            "Quantity": "1",
+            "Description": "CHEERIOS",
+            "Unit Per Case": "10",
+            "Line Amount": "69.39",
+            "Unit Price": "69.39",
+            "Universal Product Code": "016000125414"
+        },
+        {
+            "Quantity": "1",
+            "Description": "TRIX 6 FRUITY SHAPES",
+            "Unit Per Case": "10",
+            "Line Amount": "40.99",
+            "Unit Price": "40.99",
+            "Universal Product Code": "016000151598"
+        },
+        {
+            "Quantity": "1",
+            "Description": "CHEERIOS MULTI GRAIN",
+            "Unit Per Case": "8",
+            "Line Amount": "52.02",
+            "Unit Price": "52.02",
+            "Universal Product Code": "016000168756"
+        },
+        {
+            "Quantity": "1",
+            "Description": "COCOA PUFFS",
+            "Unit Per Case": "14",
+            "Line Amount": "84.47",
+            "Unit Price": "84.47",
+            "Universal Product Code": "016000169395"
+        },
+        {
+            "Quantity": "1",
+            "Description": "HONEYNUT CHEERIOS",
+            "Unit Per Case": "14",
+            "Line Amount": "91.03",
+            "Unit Price": "91.03",
+            "Universal Product Code": "016000169685"
+        },
+        {
+            "Quantity": "1",
+            "Description": "KIX",
+            "Unit Per Case": "10",
+            "Line Amount": "54.3",
+            "Unit Price": "54.3",
+            "Universal Product Code": "016000171046"
+        },
+        {
+            "Quantity": "1",
+            "Description": "CHEX BLUEBERRY",
+            "Unit Per Case": "6",
+            "Line Amount": "27.46",
+            "Unit Price": "27.46",
+            "Universal Product Code": "016000492349"
+        },
+        {
+            "Quantity": "1",
+            "Description": "KELLOGG CORN FLAKES",
+            "Unit Per Case": "6",
+            "Line Amount": "35.58",
+            "Unit Price": "35.58",
+            "Universal Product Code": "03812008"
+        },
+        {
+            "Quantity": "1",
+            "Description": "RICE KRISPIES",
+            "Unit Per Case": "8",
+            "Line Amount": "51.18",
+            "Unit Price": "51.18",
+            "Universal Product Code": "038000231537"
+        },
+        {
+            "Quantity": "1",
+            "Description": "FROOT LOOPS",
+            "Unit Per Case": "10",
+            "Line Amount": "63.98",
+            "Unit Price": "63.98",
+            "Universal Product Code": "038000270093"
+        },
+        {
+            "Quantity": "1",
+            "Description": "COCOA KRISPIES",
+            "Unit Per Case": "10",
+            "Line Amount": "46.3",
+            "Unit Price": "46.3",
+            "Universal Product Code": "038000270888"
+        },
+        {
+            "Quantity": "1",
+            "Description": "LA CHOY SOY SAUCE",
+            "Unit Per Case": "12",
+            "Line Amount": "26.97",
+            "Unit Price": "26.97",
+            "Universal Product Code": "044300125117"
+        },
+        {
+            "Quantity": "1",
+            "Description": "LA CHOY SOY SAUCE",
+            "Unit Per Case": "12",
+            "Line Amount": "20.48",
+            "Unit Price": "20.48",
+            "Universal Product Code": "044300125131"
+        },
+        {
+            "Quantity": "1",
+            "Description": "DUBBLE BUBBLE BUBBLEGUM",
+            "Unit Per Case": "165",
+            "Line Amount": "6.76",
+            "Unit Price": "6.76",
+            "Universal Product Code": "059642161235"
+        },
+        {
+            "Quantity": "1",
+            "Description": "MIKE AND IKE MEGA SOUR",
+            "Unit Per Case": "8",
+            "Line Amount": "18.31",
+            "Unit Price": "18.31",
+            "Universal Product Code": "070970472695"
+        },
+        {
+            "Quantity": "1",
+            "Description": "HOT TAMALES FIERCE CINN",
+            "Unit Per Case": "8",
+            "Line Amount": "18.31",
+            "Unit Price": "18.31",
+            "Universal Product Code": "070970472909"
+        },
+        {
+            "Quantity": "1",
+            "Description": "MIKE AND IKE ORIG FRUITS",
+            "Unit Per Case": "8",
+            "Line Amount": "18.31",
+            "Unit Price": "18.31",
+            "Universal Product Code": "070970472923"
+        },
+        {
+            "Quantity": "1",
+            "Description": "MIKE AND IKE MEGA MIX",
+            "Unit Per Case": "8",
+            "Line Amount": "18.31",
+            "Unit Price": "18.31",
+            "Universal Product Code": "070970473579"
+        },
+        {
+            "Quantity": "1",
+            "Description": "MIKE AND IKE ORIG FRUITS",
+            "Unit Per Case": "12",
+            "Line Amount": "12.21",
+            "Unit Price": "12.21",
+            "Universal Product Code": "070970475337"
+        },
+        {
+            "Quantity": "1",
+            "Description": "MIKE AND IKE BERRY BLAST",
+            "Unit Per Case": "12",
+            "Line Amount": "12.21",
+            "Unit Price": "12.21",
+            "Universal Product Code": "070970475344"
+        },
+        {
+            "Quantity": "1",
+            "Description": "MIKE AND IKE TROPICAL",
+            "Unit Per Case": "12",
+            "Line Amount": "12.21",
+            "Unit Price": "12.21",
+            "Universal Product Code": "070970475351"
+        },
+        {
+            "Quantity": "1",
+            "Description": "MIKE AND IKE MEGA MIX",
+            "Unit Per Case": "12",
+            "Line Amount": "12.21",
+            "Unit Price": "12.21",
+            "Universal Product Code": "070970475368"
+        },
+        {
+            "Quantity": "1",
+            "Description": "MIKE AND IKE MEGA SOUR",
+            "Unit Per Case": "12",
+            "Line Amount": "12.21",
+            "Unit Price": "12.21",
+            "Universal Product Code": "070970475375"
+        },
+        {
+            "Quantity": "1",
+            "Description": "MIKE AND IKE ORIG FRUITS",
+            "Unit Per Case": "24",
+            "Line Amount": "5.49",
+            "Unit Price": "5.49",
+            "Universal Product Code": "070970475436"
+        },
+        {
+            "Quantity": "1",
+            "Description": "MIKE AND IKE TROPICAL",
+            "Unit Per Case": "24",
+            "Line Amount": "5.49",
+            "Unit Price": "5.49",
+            "Universal Product Code": "070970475450"
+        },
+        {
+            "Quantity": "1",
+            "Description": "MIKE AND IKE SOUR WTRMEL",
+            "Unit Per Case": "24",
+            "Line Amount": "5.49",
+            "Unit Price": "5.49",
+            "Universal Product Code": "070970475474"
+        },
+        {
+            "Quantity": "1",
+            "Description": "MIKE AND IKE SOUR BLRASP",
+            "Unit Per Case": "12",
+            "Line Amount": "12.21",
+            "Unit Price": "12.21",
+            "Universal Product Code": "070970475603"
+        },
+        {
+            "Quantity": "10",
+            "Description": "ENFAMIL PROSOBEE",
+            "Unit Per Case": "6",
+            "Line Amount": "153.24",
+            "Unit Price": "15.325",
+            "Universal Product Code": "300871214415"
+        },
+        {
+            "Quantity": "1",
+            "Description": "GUMBALL DISPENSR DBL BBL",
+            "Unit Per Case": "12",
+            "Line Amount": "14.36",
+            "Unit Price": "14.36",
+            "Universal Product Code": "686464101110"
+        },
+        {
+            "Quantity": "1",
+            "Description": "MINI GUM MACHINE SPORT",
+            "Unit Per Case": "12",
+            "Line Amount": "14.36",
+            "Unit Price": "14.36",
+            "Universal Product Code": "686464131117"
+        },
+        {
+            "Quantity": "1",
+            "Description": "GOLDEN CRISP",
+            "Unit Per Case": "12",
+            "Line Amount": "31.2",
+            "Unit Price": "31.2",
+            "Universal Product Code": "884912117625"
+        },
+        {
+            "Quantity": "1",
+            "Description": "HONEY BUNCH HONEY ROASTD",
+            "Unit Per Case": "12",
+            "Line Amount": "49.44",
+            "Unit Price": "49.44",
+            "Universal Product Code": "884912359155"
+        },
+        {
+            "Quantity": "1",
+            "Description": "HONEY BUNCH WITH ALMONDS",
+            "Unit Per Case": "12",
+            "Line Amount": "49.44",
+            "Unit Price": "49.44",
+            "Universal Product Code": "884912359162"
+        },
+        {
+            "Quantity": "1",
+            "Description": "HONEY BUNCH VANILLA",
+            "Unit Per Case": "12",
+            "Line Amount": "49.44",
+            "Unit Price": "49.44",
+            "Universal Product Code": "884912377142"
+        },
+        {
+            "Quantity": "1",
+            "Description": "POST RAISIN BRAN",
+            "Unit Per Case": "12",
+            "Line Amount": "47.46",
+            "Unit Price": "47.46",
+            "Universal Product Code": "884912378118"
+        },
+        {
+            "Quantity": "1",
+            "Description": "FRUITY PEBBLES",
+            "Unit Per Case": "10",
+            "Line Amount": "57.68",
+            "Unit Price": "57.68",
+            "Universal Product Code": "884912379276"
+        },
+        {
+            "Quantity": "1",
+            "Description": "COCOA PEBBLES",
+            "Unit Per Case": "10",
+            "Line Amount": "57.68",
+            "Unit Price": "57.68",
+            "Universal Product Code": "884912379283"
+        },
+        {
+            "Quantity": "3",
+            "Description": "HONEY-COMB",
+            "Unit Per Case": "8",
+            "Line Amount": "41.2",
+            "Unit Price": "13.73",
+            "Universal Product Code": "884912484086"
+        }
+    ],
+    "Adjustment": "255.04"
+}

@@ -1,0 +1,157 @@
+{
+    "Store": "Foodex",
+    "Vendor": "Mehadrin Ice Cream",
+    "Vendor Physical Address": "100 Trumbull St ., Elizabeth, NJ 07206",
+    "Vendor Phone Number": "7184569494 Fax:",
+    "Invoice No": "2610217607",
+    "Invoice Date": "6/25/2026",
+    "Total Quantity": "37",
+    "Bottle Deposit": "0.00",
+    "Invoice Amount": "496.5",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Item Code": "10100504",
+            "Description": "Cone Sundae 1/24",
+            "Unit Per Case": "1",
+            "Quantity": "1",
+            "Unit Price": "34.00",
+            "Line Amount": "34",
+            "Cases": "1",
+            "Pieces": "0",
+            "Universal Product Code": "00143535007"
+        },
+        {
+            "Item Code": "10100601",
+            "Description": "Sandwich Vanilla 1/24",
+            "Unit Per Case": "1",
+            "Quantity": "1",
+            "Unit Price": "34",
+            "Line Amount": "34",
+            "Cases": "1",
+            "Pieces": "0",
+            "Universal Product Code": "00143535007"
+        },
+        {
+            "Item Code": "10100903",
+            "Description": "Italian Rainbow 1/12",
+            "Unit Per Case": "1",
+            "Quantity": "1",
+            "Unit Price": "11.5",
+            "Line Amount": "11.50",
+            "Cases": "1",
+            "Pieces": "0",
+            "Universal Product Code": "00143535013"
+        },
+        {
+            "Item Code": "10120401",
+            "Description": "Conf CupLight Van/Choc",
+            "Quantity": "12",
+            "Unit Price": "3.33",
+            "Line Amount": "39.96",
+            "Cases": "1",
+            "Pieces": "0",
+            "Universal Product Code": "435350552"
+        },
+        {
+            "Item Code": "10200341",
+            "Description": "Refresh Cffee Bar 6/4pk",
+            "Unit Per Case": "6",
+            "Quantity": "1",
+            "Unit Price": "34",
+            "Line Amount": "34",
+            "Cases": "0",
+            "Pieces": "1",
+            "Universal Product Code": "01435350920"
+        },
+        {
+            "Item Code": "10200402",
+            "Description": "FPK FNF Coffee/Vanilla Bar 4/6",
+            "Unit Per Case": "4",
+            "Quantity": "1",
+            "Unit Price": "32",
+            "Line Amount": "32",
+            "Cases": "0",
+            "Pieces": "1",
+            "Universal Product Code": "00143535064"
+        },
+        {
+            "Item Code": "10200801",
+            "Description": "FPK Cone Sundae 4/6",
+            "Unit Per Case": "4",
+            "Quantity": "1",
+            "Unit Price": "34",
+            "Line Amount": "34.00",
+            "Cases": "0",
+            "Pieces": "1",
+            "Universal Product Code": "00143535004"
+        },
+        {
+            "Item Code": "10300204",
+            "Description": "Polar Cherry Pop 6/12",
+            "Unit Per Case": "6",
+            "Quantity": "1",
+            "Unit Price": "40",
+            "Line Amount": "40",
+            "Cases": "0",
+            "Pieces": "1",
+            "Universal Product Code": "01435350171"
+        },
+        {
+            "Item Code": "10300311",
+            "Description": "Club Jumble Pops 6/20",
+            "Unit Per Case": "6",
+            "Quantity": "1",
+            "Unit Price": "54",
+            "Line Amount": "54",
+            "Cases": "0",
+            "Pieces": "1",
+            "Universal Product Code": "00143535069"
+        },
+        {
+            "Item Code": "10300401",
+            "Description": "Philly Swirl Stix 12/12",
+            "Unit Per Case": "12",
+            "Quantity": "12",
+            "Unit Price": "6.67",
+            "Line Amount": "80.04",
+            "Cases": "1",
+            "Pieces": "0",
+            "Universal Product Code": "00572431751"
+        },
+        {
+            "Item Code": "10300403",
+            "Description": "Philly Swirl ICEE Cherry Blue 6/12",
+            "Unit Per Case": "6",
+            "Quantity": "1",
+            "Unit Price": "40",
+            "Line Amount": "40",
+            "Cases": "0",
+            "Pieces": "1",
+            "Universal Product Code": "07332117533"
+        },
+        {
+            "Item Code": "10400102",
+            "Description": "56oz Neopolitan 2pk",
+            "Unit Per Case": "2",
+            "Quantity": "1",
+            "Unit Price": "15.75",
+            "Line Amount": "15.75",
+            "Cases": "0",
+            "Pieces": "1",
+            "Universal Product Code": "00143535015"
+        },
+        {
+            "Item Code": "10400103",
+            "Description": "56oz Vanilla 2pk",
+            "Unit Per Case": "2",
+            "Quantity": "3",
+            "Unit Price": "15.75",
+            "Line Amount": "47.25",
+            "Cases": "0",
+            "Pieces": "3",
+            "Universal Product Code": "00143535015"
+        }
+    ],
+    "Adjustment": "0"
+}

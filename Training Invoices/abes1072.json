@@ -1,0 +1,40 @@
+{
+    "Vendor": "Abes Ice Cream",
+    "Vendor Physical Address": "P.O. BOX 155 Monroe NY 10949",
+    "Vendor Phone Number": "8454662237",
+    "Vendor Email Address": "billing@abesicecream.us",
+    "Invoice No": "A1-001072",
+    "Invoice Date": "5/27/2026",
+    "Total Quantity": "4",
+    "Invoice Amount": "31.18",
+    "Document Type": "Credit",
+    "Rows": [
+        {
+            "Quantity": "1",
+            "Unit Per Case": "6",
+            "Item Code": "AW790",
+            "Description": "SORBII BAR ICED COFFEE DIPPED IN CHOC 6 x 6pk 2.4 Fl oz",
+            "Unit Price": "7.54",
+            "Line Amount": "7.54",
+            "Universal Product Code": "058650790123"
+        },
+        {
+            "Quantity": "2",
+            "Unit Per Case": "4",
+            "Item Code": "AW870",
+            "Description": "NADA NEAPOLITAN 4 X 34 FL OZ (1 L)",
+            "Unit Price": "7.88",
+            "Line Amount": "15.76",
+            "Universal Product Code": "058650870009"
+        },
+        {
+            "Quantity": "1",
+            "Unit Per Case": "4",
+            "Item Code": "AW872",
+            "Description": "NADA VANILLA MANGO 4 X 34 FL OZ (1 L)",
+            "Unit Price": "7.88",
+            "Line Amount": "7.88",
+            "Universal Product Code": "058650872003"
+        }
+    ]
+}

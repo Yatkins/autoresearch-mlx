@@ -15,7 +15,7 @@
             "Quantity": "2.0",
             "Item Code": "711700",
             "Description": "SALAD FRESH CRISPY LEAF 4OZ BELEAVES GARDENS",
-            "SKU": "840762097005",
+            "Universal Product Code": "840762097005",
             "Unit Per Case": "6",
             "Unit Price": "25.38",
             "Line Amount": "50.76"
@@ -25,7 +25,7 @@
             "Quantity": "1.0",
             "Item Code": "711701",
             "Description": "SALAD FRESH SPRING MIX 4OZ BELEAVES GARDENS",
-            "SKU": "840762097012",
+            "Universal Product Code": "840762097012",
             "Unit Per Case": "6",
             "Unit Price": "25.38",
             "Line Amount": "25.38"
@@ -35,7 +35,7 @@
             "Quantity": "2.0",
             "Item Code": "711702",
             "Description": "SALAD FRESH LETTUCE BABY ROMAINE 4OZ BELEAVES GARDENS",
-            "SKU": "840762097029",
+            "Universal Product Code": "840762097029",
             "Unit Per Case": "6",
             "Unit Price": "25.38",
             "Line Amount": "50.76"
@@ -45,7 +45,7 @@
             "Quantity": "1.0",
             "Item Code": "711703",
             "Description": "SALAD FRESH LETTUCE BABY BUTTER 4OZ BELEAVES GARDENS",
-            "SKU": "840762097036",
+            "Universal Product Code": "840762097036",
             "Unit Per Case": "6",
             "Unit Price": "25.38",
             "Line Amount": "25.38"
@@ -55,7 +55,7 @@
             "Quantity": "1.0",
             "Item Code": "711704",
             "Description": "SALAD FRESH LETTUCE MIXED 4OZ BELEAVES GARDENS",
-            "SKU": "840762097043",
+            "Universal Product Code": "840762097043",
             "Unit Per Case": "6",
             "Unit Price": "25.38",
             "Line Amount": "25.38"
@@ -65,7 +65,7 @@
             "Quantity": "0.00",
             "Item Code": "711715",
             "Description": "SALAD FRESH CRISPY LEAF 9OZ BELEAVES GARDENS",
-            "SKU": "840762097159",
+            "Universal Product Code": "840762097159",
             "Unit Per Case": "6",
             "Unit Price": "48.00",
             "Line Amount": "0"
@@ -75,7 +75,7 @@
             "Quantity": "1.0",
             "Item Code": "711717",
             "Description": "SALAD FRESH LETTUCE ROMAINE 9OZ BELEAVES GARDENS",
-            "SKU": "840762097173",
+            "Universal Product Code": "840762097173",
             "Unit Per Case": "6",
             "Unit Price": "48.00",
             "Line Amount": "48.00"

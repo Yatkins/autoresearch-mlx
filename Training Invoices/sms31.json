@@ -1,0 +1,60 @@
+{
+    "Vendor": "SMS Central",
+    "Vendor Physical Address": "918 E 12th Street Brooklyn NY 11230",
+    "Invoice No": "31",
+    "Invoice Date": "6/4/2026",
+    "Total Quantity": "64.61",
+    "Invoice Amount": "479.35",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Unit Price": "10.25",
+            "Line Amount": "34.235",
+            "Quantity": "3.34",
+            "Description": "Franks n Blanks"
+        },
+        {
+            "Unit Price": "5.50",
+            "Line Amount": "70.95",
+            "Quantity": "12.9",
+            "Description": "Potato Kugel"
+        },
+        {
+            "Unit Price": "5.5",
+            "Line Amount": "44.55",
+            "Quantity": "8.1",
+            "Description": "Chulent Reg"
+        },
+        {
+            "Unit Price": "5.50",
+            "Line Amount": "78.10",
+            "Quantity": "14.2",
+            "Description": "Barley Chulent"
+        },
+        {
+            "Unit Price": "10",
+            "Line Amount": "79.50",
+            "Quantity": "7.95",
+            "Description": "Hot Poppers"
+        },
+        {
+            "Unit Price": "12",
+            "Line Amount": "64.8",
+            "Quantity": "5.4",
+            "Description": "pretzel fingers"
+        },
+        {
+            "Unit Price": "10",
+            "Line Amount": "70.8",
+            "Quantity": "7.08",
+            "Description": "Sesame Chicken"
+        },
+        {
+            "Unit Price": "10",
+            "Line Amount": "56.4",
+            "Quantity": "5.64",
+            "Description": "pepper steak"
+        }
+    ],
+    "Adjustment": "0.00"
+}

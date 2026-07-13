@@ -1,0 +1,107 @@
+{
+    "Vendor": "BIMBO FOODS, INC.",
+    "Vendor Physical Address": "PO BOX 412678 BOSTON, MASSACHUSETTS, 02241",
+    "Invoice No": "69140390009825",
+    "Invoice Date": "7/3/2026",
+    "Total Quantity": "192",
+    "Invoice Amount": "790.41",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Item Code": "000820",
+            "Quantity": "22",
+            "Description": "AR BRK OV WHI BRD20Z",
+            "Unit Price": "4.09",
+            "Line Amount": "89.98",
+            "Universal Product Code": "7341000304"
+        },
+        {
+            "Item Code": "000012",
+            "Quantity": "30",
+            "Description": "AR BRK OV WHI BRD32Z",
+            "Unit Price": "4.8500",
+            "Line Amount": "145.50",
+            "Universal Product Code": "7341000500"
+        },
+        {
+            "Item Code": "007375",
+            "Quantity": "24",
+            "Description": "AR SG WW RTBRD 16Z",
+            "Unit Price": "3.47",
+            "Line Amount": "83.28",
+            "Universal Product Code": "7341002250"
+        },
+        {
+            "Item Code": "002803",
+            "Quantity": "8",
+            "Description": "LVY SO RYE BRD 16Z",
+            "Unit Price": "3.75",
+            "Line Amount": "30",
+            "Universal Product Code": "7153507205"
+        },
+        {
+            "Item Code": "006686",
+            "Quantity": "27",
+            "Description": "ANZ WHI SUB RL 6P 15Z",
+            "Unit Price": "3.93",
+            "Line Amount": "106.11",
+            "Universal Product Code": "7102561551"
+        },
+        {
+            "Item Code": "006596",
+            "Quantity": "27",
+            "Description": "ANZ WHI KSR &P 16Z",
+            "Unit Price": "3.93",
+            "Line Amount": "106.11",
+            "Universal Product Code": "7102561554"
+        },
+        {
+            "Item Code": "003841",
+            "Quantity": "39",
+            "Description": "ANZ HRTY SW RL 8P 18Z",
+            "Unit Price": "3.93",
+            "Line Amount": "153.27",
+            "Universal Product Code": "7102561555"
+        },
+        {
+            "Item Code": "013608",
+            "Quantity": "12",
+            "Description": "AR KETO HAM &P 12Z",
+            "Unit Price": "5.8400",
+            "Line Amount": "70.08",
+            "Universal Product Code": "7341095766"
+        },
+        {
+            "Item Code": "003587",
+            "Quantity": "18",
+            "Description": "AR WW HAM 8P 16Z",
+            "Unit Price": "3.55",
+            "Line Amount": "63.9",
+            "Universal Product Code": "7341013554"
+        },
+        {
+            "Item Code": "014780",
+            "Quantity": "-1",
+            "Description": "AR 22GS SHSL 18Z",
+            "Unit Price": "3.56",
+            "Line Amount": "-3.56",
+            "Universal Product Code": "7341095806"
+        },
+        {
+            "Item Code": "006686",
+            "Quantity": "-12",
+            "Description": "ANZ WHI SUB RL 6P 15Z",
+            "Unit Price": "3.93",
+            "Line Amount": "-47.16",
+            "Universal Product Code": "7102561551"
+        },
+        {
+            "Item Code": "003587",
+            "Quantity": "-2",
+            "Description": "AR WW HAM 8P 16Z",
+            "Unit Price": "3.55",
+            "Line Amount": "-7.1",
+            "Universal Product Code": "7341013554"
+        }
+    ]
+}

@@ -1,0 +1,67 @@
+{
+    "Vendor": "Y&S Coffee",
+    "Vendor Physical Address": "350 Campus Dr Somerset, NJ 08873-1126",
+    "Vendor Phone Number": "17183816422",
+    "Vendor Email Address": "Contact@ysdrinkcom",
+    "Invoice No": "09579310",
+    "Invoice Date": "7/2/2026",
+    "Total Quantity": "11",
+    "Invoice Amount": "721.00",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Unit Per Case": "4",
+            "Item Code": "62",
+            "Description": "#62 LIQUID Cold & Slush French Vanilla Cappuccino Splenda 4 x 64 fi oz",
+            "Quantity": "2",
+            "Unit Price": "96.00",
+            "Line Amount": "192"
+        },
+        {
+            "Unit Per Case": "4",
+            "Item Code": "991",
+            "Description": "991 LIQUID COLD AND SLUSH ORIGINAL CAPPUCCIONO SUGAR FREE 4 X 64 OZ BOTTLES",
+            "Quantity": "1",
+            "Unit Price": "96.00",
+            "Line Amount": "96"
+        },
+        {
+            "Unit Per Case": "4",
+            "Item Code": "999",
+            "Description": "#999 LIQUID Cold & Slush DECAF Caramel Cappuccino 4 x 64 fl oz",
+            "Quantity": "1",
+            "Unit Price": "96.00",
+            "Line Amount": "96.00"
+        },
+        {
+            "Unit Per Case": "4",
+            "Item Code": "74",
+            "Description": "#74 Mango 4 x 64 fl oz.",
+            "Quantity": "1",
+            "Unit Price": "86.00",
+            "Line Amount": "86.00"
+        },
+        {
+            "Unit Per Case": "4",
+            "Item Code": "71",
+            "Description": "#71 Strawberry Smoothie 4 x 64 fl oz.",
+            "Quantity": "1",
+            "Unit Price": "96",
+            "Line Amount": "96.00"
+        },
+        {
+            "Unit Per Case": "4",
+            "Item Code": "602",
+            "Description": "#602 FRAPPE BASE MIX 4 x 64 oz bottles. MUST KEEP REFRIGERATED",
+            "Quantity": "1",
+            "Unit Price": "95",
+            "Line Amount": "95"
+        },
+        {
+            "Description": "Espresso concentrate 32 oz. MUST KEEP",
+            "Quantity": "4",
+            "Unit Price": "15.00",
+            "Line Amount": "60"
+        }
+    ]
+}

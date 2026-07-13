@@ -1,0 +1,81 @@
+{
+    "Vendor": "Bartlett Dairy",
+    "Vendor Physical Address": "90-04 161ST STREET JAMAICA, NY 11432",
+    "Vendor Phone Number": "7186582299",
+    "Vendor Website": "www.bartlettny.com",
+    "Invoice No": "00000003671593",
+    "Invoice Date": "7/6/2026",
+    "Total Quantity": "69",
+    "Invoice Amount": "150.36",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Unit Per Case": "9",
+            "Item Code": "18332",
+            "Description": "FARMLND MILK HG (9)",
+            "Quantity": "27",
+            "Line Amount": "62.74",
+            "Cases": "3",
+            "Pieces": "0",
+            "Unit Price": "2.3237"
+        },
+        {
+            "Unit Per Case": "9",
+            "Item Code": "18010",
+            "Description": "FARMLND 2% MILK HG (9)",
+            "Quantity": "18",
+            "Line Amount": "38.78",
+            "Cases": "2",
+            "Pieces": "0",
+            "Unit Price": "2.1544"
+        },
+        {
+            "Unit Per Case": "9",
+            "Item Code": "18011",
+            "Description": "FARMLND 1% MILK HG (9)",
+            "Quantity": "18",
+            "Line Amount": "37.94",
+            "Cases": "2",
+            "Pieces": "0",
+            "Unit Price": "2.1078"
+        },
+        {
+            "Unit Per Case": "9",
+            "Item Code": "18019",
+            "Description": "FARMLND SKIM HG (9)",
+            "Quantity": "9",
+            "Line Amount": "18.90",
+            "Cases": "1",
+            "Pieces": "0",
+            "Unit Price": "2.10"
+        },
+        {
+            "Item Code": "88888",
+            "Description": "FUEL SURCHARGE",
+            "Quantity": "1",
+            "Line Amount": "0.00",
+            "Cases": "1",
+            "Pieces": "0",
+            "Unit Price": "0.00"
+        },
+        {
+            "Item Code": "98",
+            "Description": "CASES DELIVERED",
+            "Quantity": "8",
+            "Line Amount": "16.00",
+            "Cases": "0",
+            "Pieces": "0",
+            "Unit Price": "2.00"
+        },
+        {
+            "Item Code": "99",
+            "Description": "CASES RETURNED",
+            "Quantity": "-12",
+            "Line Amount": "-24.00",
+            "Cases": "0",
+            "Pieces": "0",
+            "Unit Price": "2.00"
+        }
+    ],
+    "Adjustment": "0.00"
+}

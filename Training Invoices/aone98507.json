@@ -1,0 +1,55 @@
+{
+    "Vendor": "A-One Merchandising Corp",
+    "Vendor Physical Address": "170 Schuyler Ave North Arlington, NJ 07031",
+    "Vendor Phone Number": "7187737500",
+    "Vendor Fax Number": "7187737507",
+    "Vendor Email Address": "info@aonemerchandising.com",
+    "Invoice No": "98507",
+    "Invoice Date": "7/1/2026",
+    "Total Quantity": "50",
+    "Invoice Amount": "1394.00",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Quantity": "32",
+            "Item Code": "PL24230",
+            "Description": "FACIAL TISSUE 24/230 (ELEGANT)",
+            "Line Amount": "825.60",
+            "Unit Price": "25.80",
+            "Universal Product Code": "018026242304"
+        },
+        {
+            "Quantity": "12",
+            "Item Code": "GL03160",
+            "Description": "FACIAL TISSUE 36/160 (LAUREL)",
+            "Line Amount": "466.8",
+            "Unit Price": "38.9",
+            "Universal Product Code": "726459031609"
+        },
+        {
+            "Quantity": "3",
+            "Item Code": "KC12334",
+            "Description": "SCOTT T/P 36/1-1000 WT BUNDLE (#20042)",
+            "Line Amount": "82.5",
+            "Unit Price": "27.5",
+            "Universal Product Code": "054000200427"
+        },
+        {
+            "Quantity": "1",
+            "Item Code": "PL90004",
+            "Description": "TOILET TISSUE CUT 24/375 (ELEGANT)",
+            "Line Amount": "19.10",
+            "Unit Price": "19.10",
+            "Universal Product Code": "018026243752"
+        },
+        {
+            "Quantity": "2",
+            "Item Code": "PLTS",
+            "Description": "ZZ PALLETS 40X48",
+            "Line Amount": "0",
+            "Unit Price": "0",
+            "Universal Product Code": null
+        }
+    ],
+    "Adjustment": "0"
+}

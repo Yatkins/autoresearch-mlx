@@ -5,7 +5,6 @@
     "Invoice No": "14737",
     "Invoice Date": "6/11/2026",
     "Total Quantity": "5",
-    "Bottle Deposit": "0.00",
     "Invoice Amount": "156.6",
     "Document Type": "Bill",
     "Rows": [
@@ -14,61 +13,35 @@
             "Description": "Peanuts R/S 9",
             "Unit Price": "25.2",
             "Line Amount": "25.2",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": "999020"
+            "Universal Product Code": "999020"
         },
         {
             "Quantity": "1",
             "Description": "Peanuts R/N/S 9 oz.",
             "Unit Price": "25.2",
             "Line Amount": "25.2",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": "999143"
+            "Universal Product Code": "999143"
         },
         {
             "Quantity": "1",
             "Description": "Peanuts Toffee 9 oz.",
             "Unit Price": "27",
             "Line Amount": "27",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": "999259"
+            "Universal Product Code": "999259"
         },
         {
             "Quantity": "1",
             "Description": "Mixed Nuts R/S 13.2 oz.",
             "Unit Price": "49.2",
             "Line Amount": "49.2",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": "999105"
+            "Universal Product Code": "999105"
         },
         {
             "Quantity": "1",
             "Description": "Dry Roasted Peanuty 16 oz.",
             "Unit Price": "30",
             "Line Amount": "30",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": "472423"
+            "Universal Product Code": "472423"
         }
-    ],
-    "Adjustment": "0.00"
+    ]
 }

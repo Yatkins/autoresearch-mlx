@@ -6,7 +6,6 @@
     "Invoice No": "464506",
     "Invoice Date": "5/20/2026",
     "Total Quantity": "27.00",
-    "Bottle Deposit": "0.00",
     "Invoice Amount": "431",
     "Document Type": "Bill",
     "Rows": [
@@ -14,194 +13,97 @@
             "Quantity": "1.00",
             "Description": "CARROT CALIFORNIA LOOSE",
             "Unit Price": "66.00",
-            "Line Amount": "66.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Line Amount": "66.00"
         },
         {
             "Quantity": "1.00",
             "Description": "CELERY ROOT 20LB.",
             "Unit Price": "21.00",
-            "Line Amount": "21.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Line Amount": "21.00"
         },
         {
             "Quantity": "3.00",
             "Description": "CLEMENTINE BAGS",
             "Unit Price": "50.00",
-            "Line Amount": "150.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Line Amount": "150.00"
         },
         {
             "Quantity": "2.00",
             "Description": "EGGPLANT #1",
             "Unit Price": "48.00",
-            "Line Amount": "96.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Line Amount": "96.00"
         },
         {
             "Quantity": "1.00",
             "Description": "GINGER 5LB CANADA",
             "Unit Price": "15.00",
-            "Line Amount": "15.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Line Amount": "15.00"
         },
         {
             "Quantity": "2.00",
             "Description": "GRAPE SEEDLESS GREEN XF.",
             "Unit Price": "62.00",
-            "Line Amount": "124.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Line Amount": "124.00"
         },
         {
             "Quantity": "1.00",
             "Description": "LEMON SUNKIST 95",
             "Unit Price": "44.00",
-            "Line Amount": "44.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Line Amount": "44.00"
         },
         {
             "Quantity": "2.00",
             "Description": "MUSHROOM BABY BELLA",
             "Unit Price": "22.00",
-            "Line Amount": "44.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Line Amount": "44.00"
         },
         {
             "Quantity": "5.00",
             "Description": "MUSHROOM CELLO",
             "Unit Price": "15.50",
-            "Line Amount": "77.50",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Line Amount": "77.50"
         },
         {
             "Quantity": "1.00",
             "Description": "MUSHROOM PORT PKG CAPS",
             "Unit Price": "22.00",
-            "Line Amount": "22.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Line Amount": "22.00"
         },
         {
             "Quantity": "1.00",
             "Description": "PARSNIP 20LB USA",
             "Unit Price": "24.50",
-            "Line Amount": "24.50",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Line Amount": "24.50"
         },
         {
             "Quantity": "1.00",
             "Description": "PEAR ANJOU #80",
             "Unit Price": "-425",
-            "Line Amount": "-425.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Line Amount": "-425.00"
         },
         {
             "Quantity": "1.00",
             "Description": "SQUASH SPAGHETTI",
             "Unit Price": "34.00",
-            "Line Amount": "34.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Line Amount": "34.00"
         },
         {
             "Quantity": "2.00",
             "Description": "TOMATO CHERRY",
             "Unit Price": "30.00",
-            "Line Amount": "60.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Line Amount": "60.00"
         },
         {
             "Quantity": "1.00",
             "Description": "TOMATO CHERRY MEDLEY",
             "Unit Price": "30.00",
-            "Line Amount": "30.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Line Amount": "30.00"
         },
         {
             "Quantity": "2.00",
             "Description": "TOMATO VINE BACKYARD",
             "Unit Price": "24.00",
-            "Line Amount": "48.00",
-            "Cases": "0",
-            "Pieces": "0",
-            "Discount": "0",
-            "Deposit": "0",
-            "Deposit Qty": "1",
-            "SKU": null
+            "Line Amount": "48.00"
         }
-    ],
-    "Adjustment": "0.00"
+    ]
 }

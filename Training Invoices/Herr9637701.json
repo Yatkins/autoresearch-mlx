@@ -12,7 +12,7 @@
             "Item Code": "103",
             "Unit Per Case": "42",
             "Description": "42CT 1 OZ REGULAR CHIP",
-            "SKU": "072600005747",
+            "Universal Product Code": "072600005747",
             "Quantity": "42",
             "Unit Price": "0.5500",
             "Line Amount": "23.1000"
@@ -21,7 +21,7 @@
             "Item Code": "145",
             "Unit Per Case": "42",
             "Description": "42CT 1 OZ HOT SAUCE",
-            "SKU": "072600001459",
+            "Universal Product Code": "072600001459",
             "Quantity": "588",
             "Unit Price": "0.5500",
             "Line Amount": "323.4000"
@@ -30,7 +30,7 @@
             "Item Code": "813",
             "Unit Per Case": "42",
             "Description": "42CT 1 OZ KETCHUP CHIP - NP",
-            "SKU": "072600008137",
+            "Universal Product Code": "072600008137",
             "Quantity": "252",
             "Unit Price": "0.5500",
             "Line Amount": "138.6000"
@@ -39,7 +39,7 @@
             "Item Code": "818",
             "Unit Per Case": "42",
             "Description": "42CT 1 OZ RED HOT CHIP - NP",
-            "SKU": "072600009622",
+            "Universal Product Code": "072600009622",
             "Quantity": "210",
             "Unit Price": "0.5500",
             "Line Amount": "115.5000"
@@ -48,7 +48,7 @@
             "Item Code": "886",
             "Unit Per Case": "42",
             "Description": "42CT 1 OZ HONEY BARBEQUE CHIP - NP",
-            "SKU": "072600008861",
+            "Universal Product Code": "072600008861",
             "Quantity": "42",
             "Unit Price": "0.5500",
             "Line Amount": "23.1000"
@@ -57,7 +57,7 @@
             "Item Code": "240",
             "Unit Per Case": "36",
             "Description": "36CT 1 OZ PRETZEL THINS - NP",
-            "SKU": "072600004016",
+            "Universal Product Code": "072600004016",
             "Quantity": "144",
             "Unit Price": "0.5500",
             "Line Amount": "79.2000"
@@ -66,7 +66,7 @@
             "Item Code": "387",
             "Unit Per Case": "12",
             "Description": "12CT 16 OZ MILD SALSA",
-            "SKU": "072600003873",
+            "Universal Product Code": "072600003873",
             "Quantity": "12",
             "Unit Price": "3.5400",
             "Line Amount": "42.4800"
@@ -75,11 +75,10 @@
             "Item Code": "389",
             "Unit Per Case": "12",
             "Description": "12CT 16 OZ MEDIUM SALSA",
-            "SKU": "072600003897",
+            "Universal Product Code": "072600003897",
             "Quantity": "12",
             "Unit Price": "3.5400",
             "Line Amount": "42.4800"
         }
-    ],
-    "Adjustment": "0.00"
+    ]
 }

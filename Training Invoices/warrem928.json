@@ -1,0 +1,26 @@
+{
+    "Vendor": "Warren Elevator Service Co., Inc.",
+    "Vendor Physical Address": "227 EAGLE STREET BROOKLYN, NEW YORK 11222",
+    "Vendor Phone Number": "7183891234",
+    "Vendor Fax Number": "7183492523",
+    "Invoice No": "92893",
+    "Invoice Date": "6/30/2026",
+    "Total Quantity": "9",
+    "Invoice Amount": "3967.07",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Quantity": "8",
+            "Description": "Labor: 8 hrs (2 men) @ $450.00",
+            "Unit Price": "450",
+            "Line Amount": "3600"
+        },
+        {
+            "Quantity": "1",
+            "Description": "Material: Hardware, Support Bracket, Support Steel, Section Of Mesh, Anchors",
+            "Unit Price": "585.5",
+            "Line Amount": "585.5"
+        }
+    ],
+    "Adjustment": "-218.43"
+}

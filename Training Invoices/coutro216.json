@@ -1,0 +1,25 @@
+{
+    "Vendor": "COUTROS BROTHERS, INC.",
+    "Vendor Physical Address": "344 Elm Street P.O. Box 550 Perth Amboy, NJ 08861",
+    "Vendor Phone Number": "7328261940",
+    "Invoice No": "21638",
+    "Invoice Date": "7/1/2026",
+    "Total Quantity": "4",
+    "Invoice Amount": "80.5",
+    "Document Type": "Bill",
+    "Rows": [
+        {
+            "Description": "Bananas Cereen",
+            "Unit Price": "21",
+            "Line Amount": "63.00",
+            "Quantity": "3"
+        },
+        {
+            "Description": "Pineapple 5 6 7 ct Golden",
+            "Unit Price": "17.50",
+            "Line Amount": "17.50",
+            "Quantity": "1"
+        }
+    ],
+    "Adjustment": "0.00"
+}
