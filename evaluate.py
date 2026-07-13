@@ -456,6 +456,7 @@ def build_report(results, names, scores, meta: dict) -> str:
     lines = []
     lines.append(f"# Run report — {meta['timestamp']}")
     lines.append("")
+    lines.append(f"- **CHANGE THIS RUN:** {meta.get('note') or '(none recorded — set EXP_NOTE)'}")
     lines.append(f"- backend/model: `{meta['backend']}` / `{meta['model']}`")
     lines.append(f"- overall (extractions-equal, PRIMARY): **{meta['overall']:.4f}**   "
                  f"invoices-equal: {meta.get('overall_invoice', meta['overall']):.4f}   "
@@ -552,6 +553,7 @@ def main():
     timestamp = time.strftime("%Y%m%d_%H%M%S", time.localtime(start))
     meta = {
         "timestamp": timestamp, "backend": MODEL_BACKEND, "model": MODEL_NAME,
+        "note": os.environ.get("EXP_NOTE", "").strip(),
         "overall": overall, "overall_invoice": overall_invoice,
         "adjusted": adjusted, "latency": elapsed, "lat_per": lat_per,
         "cost": cost, "cost_per": cost_per, "errors": errors, "n": n,
@@ -563,20 +565,18 @@ def main():
     print(f"Report: {report_file}")
 
     # Append to results.tsv (columns: score, score_invoice, adjusted, latency_s,
-    # cost_usd, backend, model, errors, invoices, report, per_field_json, description).
+    # cost_usd, backend, model, errors, invoices, report, description).
     # `score` is the PRIMARY extractions-equal metric (optimization target);
-    # score_invoice = invoices-equal (reported for comparison).
+    # score_invoice = invoices-equal (reported for comparison). The `description`
+    # is WHAT CHANGED this run (from EXP_NOTE) — per-field accuracy lives in the report.
     with open("results.tsv", "a") as f:
-        desc = f"[{eval_set}] backend={MODEL_BACKEND} model={MODEL_NAME}"
         note = os.environ.get("EXP_NOTE", "").strip()
-        if note:
-            desc += f" | {note}"
-        per_field_json = json.dumps(scores["per_field"])
+        desc = f"[{eval_set}] " + (note if note else f"{MODEL_BACKEND}/{MODEL_NAME} (no EXP_NOTE set)")
         f.write(
             f"{overall:.4f}\t{overall_invoice:.4f}\t{adjusted:.4f}\t"
             f"{elapsed:.1f}\t{cost:.4f}\t"
             f"{MODEL_BACKEND}\t{MODEL_NAME}\t{errors}\t{n}\t"
-            f"{report_file.name}\t{per_field_json}\t{desc}\n"
+            f"{report_file.name}\t{desc}\n"
         )
 
 if __name__ == "__main__":
