@@ -100,10 +100,10 @@ For the "Adjustment" and "Bottle Deposit" fields: if no explicit adjustment or b
 Every element of "Rows" must ALWAYS include all of these sub-fields, even when a column is blank: Item Code, Universal Product Code, Unit Per Case, Description, Quantity, Cases, Pieces, Unit Price, Line Amount, Discount, Discount Type, Deposit, Deposit Qty. For "Cases", "Pieces", "Discount", and "Deposit", output "0" when that column is blank or absent (do not omit them). "Deposit Qty" is the deposit/unit count for the line — output the number shown (commonly "1").
 
 Meaning of the quantity-related columns — map the correct printed column even when the invoice labels it differently:
-- Quantity: the number of units ordered for the line. If the layout has only a "Cases" column and no separate quantity column, use that column's value for Quantity AND also output the same value as "Cases". If only a "Pieces" column represents the amount ordered, use it for Quantity AND also output it as "Pieces".
+- Quantity: the number of units ordered for the line. It usually has its own column; but if the ONLY column indicating the amount ordered is labeled "Cases" (or "Pieces") and there is no separate quantity column, set Quantity to that column's value.
 - Unit Per Case: the pack size — how many individual units/pieces are inside ONE case or box — NOT the number of cases ordered.
-- Cases: the number of cases ordered, when the invoice shows it as its own column.
-- Pieces: the number of loose/individual pieces, when the invoice shows it as its own column.
+- Cases: the value printed in the invoice's cases column, exactly as shown; output "0" when there is no cases column.
+- Pieces: the value printed in the invoice's pieces column, exactly as shown; output "0" when there is no pieces column.
 - Universal Product Code: the product barcode digits (often 12) for the line item; digits only.
 - Discount Type: when a Discount is present, output "dollar" if the discount is a currency amount or "percent" if it is a percentage; when there is no discount, output "0".
 """
