@@ -71,12 +71,14 @@ Top-level fields:
 Line items must be returned as a JSON array under the key "Rows". Each element in Rows should include whatever of these sub-fields are present:
 - Item Code
 - SKU
+- Universal Product Code
 - Unit Per Case
 - Description
 - Quantity
 - Unit Price
 - Line Amount
 - Discount
+- Discount Type
 - Deposit
 
 Example output structure (values are illustrative only):
