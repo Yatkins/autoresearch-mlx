@@ -44,10 +44,21 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 - Rotate tracks if the prompt track stalls (see TRACKS).
 
 ## STATE  (update every cycle)
-- best_committed_score: 0.8021  (mistral-small, commit 59753b2)
-- last_sweep_best: 0.8021  (baseline sweep; milestone fires at ≥0.8121)
-- no_gain_streak: 0
-- experiments_done: 3
+- best_committed_score: 0.8252  (mistral-small, commit 295b25d / exp4)
+- last_sweep_best: 0.8021  (milestone TRIGGERED at exp4 → running prompt-model sweep now)
+- no_gain_streak: 1  (exp5 reverted)
+- experiments_done: 5
+- sweep_running: milestone sweep after exp4 (gemini-flash/pro/qwen via OpenRouter). While a
+  sweep runs, DO NOT edit evaluate.py (later models would use a changed prompt). Wait for it,
+  log results, set last_sweep_best, THEN resume experiments.
+
+### Key findings so far
+- Milestone sweeps after PROMPT experiments only need the PROMPT-based models (mistral-small,
+  gemini-flash/pro, qwen). Azure + mistral-ocr ignore the prompt — re-run them only after
+  editing run_azure / _OCR_SCHEMA (tracks B/C).
+- The "ALWAYS include all Rows sub-fields (output 0 when blank)" checklist framing HELPS
+  completeness. Omitting absent sub-fields regressed 0.8252→0.7800 (exp5). Keep the checklist.
+- Reading Cases/Pieces "as printed" (not force-mirroring Quantity) was a big win (exp4, +0.023).
 
 ## TRACKS
 - **A — prompt (mistral-small):** primary track. Refine Rows/header extraction wording.
@@ -77,3 +88,5 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 | 1 | A | derive Total Quantity=sum(row Qty) in postprocess | 0.7345 | kept | Total Qty 0.49→0.62 |
 | 2 | A | +Universal Product Code +Discount Type in prompt | 0.7994 | kept | UPC 0.06→0.78 (+0.065) |
 | 3 | A | Rows column semantics + drop dead SKU | 0.8021 | kept | UPC 0.78→0.89, Pieces +0.19, Cases −0.11 |
+| 4 | A | read Cases/Pieces as-printed (stop force-mirroring Qty→Cases) | 0.8252 | kept | +0.023; recovered Cases regression |
+| 5 | A | omit absent row sub-fields (no "0" padding) to match GT | 0.7800 | REVERTED | checklist framing helps completeness; keep "always include" |
