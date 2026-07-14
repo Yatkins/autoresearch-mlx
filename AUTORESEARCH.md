@@ -45,7 +45,7 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 
 ## STATE  (update every cycle)
 - best_committed_score: 0.8252  (mistral-small ITERATION target, commit 295b25d / exp4)
-- global_best: 0.9222  (gemini-2.5-pro via OpenRouter @ exp4 prompt — validation only)
+- global_best: 0.9312  (gemini-2.5-pro, exp27 backend hardening + Unit Per Case; was 0.9222)
 - azure_best: 0.5655  (exp11; 0.0533→0.5405→0.5579→0.5655)
 - last_sweep_best: 0.8252  (mistral-small at last milestone sweep; next milestone fires at ≥0.8352)
 - no_gain_streak: 6 — Phase 1 STOPPED (single-model/mistral-small optimization; see FINAL SUMMARY).
