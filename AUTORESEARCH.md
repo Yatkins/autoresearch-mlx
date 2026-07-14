@@ -46,7 +46,7 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 ## STATE  (update every cycle)
 - best_committed_score: 0.8252  (mistral-small ITERATION target, commit 295b25d / exp4)
 - global_best: 0.9222  (gemini-2.5-pro via OpenRouter @ exp4 prompt — validation only)
-- azure_best: 0.5579  (commit exp9; was 0.0533 → 0.5405 → 0.5579)
+- azure_best: 0.5655  (exp11; 0.0533→0.5405→0.5579→0.5655)
 - last_sweep_best: 0.8252  (mistral-small at last milestone sweep; next milestone fires at ≥0.8352)
 - no_gain_streak: 0  (reset — exp8 Azure win). exp5/6/7 (prompt) all regressed → mistral-small
   near its prompt ceiling (~0.8252); prefer non-prompt tracks (Azure headroom, mistral-ocr) and
@@ -111,3 +111,4 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 | 8 | B | parse Azure Items→Rows list (was dumped as string) | 0.5405 | KEPT (Azure) | azure 0.0533→0.5405 (+0.49); pivot after 3 prompt regressions |
 | 9 | B | Azure defaults: Document Type=Bill, Adjustment/Bottle Deposit=0.00 | 0.5579 | KEPT (Azure) | azure 0.5405→0.5579 (+0.017) |
 | 10 | C | mistral-ocr _OCR_SCHEMA: fix keys (UPC/Discount Type/aligned) + field descriptions | 0.7328 | KEPT (ocr) | mistral-ocr-4 0.6450→0.7328 (+0.088) |
+| 11 | B | Azure: route ProductCode→UPC when ~12-digit barcode, else Item Code | 0.5655 | KEPT (Azure) | azure 0.5579→0.5655 (+0.008) |

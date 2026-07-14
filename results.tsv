@@ -18,3 +18,4 @@ score	score_invoice	adjusted	latency_s	cost_usd	backend	model	errors	invoices	re
 0.5405	0.5538	0.5254	429.3	0.0000	azure	prebuilt-invoice	1	39	run_20260713_201210.md	[train] exp8(Azure track): parse Azure Items into Rows list (ProductCode/Description/Quantity/UnitPrice/Amount)
 0.5579	0.5836	0.5386	463.2	0.0000	azure	prebuilt-invoice	1	39	run_20260714_081815.md	[train] exp9(Azure): default Document Type=Bill, Adjustment/Bottle Deposit=0.00
 0.7328	0.7947	0.7186	422.8	0.0390	mistral	mistral-ocr-4	0	39	run_20260714_083850.md	[train] exp10(mistral-ocr): fix schema keys (UPC/Discount Type/aligned top) + field descriptions
+0.5655	0.5868	0.5398	512.0	0.0000	azure	prebuilt-invoice	1	39	run_20260714_084946.md	[train] exp11(Azure): route Azure ProductCode -> UPC when ~12-digit barcode, else Item Code

@@ -449,12 +449,11 @@ def run_azure(path: Path) -> dict:
     if arr is None and items is not None:
         v = getattr(items, "value", None)
         arr = v if isinstance(v, list) else None
-    item_map = {
-        "ProductCode": "Item Code",
-        "Description":  "Description",
-        "Quantity":     "Quantity",
-        "UnitPrice":    "Unit Price",
-        "Amount":       "Line Amount",
+    other_map = {
+        "Description": "Description",
+        "Quantity":    "Quantity",
+        "UnitPrice":   "Unit Price",
+        "Amount":      "Line Amount",
     }
     rows = []
     for it in (arr or []):
@@ -462,7 +461,15 @@ def run_azure(path: Path) -> dict:
         if not isinstance(obj, dict):
             continue
         row = {}
-        for az_key, our_key in item_map.items():
+        # Azure gives one ProductCode per line; route a ~12-digit barcode to
+        # Universal Product Code, otherwise treat it as the vendor Item Code.
+        pc = fcontent(obj.get("ProductCode"))
+        if pc not in (None, ""):
+            if len(re.sub(r"\D", "", pc)) >= 11:
+                row["Universal Product Code"] = pc
+            else:
+                row["Item Code"] = pc
+        for az_key, our_key in other_map.items():
             v = fcontent(obj.get(az_key))
             if v not in (None, ""):
                 row[our_key] = v
