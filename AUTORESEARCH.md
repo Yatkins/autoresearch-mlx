@@ -48,7 +48,7 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 - global_best: 0.9222  (gemini-2.5-pro via OpenRouter @ exp4 prompt — validation only)
 - azure_best: 0.5655  (exp11; 0.0533→0.5405→0.5579→0.5655)
 - last_sweep_best: 0.8252  (mistral-small at last milestone sweep; next milestone fires at ≥0.8352)
-- no_gain_streak: 4  (exp20 no-op; plateau since exp15). 2 more no-gains -> STOP with summary.
+- no_gain_streak: 6 — STOPPED 2026-07-14 (plateau; see FINAL SUMMARY). Loop ended, not rescheduling.
   near its prompt ceiling (~0.8252); prefer non-prompt tracks (Azure headroom, mistral-ocr) and
   higher-leverage prompt ideas (few-shot, format hints) over more small wording tweaks.
 - ocr_best: 0.7388  (exp15; 0.6450→0.7328→0.7388)
