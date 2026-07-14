@@ -90,7 +90,23 @@ print pack descriptors "6/16 OZ" / "24/330 ML" but GT wants only the leading cou
 Fixed in shared prompt (chat models) + postprocess (all backends). mistral-small 0.8252→0.8296.
 Validating on qwen + gemini-pro now (task b92nni786) — expected to help them MORE.
 
-- p4 targets & bests: qwen 0.8089, mistral-ocr 0.7388. (azure DROPPED; mistral-small-3.2 & flash de-prioritized.)
+- p4 targets & bests: qwen 0.8089, mistral-ocr 0.7397. (azure DROPPED; mistral-small-3.2 & flash de-prioritized.)
+
+### PHASE 4 CONCLUSION (2026-07-14 ~14:45 PDT) — "qwen & mistral-ocr into the 90s" is NOT feasible:
+- **gemini-2.5-pro 0.9222 → 0.9312** — the phase's real win (exp27 backend hardening recovered
+  invoices lost to OpenRouter null-content errors + exp25 Unit Per Case fix). It's the reliable
+  in-the-90s model.
+- **qwen: BLOCKED by OpenRouter reliability, not quality.** Its extraction is excellent (~0.99 on
+  individual invoices, ~0.88 when it fully responds) BUT it returns random empty invoices at a wildly
+  variable rate (1/39 one run → 16/39 the next → 0.42). Backoff added (exp28→commit); still can't
+  guarantee stability. True ceiling ~0.88 IF made reliable — needs OpenRouter provider pinning or
+  self-hosting. Best stays 0.8089. Not a stable-0.90 path from here.
+- **mistral-ocr: CEILING ~0.74.** OCR-annotation endpoint (not a full VLM); row fields OCR-quality
+  limited (~0.73), Adjustment/Bottle Deposit output wrong values (0.18/0.20, unfixable via schema/
+  postprocess — exp12/29). Cannot reach high-0.8s, let alone 0.90.
+- **Conclusion: only gemini-pro is realistically in the 90s.** A second 90s model would need a
+  different strong reliable VLM (e.g. another gemini/claude/gpt vision model), NOT qwen-via-OpenRouter
+  or mistral-ocr. Loop PAUSED pending user redirection.
 - DEADLINE_P4 epoch: 1784082013.  p4_no_gain_streak: 0.
 - Per-experiment: pick a target model (qwen or mistral-ocr) + its lever, ONE change, run that model,
   commit if ITS score beats its prior best else revert. Prefer FAST mistral-ocr iterations; batch slow qwen runs.
