@@ -113,6 +113,13 @@ Meaning of the quantity-related columns — map the correct printed column even 
 #   "Invoice Amount must be a plain decimal number without currency symbols, e.g. 82.80"
 #   "Vendor Phone Number must be digits only, no dashes or parentheses"
 
+# Per-model prompt overrides: extra instructions appended ONLY for the given model,
+# so one model can be tuned without changing the shared prompt for the others.
+# Keyed by MODEL_NAME. (Chat/vision backends only — azure & mistral-ocr ignore prompts.)
+MODEL_EXTRA = {
+    # "qwen/qwen2.5-vl-72b-instruct": "…qwen-specific guidance…",
+}
+
 # --- Cost / latency tracking (tunable; NOT optimization targets) ---
 # Approximate USD per 1M tokens (input, output). Adjust to your provider's rates.
 PRICE_PER_M = {
@@ -289,6 +296,9 @@ def full_prompt() -> str:
     parts = [EXTRACTION_PROMPT.strip()]
     if EXTRA_INSTRUCTIONS.strip():
         parts.append(EXTRA_INSTRUCTIONS.strip())
+    extra = MODEL_EXTRA.get(MODEL_NAME, "").strip()
+    if extra:
+        parts.append(extra)
     return "\n\n".join(parts)
 
 # --- Backends ---
