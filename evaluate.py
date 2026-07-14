@@ -456,6 +456,10 @@ def run_azure(path: Path) -> dict:
             rows.append(row)
     if rows:
         out["Rows"] = rows
+    # Defaults Azure's prebuilt-invoice doesn't return (match GT majority / zero-defaults):
+    out.setdefault("Document Type", "Bill")    # GT: 43 Bill / 5 Credit
+    out.setdefault("Adjustment", "0.00")       # GT: 21/28 present are zero
+    out.setdefault("Bottle Deposit", "0.00")   # GT: 5/8 present are zero
     return out
 
 def run_ollama(path: Path) -> dict:

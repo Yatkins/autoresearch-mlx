@@ -10,7 +10,7 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 
 ## Run parameters (set 2026-07-13 15:40 PDT)
 - START epoch: 1783982436  (2026-07-13 15:40:36 PDT)
-- DEADLINE epoch: 1784011236  (+8h → ~2026-07-13 23:40 PDT). Check `date +%s` each cycle.
+- DEADLINE epoch: 1784071023  (reset 2026-07-14 08:17 → +8h → ~16:17 PDT). Check `date +%s` each cycle.
 - Iteration model: `mistral-small-latest` (fast ~5.5min, ~$0.03/run) — prompt is SHARED, so
   gains generalize to all prompt backends.
 - Milestone validation (BALANCED): whenever the best committed `score` improves by ≥0.01
@@ -46,7 +46,7 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 ## STATE  (update every cycle)
 - best_committed_score: 0.8252  (mistral-small ITERATION target, commit 295b25d / exp4)
 - global_best: 0.9222  (gemini-2.5-pro via OpenRouter @ exp4 prompt — validation only)
-- azure_best: 0.5405  (commit 673ae79 / exp8; was 0.0533)
+- azure_best: 0.5579  (commit exp9; was 0.0533 → 0.5405 → 0.5579)
 - last_sweep_best: 0.8252  (mistral-small at last milestone sweep; next milestone fires at ≥0.8352)
 - no_gain_streak: 0  (reset — exp8 Azure win). exp5/6/7 (prompt) all regressed → mistral-small
   near its prompt ceiling (~0.8252); prefer non-prompt tracks (Azure headroom, mistral-ocr) and
@@ -103,3 +103,4 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 | 6 | A | clarify Unit Per Case (labels; disambiguate from barcode UPC) | 0.8086 | REVERTED | extra wording confused mistral-small |
 | 7 | A | Item Code as-printed (keep zeros/letters/dashes) | 0.7891 | REVERTED | regressed; mistral-small near prompt ceiling |
 | 8 | B | parse Azure Items→Rows list (was dumped as string) | 0.5405 | KEPT (Azure) | azure 0.0533→0.5405 (+0.49); pivot after 3 prompt regressions |
+| 9 | B | Azure defaults: Document Type=Bill, Adjustment/Bottle Deposit=0.00 | 0.5579 | KEPT (Azure) | azure 0.5405→0.5579 (+0.017) |
