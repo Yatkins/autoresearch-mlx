@@ -48,7 +48,26 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 - global_best: 0.9222  (gemini-2.5-pro via OpenRouter @ exp4 prompt — validation only)
 - azure_best: 0.5655  (exp11; 0.0533→0.5405→0.5579→0.5655)
 - last_sweep_best: 0.8252  (mistral-small at last milestone sweep; next milestone fires at ≥0.8352)
-- no_gain_streak: 6 — STOPPED 2026-07-14 (plateau; see FINAL SUMMARY). Loop ended, not rescheduling.
+- no_gain_streak: 6 — Phase 1 STOPPED (single-model/mistral-small optimization; see FINAL SUMMARY).
+
+## PHASE 2 — multi-model PANEL optimization (started 2026-07-14, user-directed)
+Phase 1 optimized the shared prompt ONLY on mistral-small, so prompt changes that helped other
+models but hurt mistral-small were wrongly discarded (e.g. exp2-4 pushed gemini-pro to 0.9222 but
+nudged gemini-flash DOWN 0.7457→0.7427). Phase 2 optimizes the shared prompt on a PANEL.
+
+- DEADLINE_P2 epoch: 1784082013  (~2026-07-14 19:20 PDT, +8h). Check `date +%s`.
+- p2_no_gain_streak: 0  (STOP Phase 2 at 6, or deadline).
+- PANEL = mistral-small-latest + google/gemini-2.5-flash (OpenRouter) — two families, both fast/cheap.
+- OBJECTIVE = maximize the PANEL AVERAGE score. Keep a prompt change if avg improves AND neither
+  model regresses by >0.01. Baseline panel avg @ current committed (exp4) prompt = **0.7840**
+  (mistral-small 0.8252, gemini-flash 0.7427).
+- Procedure per experiment: make ONE prompt change → run `scratchpad/panel_eval.sh "expN: <desc>"`
+  (runs both models, prints PANEL AVG) → if avg > best_panel_avg and no model regresses >0.01,
+  commit; else `git checkout -- evaluate.py`. Update STATE+LEDGER, git push, ScheduleWakeup(~90s).
+- FIRST re-test the Phase-1 prompt ideas that regressed mistral-small (exp5/6/7/13/22) on the PANEL —
+  some may help flash/qwen. Then new prompt ideas. Milestone: when panel avg improves ≥0.01,
+  validate on gemini-pro + qwen (expensive — only at milestones).
+- best_panel_avg: 0.7840  (baseline)
   near its prompt ceiling (~0.8252); prefer non-prompt tracks (Azure headroom, mistral-ocr) and
   higher-leverage prompt ideas (few-shot, format hints) over more small wording tweaks.
 - ocr_best: 0.7388  (exp15; 0.6450→0.7328→0.7388)
