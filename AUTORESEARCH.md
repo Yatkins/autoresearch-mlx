@@ -119,3 +119,4 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 | 16 | C | mistral-ocr schema: Cases/Pieces/Deposit "'0' if none" descriptions | 0.7121 | REVERTED | 0.7388→0.7121; the "'0' if none" framing hurts OCR (cf exp12) |
 | 17 | (openrouter) | max_tokens=8000 to avoid truncation — test gemini-flash | 0.6526 | REVERTED | flash 0.7457→0.6526; gap is inherent, not truncation |
 | 18 | (image) | PDF render 2.0→3.0 (216 DPI) + MAX_IMG_WIDTH 2600 | 0.8190 | REVERTED | mistral-small 0.8252→0.8190; 144 DPI already sufficient |
+| 19 | (model) | mistralai/mistral-small-3.2-24b-instruct baseline (OpenRouter) | 0.7963 | BASELINE | new model data point; mid-pack, slow (24min) |

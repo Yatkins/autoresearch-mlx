@@ -25,3 +25,4 @@ score	score_invoice	adjusted	latency_s	cost_usd	backend	model	errors	invoices	re
 0.7121	0.7692	0.7121	282.5	0.0390	mistral	mistral-ocr-4	0	39	run_20260714_093325.md	[train] exp16(mistral-ocr): add Rows descriptions Cases/Pieces/Deposit ('0' if none)
 0.6526	0.7770	0.6207	537.5	0.2242	openrouter	google/gemini-2.5-flash	0	39	run_20260714_093853.md	[train] exp17(openrouter): max_tokens=8000 to avoid truncating long invoices — test gemini-flash
 0.8190	0.8062	0.8140	351.6	0.0319	mistral	mistral-small-latest	0	39	run_20260714_094833.md	[train] exp18(image): PDF render 2.0->3.0 (~216 DPI), MAX_IMG_WIDTH 2000->2600 — sharper small text
+0.7963	0.8051	0.6963	1481.5	0.0150	openrouter	mistralai/mistral-small-3.2-24b-instruct	0	39	run_20260714_095815.md	[train] exp19(model): mistralai/mistral-small-3.2-24b-instruct baseline @ best prompt (OpenRouter)
