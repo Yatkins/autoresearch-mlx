@@ -50,24 +50,27 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 - last_sweep_best: 0.8252  (mistral-small at last milestone sweep; next milestone fires at ≥0.8352)
 - no_gain_streak: 6 — Phase 1 STOPPED (single-model/mistral-small optimization; see FINAL SUMMARY).
 
-## PHASE 2 — multi-model PANEL optimization (started 2026-07-14, user-directed)
-Phase 1 optimized the shared prompt ONLY on mistral-small, so prompt changes that helped other
-models but hurt mistral-small were wrongly discarded (e.g. exp2-4 pushed gemini-pro to 0.9222 but
-nudged gemini-flash DOWN 0.7457→0.7427). Phase 2 optimizes the shared prompt on a PANEL.
+## PHASE 3 — optimize the SINGLE BEST model (started 2026-07-14, user-directed)
+User goal: maximize the accuracy of the ONE most-accurate model (not an average). The best model
+is **openrouter google/gemini-2.5-pro @ 0.9222** (exp4 prompt). Optimize the shared prompt on
+gemini-pro directly; if another model ever overtakes it, switch the target to that model.
+(Phase 2 panel idea abandoned — user wants a single-model max, not an average.)
 
-- DEADLINE_P2 epoch: 1784082013  (~2026-07-14 19:20 PDT, +8h). Check `date +%s`.
-- p2_no_gain_streak: 0  (STOP Phase 2 at 6, or deadline).
-- PANEL = mistral-small-latest + google/gemini-2.5-flash (OpenRouter) — two families, both fast/cheap.
-- OBJECTIVE = maximize the PANEL AVERAGE score. Keep a prompt change if avg improves AND neither
-  model regresses by >0.01. Baseline panel avg @ current committed (exp4) prompt = **0.7840**
-  (mistral-small 0.8252, gemini-flash 0.7427).
-- Procedure per experiment: make ONE prompt change → run `scratchpad/panel_eval.sh "expN: <desc>"`
-  (runs both models, prints PANEL AVG) → if avg > best_panel_avg and no model regresses >0.01,
-  commit; else `git checkout -- evaluate.py`. Update STATE+LEDGER, git push, ScheduleWakeup(~90s).
-- FIRST re-test the Phase-1 prompt ideas that regressed mistral-small (exp5/6/7/13/22) on the PANEL —
-  some may help flash/qwen. Then new prompt ideas. Milestone: when panel avg improves ≥0.01,
-  validate on gemini-pro + qwen (expensive — only at milestones).
-- best_panel_avg: 0.7840  (baseline)
+- DEADLINE_P3 epoch: 1784082013  (~2026-07-14 19:20 PDT). Check `date +%s`.
+- TARGET model: openrouter google/gemini-2.5-pro. best_target: 0.9222 (commit run_20260713_161256).
+- p3_no_gain_streak: 0  (STOP Phase 3 at 6, or deadline).
+- COST/PACE: each gemini-pro run ≈ 32 min, ≈ $2.70. Slow + pricey — pick high-leverage experiments.
+- gemini-pro's remaining loss is concentrated: Unit Per Case 0.52 (259 cells), Cases 0.59 (63),
+  Pieces 0.78 (36), Adjustment 0.82 (20). Everything else ≥0.92. TARGET Unit Per Case + Cases first.
+- Procedure: make ONE prompt change → `EXP_NOTE="expN(pro): <desc>" MODEL_BACKEND=openrouter
+  MODEL_NAME=google/gemini-2.5-pro python evaluate.py` (BACKGROUND, ~32min) → if score > best_target,
+  commit + set best_target + p3_no_gain_streak=0; else `git checkout -- evaluate.py` + streak+=1.
+  Update STATE+LEDGER, git push, ScheduleWakeup(~1800s fallback; completion wakes sooner).
+- Good first ideas (target Unit Per Case / Cases — even pro is weak here): re-test the Unit Per Case
+  clarification (Phase-1 exp6, labels + disambiguate from barcode) — it hurt mistral-small but pro
+  may use it; then a Cases-column clarification.
+- CAUTION: keep prompt changes that DON'T regress the other models much either (spot-check occasionally)
+  — but the commit decision is gemini-pro's score only.
   near its prompt ceiling (~0.8252); prefer non-prompt tracks (Azure headroom, mistral-ocr) and
   higher-leverage prompt ideas (few-shot, format hints) over more small wording tweaks.
 - ocr_best: 0.7388  (exp15; 0.6450→0.7328→0.7388)
