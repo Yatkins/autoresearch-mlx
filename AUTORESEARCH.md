@@ -51,10 +51,16 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 - no_gain_streak: 0  (reset — exp8 Azure win). exp5/6/7 (prompt) all regressed → mistral-small
   near its prompt ceiling (~0.8252); prefer non-prompt tracks (Azure headroom, mistral-ocr) and
   higher-leverage prompt ideas (few-shot, format hints) over more small wording tweaks.
-- experiments_done: 8
+- ocr_best: 0.7328  (commit exp10 / mistral-ocr-4; was 0.6450)
+- experiments_done: 10
 - sweep_running: none
-- NEXT: exp9 = extend Azure header/item mapping (Unit Per Case, UPC, VendorPhone/Email/Website,
-  DueDate→? ) to push azure past 0.5405; then mistral-ocr _OCR_SCHEMA enrich (track C).
+- NEXT ideas (pick one per cycle, non-prompt tracks preferred since mistral-small ~ceiling):
+  C: mistral-ocr postprocess/schema — it scores worse on many-row invoices (extractions 0.73 <
+     invoices 0.79); check its report for weak Rows sub-fields. B: Azure — UPC still 0.06 (254
+     cells); Azure ProductCode is sometimes the barcode — try also mapping it to Universal
+     Product Code when it's ~12 digits. A(prompt, only if a strong idea): one compact few-shot
+     row example with the full sub-field set. Also: gemini-flash underperforms (0.7457) — check
+     its report for a systematic miss.
 
 ### Milestone sweep @ exp4 prompt (done 2026-07-13 ~16:45 PDT) — prompt gains GENERALIZE:
 - gemini-2.5-pro (OR): 0.8010 → **0.9222** (+0.121, new global best)
