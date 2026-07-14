@@ -75,11 +75,10 @@ gemini-pro directly; if another model ever overtakes it, switch the target to th
 ## PHASE 4 — raise the laggards qwen / mistral-ocr / azure (started 2026-07-14, user-directed)
 User: drop mistral-small-3.2-24b (redundant, < mistral-small) and de-prioritize gemini-flash;
 push qwen, mistral-ocr, azure "into the 90s". Reality check done:
-- **azure prebuilt-invoice HARD CEILING ≈ 0.78** — only 78% of GT cells are fields Azure can emit
-  (it never returns per-line Unit Per Case/UPC/Cases/Pieces/Discount/Deposit, or vendor phone/
-  email/fax/website). Realistic azure max ~0.75 by improving the producible fields. **0.90 needs an
-  Azure+LLM HYBRID backend** (Azure headers/amounts + LLM for the rest) — offered to user, NOT built
-  unless they confirm.
+- **azure prebuilt-invoice: DROPPED (user decision 2026-07-14)** — less accurate than every LLM AND
+  more expensive; structurally capped ~0.78 (never emits per-line Unit Per Case/UPC/Cases/Pieces/
+  Discount/Deposit or vendor phone/email/fax/website). Do NOT run azure or build the hybrid. Leave
+  run_azure code as-is (0.5655 stays its final logged number); just stop optimizing it.
 - **qwen 0.8089 → ~0.90 plausible** (gemini-pro proves 0.92 on the shared prompt). Tune via
   `MODEL_EXTRA["qwen/qwen2.5-vl-72b-instruct"]` (per-model override — does NOT affect gemini-pro).
   qwen is SLOW (~56min/run, cheap). Weak: Unit Per Case 0.45, Pieces 0.50, Cases 0.71, UPC 0.81.
@@ -91,10 +90,10 @@ print pack descriptors "6/16 OZ" / "24/330 ML" but GT wants only the leading cou
 Fixed in shared prompt (chat models) + postprocess (all backends). mistral-small 0.8252→0.8296.
 Validating on qwen + gemini-pro now (task b92nni786) — expected to help them MORE.
 
-- p4 targets & bests: qwen 0.8089, mistral-ocr 0.7388, azure 0.5655 (ceiling ~0.78).
+- p4 targets & bests: qwen 0.8089, mistral-ocr 0.7388. (azure DROPPED; mistral-small-3.2 & flash de-prioritized.)
 - DEADLINE_P4 epoch: 1784082013.  p4_no_gain_streak: 0.
-- Per-experiment: pick a target model + its lever, ONE change, run that model, commit if ITS score
-  beats its prior best else revert. Prefer FAST mistral-ocr iterations; batch slow qwen runs.
+- Per-experiment: pick a target model (qwen or mistral-ocr) + its lever, ONE change, run that model,
+  commit if ITS score beats its prior best else revert. Prefer FAST mistral-ocr iterations; batch slow qwen runs.
   near its prompt ceiling (~0.8252); prefer non-prompt tracks (Azure headroom, mistral-ocr) and
   higher-leverage prompt ideas (few-shot, format hints) over more small wording tweaks.
 - ocr_best: 0.7388  (exp15; 0.6450→0.7328→0.7388)
