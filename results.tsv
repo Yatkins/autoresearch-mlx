@@ -32,3 +32,6 @@ score	score_invoice	adjusted	latency_s	cost_usd	backend	model	errors	invoices	re
 0.8296	0.8089	0.8228	365.5	0.0333	mistral	mistral-small-latest	0	39	run_20260714_114105.md	[train] exp25(shared): Unit Per Case = leading count only (6/16 OZ -> 6), universal fix
 0.7388	0.7938	0.7388	29.5	0.0390	mistral	mistral-ocr-4	0	39	run_20260714_114810.md	[train] exp26(universal): postprocess Unit Per Case -> leading integer (all backends)
 0.8295	0.8088	0.8234	359.4	0.0333	mistral	mistral-small-latest	0	39	run_20260714_114908.md	[train] exp25+26(shared+postprocess): Unit Per Case leading-count (prompt + safety net)
+0.7683	0.8173	0.6683	3722.6	0.0865	openrouter	qwen/qwen2.5-vl-72b-instruct	1	39	run_20260714_115544.md	[train] exp25 validate: Unit Per Case fix @ qwen/qwen2.5-vl-72b-instruct
+0.8944	0.9065	0.6944	2388.2	2.7315	openrouter	google/gemini-2.5-pro	2	39	run_20260714_125747.md	[train] exp25 validate: Unit Per Case fix @ google/gemini-2.5-pro
+0.9312	0.9578	0.7312	2122.9	2.6921	openrouter	google/gemini-2.5-pro	0	39	run_20260714_133926.md	[train] exp27(backend): retry OpenRouter on empty/malformed response + null-safe parse_json (recover errored invoices)

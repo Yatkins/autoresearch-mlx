@@ -286,6 +286,8 @@ def render_to_images(path: Path) -> list[tuple[str, str]]:
     return images
 
 def parse_json(text: str) -> dict:
+    if not text:
+        return {}
     text = text.strip()
     # Strip markdown fences if present
     text = re.sub(r'^```(?:json)?\s*', '', text)
@@ -411,17 +413,31 @@ def run_openrouter(path: Path) -> dict:
         for data, media in render_to_images(path)
     ]
     content.append({"type": "text", "text": full_prompt()})
-    resp = httpx.post(
-        "https://openrouter.ai/api/v1/chat/completions",
-        headers={"Authorization": f"Bearer {os.environ['OPENROUTER_API_KEY']}"},
-        json={"model": MODEL_NAME, "messages": [{"role": "user", "content": content}],
-              "temperature": 0},  # deterministic for comparable experiments
-        timeout=120,
-    )
-    body = resp.json()
-    u = body.get("usage") or {}
-    _record_usage(u.get("prompt_tokens", 0), u.get("completion_tokens", 0))
-    return parse_json(body["choices"][0]["message"]["content"])
+    payload = {"model": MODEL_NAME, "messages": [{"role": "user", "content": content}],
+               "temperature": 0}  # deterministic for comparable experiments
+    # Retry on empty/malformed responses: OpenRouter intermittently returns null
+    # content or non-JSON, which otherwise zeros a whole invoice.
+    text = ""
+    for attempt in range(3):
+        try:
+            resp = httpx.post(
+                "https://openrouter.ai/api/v1/chat/completions",
+                headers={"Authorization": f"Bearer {os.environ['OPENROUTER_API_KEY']}"},
+                json=payload, timeout=180,
+            )
+            body = resp.json()
+        except Exception:
+            continue
+        u = body.get("usage") or {}
+        _record_usage(u.get("prompt_tokens", 0), u.get("completion_tokens", 0))
+        choices = body.get("choices") or []
+        msg = (choices[0].get("message") or {}) if choices else {}
+        text = msg.get("content") or ""
+        parsed = parse_json(text)
+        if parsed:            # got a usable object — done
+            return parsed
+        # else empty/garbled → retry
+    return parse_json(text)
 
 def run_azure(path: Path) -> dict:
     from azure.ai.documentintelligence import DocumentIntelligenceClient
