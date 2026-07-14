@@ -44,13 +44,23 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 - Rotate tracks if the prompt track stalls (see TRACKS).
 
 ## STATE  (update every cycle)
-- best_committed_score: 0.8252  (mistral-small, commit 295b25d / exp4)
-- last_sweep_best: 0.8021  (milestone TRIGGERED at exp4 → running prompt-model sweep now)
-- no_gain_streak: 1  (exp5 reverted)
-- experiments_done: 5
-- sweep_running: milestone sweep after exp4 (gemini-flash/pro/qwen via OpenRouter). While a
-  sweep runs, DO NOT edit evaluate.py (later models would use a changed prompt). Wait for it,
-  log results, set last_sweep_best, THEN resume experiments.
+- best_committed_score: 0.8252  (mistral-small ITERATION target, commit 295b25d / exp4)
+- global_best: 0.9222  (gemini-2.5-pro via OpenRouter @ exp4 prompt — validation only)
+- azure_best: 0.5405  (commit 673ae79 / exp8; was 0.0533)
+- last_sweep_best: 0.8252  (mistral-small at last milestone sweep; next milestone fires at ≥0.8352)
+- no_gain_streak: 0  (reset — exp8 Azure win). exp5/6/7 (prompt) all regressed → mistral-small
+  near its prompt ceiling (~0.8252); prefer non-prompt tracks (Azure headroom, mistral-ocr) and
+  higher-leverage prompt ideas (few-shot, format hints) over more small wording tweaks.
+- experiments_done: 8
+- sweep_running: none
+- NEXT: exp9 = extend Azure header/item mapping (Unit Per Case, UPC, VendorPhone/Email/Website,
+  DueDate→? ) to push azure past 0.5405; then mistral-ocr _OCR_SCHEMA enrich (track C).
+
+### Milestone sweep @ exp4 prompt (done 2026-07-13 ~16:45 PDT) — prompt gains GENERALIZE:
+- gemini-2.5-pro (OR): 0.8010 → **0.9222** (+0.121, new global best)
+- qwen2.5-vl-72b (OR): 0.7758 → 0.8089 (+0.033)
+- gemini-2.5-flash (OR): 0.7457 → 0.7427 (~flat; UPC/semantics didn't move it)
+- (mistral-small already at 0.8252 = the iteration best)
 
 ### Key findings so far
 - Milestone sweeps after PROMPT experiments only need the PROMPT-based models (mistral-small,
@@ -90,3 +100,6 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 | 3 | A | Rows column semantics + drop dead SKU | 0.8021 | kept | UPC 0.78→0.89, Pieces +0.19, Cases −0.11 |
 | 4 | A | read Cases/Pieces as-printed (stop force-mirroring Qty→Cases) | 0.8252 | kept | +0.023; recovered Cases regression |
 | 5 | A | omit absent row sub-fields (no "0" padding) to match GT | 0.7800 | REVERTED | checklist framing helps completeness; keep "always include" |
+| 6 | A | clarify Unit Per Case (labels; disambiguate from barcode UPC) | 0.8086 | REVERTED | extra wording confused mistral-small |
+| 7 | A | Item Code as-printed (keep zeros/letters/dashes) | 0.7891 | REVERTED | regressed; mistral-small near prompt ceiling |
+| 8 | B | parse Azure Items→Rows list (was dumped as string) | 0.5405 | KEPT (Azure) | azure 0.0533→0.5405 (+0.49); pivot after 3 prompt regressions |
