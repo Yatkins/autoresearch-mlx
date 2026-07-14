@@ -48,11 +48,11 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 - global_best: 0.9222  (gemini-2.5-pro via OpenRouter @ exp4 prompt — validation only)
 - azure_best: 0.5655  (exp11; 0.0533→0.5405→0.5579→0.5655)
 - last_sweep_best: 0.8252  (mistral-small at last milestone sweep; next milestone fires at ≥0.8352)
-- no_gain_streak: 0  (reset — exp8 Azure win). exp5/6/7 (prompt) all regressed → mistral-small
+- no_gain_streak: 1  (exp12 reverted). exp8-11 wins (Azure+ocr); prompt track at ceiling.
   near its prompt ceiling (~0.8252); prefer non-prompt tracks (Azure headroom, mistral-ocr) and
   higher-leverage prompt ideas (few-shot, format hints) over more small wording tweaks.
 - ocr_best: 0.7328  (commit exp10 / mistral-ocr-4; was 0.6450)
-- experiments_done: 10
+- experiments_done: 12
 - sweep_running: none
 - NEXT ideas (pick one per cycle, non-prompt tracks preferred since mistral-small ~ceiling):
   C: mistral-ocr postprocess/schema — it scores worse on many-row invoices (extractions 0.73 <
@@ -111,4 +111,5 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 | 8 | B | parse Azure Items→Rows list (was dumped as string) | 0.5405 | KEPT (Azure) | azure 0.0533→0.5405 (+0.49); pivot after 3 prompt regressions |
 | 9 | B | Azure defaults: Document Type=Bill, Adjustment/Bottle Deposit=0.00 | 0.5579 | KEPT (Azure) | azure 0.5405→0.5579 (+0.017) |
 | 10 | C | mistral-ocr _OCR_SCHEMA: fix keys (UPC/Discount Type/aligned) + field descriptions | 0.7328 | KEPT (ocr) | mistral-ocr-4 0.6450→0.7328 (+0.088) |
-| 11 | B | Azure: route ProductCode→UPC when ~12-digit barcode, else Item Code | 0.5655 | KEPT (Azure) | azure 0.5579→0.5655 (+0.008) |
+| 11 | B | Azure: route ProductCode→UPC when ~12-digit barcode, else Item Code | 0.5655 | KEPT (Azure) | azure 0.5579→0.5655 (+0.008); Item Code 0.55→0.40, UPC 0.06→0.39 |
+| 12 | C | mistral-ocr schema: Adjustment/Bottle Deposit "0.00" descriptions | 0.7083 | REVERTED | 0.7328→0.7083; OCR schema hints for these backfired |
