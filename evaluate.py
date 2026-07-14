@@ -418,7 +418,9 @@ def run_openrouter(path: Path) -> dict:
     # Retry on empty/malformed responses: OpenRouter intermittently returns null
     # content or non-JSON, which otherwise zeros a whole invoice.
     text = ""
-    for attempt in range(3):
+    for attempt in range(4):
+        if attempt:
+            time.sleep(2.0 * attempt)  # backoff before retry (rate-limit / transient recovery)
         try:
             resp = httpx.post(
                 "https://openrouter.ai/api/v1/chat/completions",
