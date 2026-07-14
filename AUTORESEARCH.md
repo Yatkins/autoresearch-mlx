@@ -48,11 +48,11 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 - global_best: 0.9222  (gemini-2.5-pro via OpenRouter @ exp4 prompt — validation only)
 - azure_best: 0.5655  (exp11; 0.0533→0.5405→0.5579→0.5655)
 - last_sweep_best: 0.8252  (mistral-small at last milestone sweep; next milestone fires at ≥0.8352)
-- no_gain_streak: 3  (exp16/17/18 all reverted). Models near ceilings; wins mostly captured.
+- no_gain_streak: 4  (exp20 no-op; plateau since exp15). 2 more no-gains -> STOP with summary.
   near its prompt ceiling (~0.8252); prefer non-prompt tracks (Azure headroom, mistral-ocr) and
   higher-leverage prompt ideas (few-shot, format hints) over more small wording tweaks.
 - ocr_best: 0.7388  (exp15; 0.6450→0.7328→0.7388)
-- experiments_done: 18
+- experiments_done: 20
 - sweep_running: none
 - NEXT ideas (pick one per cycle, non-prompt tracks preferred since mistral-small ~ceiling):
   C: mistral-ocr postprocess/schema — it scores worse on many-row invoices (extractions 0.73 <
@@ -120,3 +120,4 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 | 17 | (openrouter) | max_tokens=8000 to avoid truncation — test gemini-flash | 0.6526 | REVERTED | flash 0.7457→0.6526; gap is inherent, not truncation |
 | 18 | (image) | PDF render 2.0→3.0 (216 DPI) + MAX_IMG_WIDTH 2600 | 0.8190 | REVERTED | mistral-small 0.8252→0.8190; 144 DPI already sufficient |
 | 19 | (model) | mistralai/mistral-small-3.2-24b-instruct baseline (OpenRouter) | 0.7963 | BASELINE | new model data point; mid-pack, slow (24min) |
+| 20 | B | Azure Vendor fallback to VendorAddressRecipient when VendorName missing | 0.5655 | REVERTED | no-op (VendorName always present) |
