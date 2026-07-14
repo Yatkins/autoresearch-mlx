@@ -22,3 +22,6 @@ score	score_invoice	adjusted	latency_s	cost_usd	backend	model	errors	invoices	re
 0.7083	0.8039	0.7083	305.0	0.0390	mistral	mistral-ocr-4	0	39	run_20260714_085935.md	[train] exp12(mistral-ocr): schema descriptions for Adjustment/Bottle Deposit (default 0.00 when absent)
 0.8042	0.7916	0.7989	352.9	0.0324	mistral	mistral-small-latest	0	39	run_20260714_090838.md	[train] exp13(prompt): enrich JSON example row to full sub-field set (UPC/UnitPerCase/Cases/Pieces/Discount/Deposit)
 0.7388	0.7938	0.7388	280.7	0.0390	mistral	mistral-ocr-4	0	39	run_20260714_092608.md	[train] exp15(mistral-ocr): add Rows descriptions Unit Price/Line Amount/Description
+0.7121	0.7692	0.7121	282.5	0.0390	mistral	mistral-ocr-4	0	39	run_20260714_093325.md	[train] exp16(mistral-ocr): add Rows descriptions Cases/Pieces/Deposit ('0' if none)
+0.6526	0.7770	0.6207	537.5	0.2242	openrouter	google/gemini-2.5-flash	0	39	run_20260714_093853.md	[train] exp17(openrouter): max_tokens=8000 to avoid truncating long invoices — test gemini-flash
+0.8190	0.8062	0.8140	351.6	0.0319	mistral	mistral-small-latest	0	39	run_20260714_094833.md	[train] exp18(image): PDF render 2.0->3.0 (~216 DPI), MAX_IMG_WIDTH 2000->2600 — sharper small text
