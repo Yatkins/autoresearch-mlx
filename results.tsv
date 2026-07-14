@@ -29,3 +29,6 @@ score	score_invoice	adjusted	latency_s	cost_usd	backend	model	errors	invoices	re
 0.5655	0.5868	0.5517	419.5	0.0000	azure	prebuilt-invoice	1	39	run_20260714_102358.md	[train] exp20(Azure): Vendor fallback to VendorAddressRecipient/RemittanceAddressRecipient when VendorName missing
 0.7322	0.7894	0.7322	284.3	0.0390	mistral	mistral-ocr-4	0	39	run_20260714_103150.md	[train] exp21(mistral-ocr): Cases/Pieces pure-semantic descriptions (no '0-if-none' framing)
 0.8134	0.7899	0.8107	333.1	0.0315	mistral	mistral-small-latest	0	39	run_20260714_103713.md	[train] exp22(prompt): Vendor = seller who issued invoice, not Bill-To/Ship-To customer
+0.8296	0.8089	0.8228	365.5	0.0333	mistral	mistral-small-latest	0	39	run_20260714_114105.md	[train] exp25(shared): Unit Per Case = leading count only (6/16 OZ -> 6), universal fix
+0.7388	0.7938	0.7388	29.5	0.0390	mistral	mistral-ocr-4	0	39	run_20260714_114810.md	[train] exp26(universal): postprocess Unit Per Case -> leading integer (all backends)
+0.8295	0.8088	0.8234	359.4	0.0333	mistral	mistral-small-latest	0	39	run_20260714_114908.md	[train] exp25+26(shared+postprocess): Unit Per Case leading-count (prompt + safety net)

@@ -101,7 +101,7 @@ Every element of "Rows" must ALWAYS include all of these sub-fields, even when a
 
 Meaning of the quantity-related columns — map the correct printed column even when the invoice labels it differently:
 - Quantity: the number of units ordered for the line. It usually has its own column; but if the ONLY column indicating the amount ordered is labeled "Cases" (or "Pieces") and there is no separate quantity column, set Quantity to that column's value.
-- Unit Per Case: the pack size — how many individual units/pieces are inside ONE case or box — NOT the number of cases ordered.
+- Unit Per Case: output ONLY the number of units per case (the leading count), as a plain integer — NOT the full pack descriptor and NOT the size/weight of each unit. If the invoice prints a pack like "6/16 OZ", "24/330 ML", or "12/32 OZ.", output just the first number ("6", "24", "12"). It is NOT the number of cases ordered and NOT a barcode.
 - Cases: the value printed in the invoice's cases column, exactly as shown; output "0" when there is no cases column.
 - Pieces: the value printed in the invoice's pieces column, exactly as shown; output "0" when there is no pieces column.
 - Universal Product Code: the product barcode digits (often 12) for the line item; digits only.
@@ -167,6 +167,16 @@ def postprocess(extracted: dict) -> dict:
         if qtys:
             total = sum(qtys)
             extracted["Total Quantity"] = str(int(total)) if total == int(total) else str(total)
+        # Unit Per Case: GT is the leading pack count only. Models often emit the full
+        # printed descriptor ("6/16 OZ", "24/330 ML") — keep just the leading integer.
+        # Applies to EVERY backend (incl. mistral-ocr/azure which ignore the prompt).
+        for r in rows:
+            if isinstance(r, dict) and r.get("Unit Per Case") is not None:
+                s = str(r["Unit Per Case"]).strip()
+                if not s.isdigit():
+                    m = re.match(r'\s*(\d+)', s)
+                    if m:
+                        r["Unit Per Case"] = m.group(1)
     return extracted
 
 # ============================================================
