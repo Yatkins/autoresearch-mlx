@@ -48,11 +48,11 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 - global_best: 0.9222  (gemini-2.5-pro via OpenRouter @ exp4 prompt — validation only)
 - azure_best: 0.5655  (exp11; 0.0533→0.5405→0.5579→0.5655)
 - last_sweep_best: 0.8252  (mistral-small at last milestone sweep; next milestone fires at ≥0.8352)
-- no_gain_streak: 1  (exp12 reverted). exp8-11 wins (Azure+ocr); prompt track at ceiling.
+- no_gain_streak: 0  (exp15 mistral-ocr win). Pattern: OCR *Rows* descriptions help, *header* descriptions hurt (exp12). Prompt track at ceiling (exp5/6/7/13 regressed).
   near its prompt ceiling (~0.8252); prefer non-prompt tracks (Azure headroom, mistral-ocr) and
   higher-leverage prompt ideas (few-shot, format hints) over more small wording tweaks.
-- ocr_best: 0.7328  (commit exp10 / mistral-ocr-4; was 0.6450)
-- experiments_done: 12
+- ocr_best: 0.7388  (exp15; 0.6450→0.7328→0.7388)
+- experiments_done: 15
 - sweep_running: none
 - NEXT ideas (pick one per cycle, non-prompt tracks preferred since mistral-small ~ceiling):
   C: mistral-ocr postprocess/schema — it scores worse on many-row invoices (extractions 0.73 <
@@ -113,3 +113,6 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 | 10 | C | mistral-ocr _OCR_SCHEMA: fix keys (UPC/Discount Type/aligned) + field descriptions | 0.7328 | KEPT (ocr) | mistral-ocr-4 0.6450→0.7328 (+0.088) |
 | 11 | B | Azure: route ProductCode→UPC when ~12-digit barcode, else Item Code | 0.5655 | KEPT (Azure) | azure 0.5579→0.5655 (+0.008); Item Code 0.55→0.40, UPC 0.06→0.39 |
 | 12 | C | mistral-ocr schema: Adjustment/Bottle Deposit "0.00" descriptions | 0.7083 | REVERTED | 0.7328→0.7083; OCR schema hints for these backfired |
+| 13 | A | enrich JSON example row to full sub-field set | 0.8042 | REVERTED | 4th prompt regression; mistral-small prompt ceiling confirmed |
+| 14 | A(model) | mistral-medium-latest baseline @ best prompt | — | TIMEOUT | >10min at 39 invoices; too slow for budget, skip |
+| 15 | C | mistral-ocr schema: Rows descriptions Unit Price/Line Amount/Description | 0.7388 | KEPT (ocr) | 0.7328→0.7388; OCR *Rows* descriptions help (header ones hurt, exp12) |

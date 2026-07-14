@@ -309,6 +309,9 @@ _OCR_DESC = {
     "Quantity": "Number of units ordered for the line.",
     "Item Code": "Vendor's item/product number, exactly as printed.",
     "Discount Type": "'dollar' if the discount is a currency amount, 'percent' if a percentage.",
+    "Unit Price": "Price per single unit; plain decimal, no currency symbol.",
+    "Line Amount": "Line total for the row; plain decimal, no currency symbol.",
+    "Description": "The item description text exactly as printed on the line.",
 }
 def _ocr_prop(k):
     p = {"type": "string"}
