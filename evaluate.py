@@ -295,19 +295,33 @@ def full_prompt() -> str:
 
 # JSON schema for Mistral OCR's document annotation (OCR endpoint returns
 # structured fields directly rather than free markdown).
-_OCR_ROW_KEYS = ["Item Code", "SKU", "Unit Per Case", "Description", "Quantity",
-                 "Cases", "Pieces", "Unit Price", "Line Amount", "Discount", "Deposit", "Deposit Qty"]
-_OCR_TOP_KEYS = ["Vendor", "Vendor Physical Address", "Vendor Phone Number", "Vendor Fax Number",
-                 "Vendor Email", "Vendor Website", "Invoice No", "Invoice Date", "Total Quantity",
-                 "Adjustment", "Bottle Deposit", "Invoice Amount", "Document Type",
-                 "Holiday Invoice", "Consession Vendor"]
+_OCR_ROW_KEYS = ["Item Code", "Universal Product Code", "Unit Per Case", "Description", "Quantity",
+                 "Cases", "Pieces", "Unit Price", "Line Amount", "Discount", "Discount Type", "Deposit", "Deposit Qty"]
+_OCR_TOP_KEYS = ["Vendor", "Vendor Physical Address", "Vendor Phone Number", "Vendor Phone Number 2",
+                 "Vendor Fax Number", "Vendor Email Address", "Vendor Contact", "Vendor Website",
+                 "Invoice No", "Invoice Date", "Total Quantity", "Adjustment", "Bottle Deposit",
+                 "Invoice Amount", "Document Type", "Holiday Invoice", "Consession Vendor"]
+_OCR_DESC = {
+    "Document Type": "'Bill' for a standard invoice/bill, 'Credit' for a credit memo/return.",
+    "Total Quantity": "Sum of the line-item Quantity column.",
+    "Universal Product Code": "Product barcode digits (often 12) for the line; digits only.",
+    "Unit Per Case": "Pack size: units per case/box (NOT the barcode, NOT cases ordered).",
+    "Quantity": "Number of units ordered for the line.",
+    "Item Code": "Vendor's item/product number, exactly as printed.",
+    "Discount Type": "'dollar' if the discount is a currency amount, 'percent' if a percentage.",
+}
+def _ocr_prop(k):
+    p = {"type": "string"}
+    if k in _OCR_DESC:
+        p["description"] = _OCR_DESC[k]
+    return p
 _OCR_SCHEMA = {
     "type": "object",
     "properties": {
-        **{k: {"type": "string"} for k in _OCR_TOP_KEYS},
+        **{k: _ocr_prop(k) for k in _OCR_TOP_KEYS},
         "Rows": {"type": "array", "items": {
             "type": "object",
-            "properties": {k: {"type": "string"} for k in _OCR_ROW_KEYS}}},
+            "properties": {k: _ocr_prop(k) for k in _OCR_ROW_KEYS}}},
     },
 }
 

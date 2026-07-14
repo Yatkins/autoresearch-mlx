@@ -104,3 +104,4 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 | 7 | A | Item Code as-printed (keep zeros/letters/dashes) | 0.7891 | REVERTED | regressed; mistral-small near prompt ceiling |
 | 8 | B | parse Azure Items→Rows list (was dumped as string) | 0.5405 | KEPT (Azure) | azure 0.0533→0.5405 (+0.49); pivot after 3 prompt regressions |
 | 9 | B | Azure defaults: Document Type=Bill, Adjustment/Bottle Deposit=0.00 | 0.5579 | KEPT (Azure) | azure 0.5405→0.5579 (+0.017) |
+| 10 | C | mistral-ocr _OCR_SCHEMA: fix keys (UPC/Discount Type/aligned) + field descriptions | 0.7328 | KEPT (ocr) | mistral-ocr-4 0.6450→0.7328 (+0.088) |
