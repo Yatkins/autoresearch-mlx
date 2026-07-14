@@ -10,3 +10,9 @@ score	score_invoice	adjusted	latency_s	cost_usd	backend	model	errors	invoices	re
 0.8021	0.7951	0.7997	330.9	0.0314	mistral	mistral-small-latest	0	39	run_20260713_152954.md	[train] backend=mistral model=mistral-small-latest | exp3: Rows column semantics (UnitPerCase/Cases/Pieces meanings, Qty mirroring, DiscountType dollar/percent); drop SKU
 0.8252	0.8021	0.8220	336.8	0.0319	mistral	mistral-small-latest	0	39	run_20260713_154246.md	[train] backend=mistral model=mistral-small-latest | exp4: read Cases/Pieces columns as-printed (stop force-mirroring Quantity into Cases)
 0.7800	0.7609	0.7800	237.9	0.0248	mistral	mistral-small-latest	0	39	run_20260713_155438.md	[train] backend=mistral model=mistral-small-latest | exp5: omit absent row sub-fields to match GT (no '0' padding for Cases/Pieces/Discount/Deposit); + report shows CHANGE THIS RUN
+0.7427	0.8074	0.6901	563.9	0.3927	openrouter	google/gemini-2.5-flash	0	39	run_20260713_160332.md	[train] milestone sweep @ exp4 prompt (best mistral-small 0.8252)
+0.9222	0.9401	0.7222	1921.2	2.7321	openrouter	google/gemini-2.5-pro	0	39	run_20260713_161256.md	[train] milestone sweep @ exp4 prompt (best mistral-small 0.8252)
+0.8089	0.8025	0.7089	3570.3	0.0879	openrouter	qwen/qwen2.5-vl-72b-instruct	1	39	run_20260713_164457.md	[train] milestone sweep @ exp4 prompt (best mistral-small 0.8252)
+0.8086	0.8067	0.8056	335.2	0.0325	mistral	mistral-small-latest	0	39	run_20260713_195341.md	[train] exp6: clarify Unit Per Case (labels Pack/Size/U-C; disambiguate from barcode UPC)
+0.7891	0.7834	0.7880	320.1	0.0314	mistral	mistral-small-latest	0	39	run_20260713_200435.md	[train] exp7: Item Code as-printed (keep leading zeros/letters/dashes, no reformat)
+0.5405	0.5538	0.5254	429.3	0.0000	azure	prebuilt-invoice	1	39	run_20260713_201210.md	[train] exp8(Azure track): parse Azure Items into Rows list (ProductCode/Description/Quantity/UnitPrice/Amount)

@@ -401,22 +401,61 @@ def run_azure(path: Path) -> dict:
     if not result.documents:
         return {}
     doc = result.documents[0]
-    # Azure field names → your schema. Agent can refine EXTRA_INSTRUCTIONS
-    # to improve this mapping rather than editing this function.
-    azure_map = {
-        "VendorName":           "Vendor",
-        "VendorAddress":        "Vendor Physical Address",
-        "VendorAddressRecipient": "Vendor",
-        "InvoiceId":            "Invoice No",
-        "InvoiceDate":          "Invoice Date",
-        "InvoiceTotal":         "Invoice Amount",
-        "Items":                "Rows",
+    fields = doc.fields or {}
+
+    def fcontent(f):
+        """Printed text of an Azure DocumentField (fallback to its value)."""
+        if f is None:
+            return None
+        c = getattr(f, "content", None)
+        if c not in (None, ""):
+            return c
+        v = getattr(f, "value", None)
+        return str(v) if v not in (None, "") else None
+
+    # Header fields → our schema.
+    header_map = {
+        "VendorName":    "Vendor",
+        "VendorAddress": "Vendor Physical Address",
+        "InvoiceId":     "Invoice No",
+        "InvoiceDate":   "Invoice Date",
+        "InvoiceTotal":  "Invoice Amount",
     }
     out = {}
-    for az_key, our_key in azure_map.items():
-        field = (doc.fields or {}).get(az_key)
-        if field:
-            out[our_key] = field.content if hasattr(field, "content") else str(field.value or "")
+    for az_key, our_key in header_map.items():
+        v = fcontent(fields.get(az_key))
+        if v:
+            out[our_key] = v
+
+    # Items → Rows: Azure returns a structured array; each item is an object of
+    # DocumentFields. Map its line-item fields into our Rows sub-fields (previously
+    # this was dumped as a single string, so every Rows cell scored ~0).
+    items = fields.get("Items")
+    arr = getattr(items, "value_array", None) if items is not None else None
+    if arr is None and items is not None:
+        v = getattr(items, "value", None)
+        arr = v if isinstance(v, list) else None
+    item_map = {
+        "ProductCode": "Item Code",
+        "Description":  "Description",
+        "Quantity":     "Quantity",
+        "UnitPrice":    "Unit Price",
+        "Amount":       "Line Amount",
+    }
+    rows = []
+    for it in (arr or []):
+        obj = getattr(it, "value_object", None) or getattr(it, "value", None) or {}
+        if not isinstance(obj, dict):
+            continue
+        row = {}
+        for az_key, our_key in item_map.items():
+            v = fcontent(obj.get(az_key))
+            if v not in (None, ""):
+                row[our_key] = v
+        if row:
+            rows.append(row)
+    if rows:
+        out["Rows"] = rows
     return out
 
 def run_ollama(path: Path) -> dict:
