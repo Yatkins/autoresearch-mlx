@@ -177,6 +177,11 @@ def postprocess(extracted: dict) -> dict:
                     m = re.match(r'\s*(\d+)', s)
                     if m:
                         r["Unit Per Case"] = m.group(1)
+    # Adjustment / Bottle Deposit default to "0.00" when the model omitted them
+    # (GT: 21/28 and 5/8 are zero). No-op for chat models (the prompt already emits them);
+    # helps mistral-ocr, which leaves them blank.
+    extracted.setdefault("Adjustment", "0.00")
+    extracted.setdefault("Bottle Deposit", "0.00")
     return extracted
 
 # ============================================================

@@ -35,3 +35,5 @@ score	score_invoice	adjusted	latency_s	cost_usd	backend	model	errors	invoices	re
 0.7683	0.8173	0.6683	3722.6	0.0865	openrouter	qwen/qwen2.5-vl-72b-instruct	1	39	run_20260714_115544.md	[train] exp25 validate: Unit Per Case fix @ qwen/qwen2.5-vl-72b-instruct
 0.8944	0.9065	0.6944	2388.2	2.7315	openrouter	google/gemini-2.5-pro	2	39	run_20260714_125747.md	[train] exp25 validate: Unit Per Case fix @ google/gemini-2.5-pro
 0.9312	0.9578	0.7312	2122.9	2.6921	openrouter	google/gemini-2.5-pro	0	39	run_20260714_133926.md	[train] exp27(backend): retry OpenRouter on empty/malformed response + null-safe parse_json (recover errored invoices)
+0.4209	0.4475	0.3209	1610.9	0.0445	openrouter	qwen/qwen2.5-vl-72b-instruct	0	39	run_20260714_141529.md	[train] exp28(qwen): backend hardening + Unit Per Case (clean qwen number)
+0.7397	0.7965	0.7397	34.4	0.0390	mistral	mistral-ocr-4	0	39	run_20260714_144639.md	[train] exp29(mistral-ocr): postprocess default Adjustment/Bottle Deposit=0.00 when omitted
