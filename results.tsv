@@ -27,3 +27,5 @@ score	score_invoice	adjusted	latency_s	cost_usd	backend	model	errors	invoices	re
 0.8190	0.8062	0.8140	351.6	0.0319	mistral	mistral-small-latest	0	39	run_20260714_094833.md	[train] exp18(image): PDF render 2.0->3.0 (~216 DPI), MAX_IMG_WIDTH 2000->2600 — sharper small text
 0.7963	0.8051	0.6963	1481.5	0.0150	openrouter	mistralai/mistral-small-3.2-24b-instruct	0	39	run_20260714_095815.md	[train] exp19(model): mistralai/mistral-small-3.2-24b-instruct baseline @ best prompt (OpenRouter)
 0.5655	0.5868	0.5517	419.5	0.0000	azure	prebuilt-invoice	1	39	run_20260714_102358.md	[train] exp20(Azure): Vendor fallback to VendorAddressRecipient/RemittanceAddressRecipient when VendorName missing
+0.7322	0.7894	0.7322	284.3	0.0390	mistral	mistral-ocr-4	0	39	run_20260714_103150.md	[train] exp21(mistral-ocr): Cases/Pieces pure-semantic descriptions (no '0-if-none' framing)
+0.8134	0.7899	0.8107	333.1	0.0315	mistral	mistral-small-latest	0	39	run_20260714_103713.md	[train] exp22(prompt): Vendor = seller who issued invoice, not Bill-To/Ship-To customer

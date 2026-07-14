@@ -121,3 +121,39 @@ on the 39-invoice TRAIN set. `score_invoice` is reported but NOT the target.
 | 18 | (image) | PDF render 2.0→3.0 (216 DPI) + MAX_IMG_WIDTH 2600 | 0.8190 | REVERTED | mistral-small 0.8252→0.8190; 144 DPI already sufficient |
 | 19 | (model) | mistralai/mistral-small-3.2-24b-instruct baseline (OpenRouter) | 0.7963 | BASELINE | new model data point; mid-pack, slow (24min) |
 | 20 | B | Azure Vendor fallback to VendorAddressRecipient when VendorName missing | 0.5655 | REVERTED | no-op (VendorName always present) |
+| 21 | C | mistral-ocr Cases/Pieces pure-semantic descriptions (no "0-if-none") | 0.7322 | REVERTED | 0.7388→0.7322; OCR schema fully optimized |
+| 22 | A | Vendor = seller not Bill-To/Ship-To customer | 0.8134 | REVERTED | 0.8252→0.8134; 6th no-gain → STOP |
+
+## FINAL SUMMARY (loop stopped 2026-07-14 ~10:40 PDT — no_gain_streak reached 6)
+
+**22 experiments; loop stopped on 6 consecutive no-gains (plateau), well before the 8h deadline.**
+Every model's committed evaluate.py state is its best. Final per-model bests (extractions-equal,
+global per-cell, 39-invoice TRAIN):
+
+| model | baseline | FINAL | Δ |
+|---|---|---|---|
+| openrouter google/gemini-2.5-pro | 0.8010 | **0.9222** | +0.121 |
+| mistral mistral-small-latest | 0.7329 | 0.8252 | +0.092 |
+| openrouter qwen2.5-vl-72b | 0.7758 | 0.8089 | +0.033 |
+| openrouter mistral-small-3.2-24b | — | 0.7963 | new baseline |
+| openrouter google/gemini-2.5-flash | 0.7457 | 0.7457 | ~0 (inherent) |
+| mistral mistral-ocr-4 | 0.6450 | 0.7388 | +0.094 |
+| azure prebuilt-invoice | 0.0533 | 0.5655 | +0.512 |
+
+**What worked (kept):** Total Quantity = sum(row Quantity) in postprocess (exp1); +Universal
+Product Code in the prompt (exp2, the single biggest lever — generalized to +0.12 on gemini-pro);
+Rows column semantics + drop dead SKU (exp3); read Cases/Pieces as-printed instead of mirroring
+Quantity (exp4); Azure Items→Rows list parse (exp8, +0.49) + Bill/0.00 defaults (exp9) +
+ProductCode→UPC routing (exp11); mistral-ocr _OCR_SCHEMA key-fix + Rows field descriptions
+(exp10, exp15).
+
+**What didn't (reverted) — findings for next time:** omitting absent Rows sub-fields (the
+"always include" checklist aids completeness); OCR *header*-field & "0-if-none" schema hints
+(only OCR *Rows* semantic descriptions help); higher DPI (144 already enough); max_tokens
+(flash's gap vs pro is inherent, not truncation); more mistral-small prompt wording (at ceiling
+~0.8252 — exp5/6/7/13/22 all regressed); mistral-medium too slow for the 8-min budget.
+
+**To resume optimization later:** the cheap prompt track is exhausted; further gains likely need
+(a) targeting gemini-pro directly (expensive per-experiment) or (b) TEST-set validation of the
+current winners (`EVAL_SET=test python evaluate.py` per model) to confirm generalization, which
+was never run. That test-set validation is the recommended next step.
